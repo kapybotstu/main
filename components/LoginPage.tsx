@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, UserCheck } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import logoImage from '../../assets/logotipo-jobby-3.png';
+import { useAuth } from '../context/AuthContext';
+import logoImage from '../assets/logotipo-jobby-3.png';
 
 const LoginPage: React.FC = () => {
   const { login, isLoading, error } = useAuth();

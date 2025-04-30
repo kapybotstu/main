@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './components/LoginPage'; // Path fixed
 import MainLayout from './components/layout/MainLayout'; // Fixed casing issue: Layout → layout
-import PersonalBenefitsDashboard from './components/DashBoard/PersonalBenefitsDashboard'; // Full component name
-import BenefitsManagementDashboard from './components/DashBoard/BenefitsManagementDashboard'; // Full component name
-import OnboardingDashboard from './components/DashBoard/OnboardingDashboard'; // Full component name
-
+import PersonalBenefitsDashboard from './components/DasBoard/PersonalBenefitsDashboard';
+import BenefitsManagementDashboard from './components/DasBoard/BenefitsManagementDashboard';
+import OnboardingDashboard from './components/DasBoard/OnboardingDashboard';
 // Componente interno con acceso al contexto de autenticación
 const AppContent: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();

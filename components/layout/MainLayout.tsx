@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import Sidebar from '../SideBar';
+import Sidebar from '../Sidebar';
 import Header from '../Header';
 import { useAuth } from '../../context/AuthContext';
+import { DashboardProvider } from '../../context/DashboardContext'; // Añade esta importación
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -27,26 +28,28 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, activeDashboard, setA
         setActiveDashboard={setActiveDashboard}
       />
       
-      <div className="flex flex-col flex-grow">
-        <Header 
-          sidebarExpanded={sidebarExpanded} 
-          userName={user?.name || ''}
-          showAddWidget={activeDashboard !== 'onboarding'}
-        />
-        
-        <main className="flex-grow overflow-hidden">
-          <motion.div
-            key={activeDashboard}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="h-full"
-          >
-            {children}
-          </motion.div>
-        </main>
-      </div>
+      <DashboardProvider> {/* Añade el provider aquí */}
+        <div className="flex flex-col flex-grow">
+          <Header 
+            sidebarExpanded={sidebarExpanded} 
+            userName={user?.name || ''}
+            showAddWidget={activeDashboard !== 'onboarding'}
+          />
+          
+          <main className="flex-grow overflow-hidden">
+            <motion.div
+              key={activeDashboard}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="h-full"
+            >
+              {children}
+            </motion.div>
+          </main>
+        </div>
+      </DashboardProvider> {/* Cierra el provider */}
     </div>
   );
 };

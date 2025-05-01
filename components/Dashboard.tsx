@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
@@ -7,12 +7,60 @@ import WidgetContainer from './widgets/WidgetContainer';
 import { WidgetType } from '../types';
 import { MOCK_WIDGETS } from '../data/mockData';
 
+// Enhanced type definition to support different dashboard types
+interface DashboardProps {
+  onAddWidget?: () => void;
+  dashboardType?: 'personal-benefits' | 'benefits-management' | 'onboarding';
+}
+
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-const Dashboard: React.FC = () => {
-  const { layout, updateLayout } = useDashboard();
+const Dashboard: React.FC<DashboardProps> = ({ 
+  onAddWidget,
+  dashboardType = 'personal-benefits' 
+}) => {
+  const { layout, updateLayout, saveWidget } = useDashboard();
   const [isAddingWidget, setIsAddingWidget] = useState(false);
   const [selectedWidgetType, setSelectedWidgetType] = useState<WidgetType | null>(null);
+  
+  // Initialize dashboard with widgets based on dashboard type
+  useEffect(() => {
+    // Only initialize if the layout is empty or dashboard type changes
+    if (layout.widgets.length === 0) {
+      initializeDashboard();
+    }
+  }, [dashboardType]);
+  
+  const initializeDashboard = () => {
+    // Get widgets based on dashboard type
+    let dashboardWidgets = [];
+    
+    switch(dashboardType) {
+      case 'personal-benefits':
+        dashboardWidgets = MOCK_WIDGETS.filter(w => 
+          ['stats', 'chart', 'tasks', 'calendar', 'messages', 'notes'].includes(w.type)
+        );
+        break;
+      case 'benefits-management':
+        dashboardWidgets = MOCK_WIDGETS.filter(w => 
+          ['stats', 'chart', 'applications', 'connections'].includes(w.type)
+        );
+        break;
+      default:
+        dashboardWidgets = [];
+    }
+    
+    // Save widgets to context
+    dashboardWidgets.forEach(widget => {
+      const newId = `${widget.id}-${dashboardType}`;
+      const customizedWidget = {
+        ...widget,
+        id: newId,
+        title: widget.title
+      };
+      saveWidget(customizedWidget);
+    });
+  };
   
   const handleLayoutChange = (currentLayout: any, allLayouts: any) => {
     updateLayout(allLayouts);
@@ -52,7 +100,6 @@ const Dashboard: React.FC = () => {
         title: `New ${mockWidget.title}`
       };
       
-      const { saveWidget } = useDashboard();
       saveWidget(newWidget);
       setIsAddingWidget(false);
       setSelectedWidgetType(null);
@@ -161,17 +208,30 @@ const Dashboard: React.FC = () => {
         </motion.div>
       )}
       
-      {/* Quick Add Button (Mobile) */}
-      <div className="fixed bottom-6 right-6 md:hidden">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleAddWidget}
-          className="h-12 w-12 rounded-full bg-jobby-purple text-white shadow-lg flex items-center justify-center"
-        >
-          <span className="text-xl">+</span>
-        </motion.button>
-      </div>
+      {/* Quick Add Button */}
+      {onAddWidget ? (
+        <div className="fixed bottom-6 right-6 md:hidden">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onAddWidget}
+            className="h-12 w-12 rounded-full bg-jobby-purple text-white shadow-lg flex items-center justify-center"
+          >
+            <span className="text-xl">+</span>
+          </motion.button>
+        </div>
+      ) : (
+        <div className="fixed bottom-6 right-6">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleAddWidget}
+            className="h-12 w-12 rounded-full bg-jobby-purple text-white shadow-lg flex items-center justify-center"
+          >
+            <span className="text-xl">+</span>
+          </motion.button>
+        </div>
+      )}
     </div>
   );
 };

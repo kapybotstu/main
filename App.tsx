@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import LoginPage from './components/LoginPage'; // Path fixed
-import MainLayout from './components/layout/MainLayout'; // Fixed casing issue: Layout → layout
+import LoginPage from './components/LoginPage';
+import MainLayout from './components/layout/MainLayout';
 import PersonalBenefitsDashboard from './components/DasBoard/PersonalBenefitsDashboard';
 import BenefitsManagementDashboard from './components/DasBoard/BenefitsManagementDashboard';
 import OnboardingDashboard from './components/DasBoard/OnboardingDashboard';
-// Componente interno con acceso al contexto de autenticación
+
+// Internal component with authentication context access
 const AppContent: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const [activeDashboard, setActiveDashboard] = useState<string>('personal-benefits');
   
-  // Determinar el dashboard predeterminado basado en el rol del usuario
+  // Determine default dashboard based on user role
   useEffect(() => {
     if (user) {
       if (user.role.employee) {
@@ -21,24 +22,24 @@ const AppContent: React.FC = () => {
     }
   }, [user]);
   
-  // Renderizar pantalla de carga mientras se verifica la autenticación
+  // Show loading screen while checking authentication
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-jobby-gray-100">
         <div className="flex flex-col items-center">
           <div className="h-12 w-12 border-4 border-jobby-purple border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-jobby-gray-600">Cargando...</p>
+          <p className="text-jobby-gray-600">Loading...</p>
         </div>
       </div>
     );
   }
   
-  // Si no está autenticado, mostrar página de login
+  // Show login page if not authenticated
   if (!isAuthenticated) {
     return <LoginPage />;
   }
   
-  // Renderizar el dashboard activo
+  // Render the appropriate dashboard
   const renderDashboard = () => {
     switch (activeDashboard) {
       case 'personal-benefits':
@@ -52,7 +53,7 @@ const AppContent: React.FC = () => {
     }
   };
   
-  // Mostrar el layout principal con el dashboard seleccionado
+  // Show main layout with selected dashboard
   return (
     <MainLayout 
       activeDashboard={activeDashboard}
@@ -63,7 +64,7 @@ const AppContent: React.FC = () => {
   );
 };
 
-// Componente App principal que proporciona el contexto de autenticación
+// Main App component providing authentication context
 function App() {
   return (
     <AuthProvider>

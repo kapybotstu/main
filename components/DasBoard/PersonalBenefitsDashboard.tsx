@@ -1,261 +1,185 @@
-import React, { useState } from 'react';
-import { DashboardProvider } from '../../context/DashboardContext';
+import React, { useEffect } from 'react';
+import { DashboardProvider, useDashboard } from '../../context/DashboardContext';
 import Dashboard from '../Dashboard';
-import { Gift, Package, Ticket, Award, Calendar, CreditCard, Compass } from 'lucide-react';
+import { 
+  Gift, Package, Ticket, Award, Calendar, 
+  CreditCard, Compass, FileText, ListTodo
+} from 'lucide-react';
+import { Widget } from '../../types';
 
-// Dashboard para "Beneficios Propios"
+// Dashboard for "Beneficios Propios"
 const PersonalBenefitsDashboard: React.FC = () => {
-  const [showAddWidget, setShowAddWidget] = useState(false);
-  
-  const handleAddWidget = () => {
-    setShowAddWidget(true);
-  };
-  
-  // Datos específicos para este dashboard
-  const benefitsData = {
-    availableBalance: 5200,
-    usedBalance: 2800,
-    categories: [
-      { name: 'Salud', used: 1200, total: 2000, icon: <Gift size={18} /> },
-      { name: 'Alimentación', used: 800, total: 1500, icon: <Package size={18} /> },
-      { name: 'Entretenimiento', used: 500, total: 1000, icon: <Ticket size={18} /> },
-      { name: 'Educación', used: 300, total: 1000, icon: <Award size={18} /> },
-    ],
-    upcomingEvents: [
-      { id: 'e1', title: 'Día de wellbeing - Yoga', date: '2025-07-25T10:00:00', type: 'wellbeing' },
-      { id: 'e2', title: 'Webinar: Finanzas personales', date: '2025-07-28T16:00:00', type: 'education' },
-    ],
-    recentTransactions: [
-      { id: 't1', title: 'Suscripción Premium', amount: -250, date: '2025-07-15', category: 'Entretenimiento' },
-      { id: 't2', title: 'Reembolso médico', amount: -180, date: '2025-07-12', category: 'Salud' },
-      { id: 't3', title: 'Tarjeta regalo restaurante', amount: -350, date: '2025-07-08', category: 'Alimentación' },
-    ]
-  };
-
-  // Widget para mostrar el resumen de beneficios
-  const BenefitsSummaryWidget = () => (
-    <div className="bg-white rounded-xl shadow-md p-5 h-full">
-      <h3 className="text-lg font-semibold text-jobby-gray-800 mb-4">Mis Beneficios</h3>
-      
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-jobby-gray-600">Balance Disponible</span>
-          <span className="text-lg font-semibold text-jobby-purple">
-            ${benefitsData.availableBalance.toLocaleString()}
-          </span>
-        </div>
-        
-        <div className="w-full h-2 bg-jobby-gray-200 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-jobby-purple"
-            style={{ width: `${(benefitsData.availableBalance / (benefitsData.availableBalance + benefitsData.usedBalance)) * 100}%` }}
-          ></div>
-        </div>
-        
-        <div className="flex justify-between mt-2">
-          <span className="text-xs text-jobby-gray-500">Utilizado: ${benefitsData.usedBalance.toLocaleString()}</span>
-          <span className="text-xs text-jobby-gray-500">
-            Total: ${(benefitsData.availableBalance + benefitsData.usedBalance).toLocaleString()}
-          </span>
-        </div>
-      </div>
-      
-      <div className="space-y-4">
-        {benefitsData.categories.map((category, index) => (
-          <div key={index} className="p-3 border border-jobby-gray-200 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center">
-                <div className="p-2 rounded-md bg-jobby-purple/10 text-jobby-purple mr-2">
-                  {category.icon}
-                </div>
-                <span className="font-medium text-jobby-gray-800">{category.name}</span>
-              </div>
-              <span className="text-sm">
-                ${category.used.toLocaleString()} / ${category.total.toLocaleString()}
-              </span>
-            </div>
-            
-            <div className="w-full h-1.5 bg-jobby-gray-200 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-jobby-purple"
-                style={{ width: `${(category.used / category.total) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  // Widget para mostrar próximos eventos
-  const UpcomingEventsWidget = () => (
-    <div className="bg-white rounded-xl shadow-md p-5 h-full">
-      <div className="flex items-center mb-4">
-        <div className="p-2 rounded-md bg-jobby-gold/10 text-jobby-gold mr-3">
-          <Calendar size={20} />
-        </div>
-        <h3 className="text-lg font-semibold text-jobby-gray-800">Próximos Eventos</h3>
-      </div>
-      
-      {benefitsData.upcomingEvents.length > 0 ? (
-        <div className="space-y-3">
-          {benefitsData.upcomingEvents.map((event) => (
-            <div 
-              key={event.id} 
-              className="p-3 rounded-lg border border-jobby-gray-200 hover:border-jobby-purple/50 transition-all"
-            >
-              <h4 className="font-medium text-jobby-gray-800">{event.title}</h4>
-              <div className="flex items-center justify-between mt-2">
-                <span className="text-sm text-jobby-gray-600">
-                  {new Date(event.date).toLocaleDateString()} - {new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                </span>
-                <span className={`text-xs px-2 py-0.5 rounded-full ${
-                  event.type === 'wellbeing' 
-                    ? 'bg-green-100 text-green-700' 
-                    : 'bg-blue-100 text-blue-700'
-                }`}>
-                  {event.type === 'wellbeing' ? 'Bienestar' : 'Educación'}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="py-8 text-center text-jobby-gray-500">
-          No hay eventos próximos
-        </div>
-      )}
-      
-      <button className="w-full mt-4 py-2 text-center text-sm font-medium text-jobby-purple hover:text-jobby-purple-dark">
-        Ver todos los eventos
-      </button>
-    </div>
-  );
-
-  // Widget para mostrar transacciones recientes
-  const RecentTransactionsWidget = () => (
-    <div className="bg-white rounded-xl shadow-md p-5 h-full">
-      <div className="flex items-center mb-4">
-        <div className="p-2 rounded-md bg-jobby-purple/10 text-jobby-purple mr-3">
-          <CreditCard size={20} />
-        </div>
-        <h3 className="text-lg font-semibold text-jobby-gray-800">Transacciones Recientes</h3>
-      </div>
-      
-      {benefitsData.recentTransactions.length > 0 ? (
-        <div className="space-y-3">
-          {benefitsData.recentTransactions.map((transaction) => (
-            <div 
-              key={transaction.id} 
-              className="p-3 rounded-lg border border-jobby-gray-200 flex items-center justify-between"
-            >
-              <div>
-                <h4 className="font-medium text-jobby-gray-800">{transaction.title}</h4>
-                <div className="flex items-center mt-1">
-                  <span className="text-xs text-jobby-gray-500 mr-2">
-                    {new Date(transaction.date).toLocaleDateString()}
-                  </span>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-jobby-gray-100 text-jobby-gray-700">
-                    {transaction.category}
-                  </span>
-                </div>
-              </div>
-              <div className="text-right">
-                <span className="font-semibold text-jobby-purple">${Math.abs(transaction.amount).toLocaleString()}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="py-8 text-center text-jobby-gray-500">
-          No hay transacciones recientes
-        </div>
-      )}
-      
-      <button className="w-full mt-4 py-2 text-center text-sm font-medium text-jobby-purple hover:text-jobby-purple-dark">
-        Ver historial completo
-      </button>
-    </div>
-  );
-
-  // Widget de exploración de beneficios
-  const ExploreBenefitsWidget = () => (
-    <div className="bg-white rounded-xl shadow-md p-5 h-full">
-      <div className="flex items-center mb-4">
-        <div className="p-2 rounded-md bg-jobby-gold/10 text-jobby-gold mr-3">
-          <Compass size={20} />
-        </div>
-        <h3 className="text-lg font-semibold text-jobby-gray-800">Explorar Beneficios</h3>
-      </div>
-      
-      <div className="grid grid-cols-2 gap-3">
-        <div className="p-4 rounded-lg border-2 border-jobby-gray-200 hover:border-jobby-purple text-center cursor-pointer">
-          <div className="flex justify-center mb-2">
-            <div className="p-2 rounded-full bg-jobby-purple/10 text-jobby-purple">
-              <Gift size={20} />
-            </div>
-          </div>
-          <span className="block text-sm font-medium text-jobby-gray-800">Salud y Bienestar</span>
-        </div>
-        
-        <div className="p-4 rounded-lg border-2 border-jobby-gray-200 hover:border-jobby-purple text-center cursor-pointer">
-          <div className="flex justify-center mb-2">
-            <div className="p-2 rounded-full bg-jobby-purple/10 text-jobby-purple">
-              <Package size={20} />
-            </div>
-          </div>
-          <span className="block text-sm font-medium text-jobby-gray-800">Alimentación</span>
-        </div>
-        
-        <div className="p-4 rounded-lg border-2 border-jobby-gray-200 hover:border-jobby-purple text-center cursor-pointer">
-          <div className="flex justify-center mb-2">
-            <div className="p-2 rounded-full bg-jobby-purple/10 text-jobby-purple">
-              <Ticket size={20} />
-            </div>
-          </div>
-          <span className="block text-sm font-medium text-jobby-gray-800">Entretenimiento</span>
-        </div>
-        
-        <div className="p-4 rounded-lg border-2 border-jobby-gray-200 hover:border-jobby-purple text-center cursor-pointer">
-          <div className="flex justify-center mb-2">
-            <div className="p-2 rounded-full bg-jobby-purple/10 text-jobby-purple">
-              <Award size={20} />
-            </div>
-          </div>
-          <span className="block text-sm font-medium text-jobby-gray-800">Educación</span>
-        </div>
-      </div>
-      
-      <button className="w-full mt-4 py-2 text-center text-sm font-medium text-jobby-purple hover:text-jobby-purple-dark">
-        Ver todos los beneficios
-      </button>
-    </div>
-  );
-
+  // Wrap the entire component with DashboardProvider
   return (
     <DashboardProvider>
-      <div className="p-4 h-full">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          <div className="md:col-span-1">
-            <BenefitsSummaryWidget />
-          </div>
-          <div>
-            <UpcomingEventsWidget />
-          </div>
-          <div>
-            <RecentTransactionsWidget />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-1">
-            <ExploreBenefitsWidget />
-          </div>
-          <div className="md:col-span-2">
-            <Dashboard onAddWidget={handleAddWidget} />
-          </div>
-        </div>
-      </div>
+      <DashboardContent />
     </DashboardProvider>
+  );
+};
+
+// Separate component to use the dashboard context
+const DashboardContent: React.FC = () => {
+  const { saveWidget, layout } = useDashboard();
+  
+  // Initialize widgets on first load if needed
+  useEffect(() => {
+    if (layout.widgets.length === 0) {
+      // Add widgets from the widgets directory
+      initializeDashboardWidgets();
+    }
+  }, []);
+  
+  const initializeDashboardWidgets = () => {
+    // Create predefined widgets for Personal Benefits dashboard
+    // These should match the widget types in your widgets folder
+    const widgets: Widget[] = [
+      // Benefits Summary Widget (stats type)
+      {
+        id: 'benefits-summary',
+        type: 'stats',
+        title: 'Mis Beneficios',
+        customizable: true,
+        content: {
+          icon: Gift,
+          stats: [
+            { label: 'Balance Disponible', value: 5200, color: 'bg-purple-500' },
+            { label: 'Utilizado', value: 2800, color: 'bg-yellow-500' },
+            { label: 'Total', value: 8000, color: 'bg-green-500' },
+          ]
+        }
+      },
+      
+      // Categories Chart (chart type)
+      {
+        id: 'benefits-categories',
+        type: 'chart',
+        title: 'Distribución de Beneficios',
+        customizable: true,
+        content: {
+          type: 'pie',
+          icon: Award,
+          data: [
+            { label: 'Salud', value: 1200, color: '#6366F1' },
+            { label: 'Alimentación', value: 800, color: '#F59E0B' },
+            { label: 'Entretenimiento', value: 500, color: '#EC4899' },
+            { label: 'Educación', value: 300, color: '#10B981' },
+          ]
+        }
+      },
+      
+      // Upcoming Events Widget (calendar type)
+      {
+        id: 'upcoming-events',
+        type: 'calendar',
+        title: 'Próximos Eventos',
+        customizable: true,
+        content: {
+          icon: Calendar,
+          events: [
+            { id: 'e1', title: 'Día de wellbeing - Yoga', date: '2025-07-25T10:00:00', type: 'wellbeing' },
+            { id: 'e2', title: 'Webinar: Finanzas personales', date: '2025-07-28T16:00:00', type: 'education' },
+          ]
+        }
+      },
+      
+      // Recent Transactions Widget (messages type)
+      {
+        id: 'recent-transactions',
+        type: 'messages',
+        title: 'Transacciones Recientes',
+        customizable: true,
+        content: {
+          icon: CreditCard,
+          messages: [
+            { 
+              id: 't1', 
+              sender: 'Suscripción Premium', 
+              role: 'Entretenimiento', 
+              content: 'Pago procesado', 
+              time: '2025-07-15', 
+              unread: false 
+            },
+            { 
+              id: 't2', 
+              sender: 'Reembolso médico', 
+              role: 'Salud', 
+              content: 'Reembolso aprobado', 
+              time: '2025-07-12', 
+              unread: false 
+            },
+            { 
+              id: 't3', 
+              sender: 'Tarjeta regalo restaurante', 
+              role: 'Alimentación', 
+              content: 'Compra aprobada', 
+              time: '2025-07-08', 
+              unread: false 
+            },
+          ]
+        }
+      },
+      
+      // Tasks Widget (tasks type)
+      {
+        id: 'benefits-tasks',
+        type: 'tasks',
+        title: 'Tareas Pendientes',
+        customizable: true,
+        content: {
+          icon: ListTodo,
+          tasks: [
+            { id: 'task1', text: 'Solicitar reembolso médico', completed: false, dueDate: '2025-07-30' },
+            { id: 'task2', text: 'Registrarse para el programa de bienestar', completed: true, dueDate: '2025-07-15' },
+            { id: 'task3', text: 'Programar chequeo anual', completed: false, dueDate: '2025-08-10' },
+          ]
+        }
+      },
+      
+      // Notes Widget (notes type)
+      {
+        id: 'benefits-notes',
+        type: 'notes',
+        title: 'Mis Notas',
+        customizable: true,
+        content: {
+          icon: FileText,
+          notes: [
+            { id: 'n1', text: 'Recordar solicitar reembolso de la consulta dental antes del 30 de julio', date: '2025-07-10' },
+            { id: 'n2', text: 'Revisar nuevos cursos disponibles en la plataforma de educación', date: '2025-07-08' },
+            { id: 'n3', text: 'Consultar sobre descuentos para gimnasio', date: '2025-07-05' },
+          ]
+        }
+      },
+      
+      // Explore Benefits Widget (connections type)
+      {
+        id: 'explore-benefits',
+        type: 'connections',
+        title: 'Explorar Beneficios',
+        customizable: true,
+        content: {
+          icon: Compass,
+          connections: [
+            { id: 'b1', name: 'Salud y Bienestar', company: 'Seguros, gimnasio, mindfulness', role: 'Disponible', date: '2025-07-01' },
+            { id: 'b2', name: 'Alimentación', company: 'Tarjetas, restaurantes, delivery', role: 'Disponible', date: '2025-07-01' },
+            { id: 'b3', name: 'Entretenimiento', company: 'Streaming, eventos, cine', role: 'Disponible', date: '2025-07-01' },
+            { id: 'b4', name: 'Educación', company: 'Cursos, libros, conferencias', role: 'Disponible', date: '2025-07-01' },
+          ]
+        }
+      },
+    ];
+    
+    // Add each widget to the dashboard
+    widgets.forEach(widget => {
+      saveWidget(widget);
+    });
+  };
+  
+  return (
+    <div className="p-4 h-full">
+      {/* Use ONLY the Dashboard component */}
+      <Dashboard />
+    </div>
   );
 };
 

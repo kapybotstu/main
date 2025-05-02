@@ -10,7 +10,7 @@ import { MOCK_WIDGETS } from '../data/mockData';
 // Enhanced type definition to support different dashboard types
 interface DashboardProps {
   onAddWidget?: () => void;
-  dashboardType?: 'personal-benefits' | 'benefits-management' | 'onboarding' | 'reports';
+  dashboardType?: 'personal-benefits' | 'benefits-management' | 'reports';
 }
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -31,42 +31,43 @@ const Dashboard: React.FC<DashboardProps> = ({
     }
   }, [dashboardType]);
   
-  const initializeDashboard = () => {
-    // Get widgets based on dashboard type
-    let dashboardWidgets: Widget[] = [];
-    
-    switch(dashboardType) {
-      case 'personal-benefits':
-        dashboardWidgets = MOCK_WIDGETS.filter(w => 
-          ['stats', 'chart', 'tasks', 'calendar', 'messages', 'notes'].includes(w.type)
-        );
-        break;
-      case 'benefits-management':
-        dashboardWidgets = MOCK_WIDGETS.filter(w => 
-          ['stats', 'chart', 'applications', 'connections'].includes(w.type)
-        );
-        break;
-      case 'reports':
-        dashboardWidgets = MOCK_WIDGETS.filter(w => 
-          ['stats', 'chart', 'tasks', 'messages', 'calendar'].includes(w.type)
-        );
-        break;
-      default:
-        dashboardWidgets = [];
-    }
-    
-    // Save widgets to context
-    dashboardWidgets.forEach(widget => {
-      const newId = `${widget.id}-${dashboardType}`;
-      const customizedWidget = {
-        ...widget,
-        id: newId,
-        title: widget.title
-      };
-      saveWidget(customizedWidget);
-    });
-  };
+// Y actualiza el caso del switch en el método initializeDashboard()
+const initializeDashboard = () => {
+  // Get widgets based on dashboard type
+  let dashboardWidgets: Widget[] = [];
   
+  switch(dashboardType) {
+    case 'personal-benefits':
+      dashboardWidgets = MOCK_WIDGETS.filter(w => 
+        ['stats', 'chart', 'tasks', 'calendar', 'messages', 'notes'].includes(w.type)
+      );
+      break;
+    case 'benefits-management':
+      dashboardWidgets = MOCK_WIDGETS.filter(w => 
+        ['stats', 'chart', 'applications', 'connections'].includes(w.type)
+      );
+      break;
+    case 'reports':
+      dashboardWidgets = MOCK_WIDGETS.filter(w => 
+        ['stats', 'chart', 'tasks', 'messages', 'calendar'].includes(w.type)
+      );
+      break;
+    default:
+      dashboardWidgets = [];
+  }
+  
+  // Save widgets to context
+  dashboardWidgets.forEach(widget => {
+    const newId = `${widget.id}-${dashboardType}`;
+    const customizedWidget = {
+      ...widget,
+      id: newId,
+      title: widget.title
+    };
+    saveWidget(customizedWidget);
+  });
+};
+
   const handleLayoutChange = (currentLayout: any[], allLayouts: any) => {
     updateLayout(allLayouts);
     // Puedes usar currentLayout para algo aquí si es necesario

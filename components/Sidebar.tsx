@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, LogOut, ChevronLeft, ChevronRight, Home, Gift, Settings, 
   Building, Users, CreditCard, FileText, HelpCircle, ChevronDown,
-  Book, BarChart3, Workflow
+  BarChart3, Workflow
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -33,8 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const dashboardTypes: DashboardType[] = [
     { id: 'personal-benefits', name: 'Beneficios Propios', icon: <Gift size={20} /> },
     { id: 'benefits-management', name: 'Gestión de Beneficios', icon: <Settings size={20} /> },
-    { id: 'onboarding', name: 'Onboarding', icon: <Book size={20} /> },
-    { id: 'reports', name: 'Reportes', icon: <FileText size={20} /> },
+    { id: 'reports', name: 'Prueba Jobby', icon: <FileText size={20} /> }, // Actualizado a "Prueba Jobby"
   ];
   
   // Determinar qué dashboard está disponible para cada rol
@@ -46,9 +45,9 @@ const Sidebar: React.FC<SidebarProps> = ({
       return dashboardTypes;
     }
     
-    // Empleador puede ver gestión, onboarding y reportes
+    // Empleador puede ver gestión y reportes
     if (user.role.employer) {
-      return dashboardTypes.filter(d => ['benefits-management', 'onboarding', 'reports'].includes(d.id));
+      return dashboardTypes.filter(d => ['benefits-management', 'reports'].includes(d.id));
     }
     
     // Empleado ve beneficios propios y reportes básicos
@@ -302,9 +301,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                 )}
               </button>
             )}
-            
-            {/* Reports menu (moved from button to dashboard selection) */}
-            {/* Reports button is now main dashboard type */}
             
             {/* Help and Support */}
             <button

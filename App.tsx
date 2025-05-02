@@ -4,7 +4,6 @@ import LoginPage from './components/LoginPage';
 import MainLayout from './components/layout/MainLayout';
 import PersonalBenefitsDashboard from './components/DasBoard/PersonalBenefitsDashboard';
 import BenefitsManagementDashboard from './components/DasBoard/BenefitsManagementDashboard';
-import OnboardingDashboard from './components/DasBoard/OnboardingDashboard';
 import ReportsDashboard from './components/DasBoard/ReportsDashboard';
 
 // Internal component with authentication context access
@@ -47,9 +46,7 @@ const AppContent: React.FC = () => {
         return <PersonalBenefitsDashboard />;
       case 'benefits-management':
         return <BenefitsManagementDashboard />;
-      case 'onboarding':
-        return <OnboardingDashboard />;
-      case 'reports':
+      case 'reports': // Mantiene el ID igual, solo cambia la etiqueta en Sidebar
         return <ReportsDashboard />;
       default:
         return <PersonalBenefitsDashboard />;

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
 import { useAuth } from '../../context/AuthContext';
-import { DashboardProvider } from '../../context/DashboardContext'; // Añade esta importación
+import { DashboardProvider } from '../../context/DashboardContext';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -21,35 +21,35 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, activeDashboard, setA
 
   return (
     <div className="flex h-screen bg-jobby-gray-100">
-      <Sidebar 
-        expanded={sidebarExpanded} 
-        toggleSidebar={toggleSidebar} 
+      <Sidebar
+        expanded={sidebarExpanded}
+        toggleSidebar={toggleSidebar}
         activeDashboard={activeDashboard}
         setActiveDashboard={setActiveDashboard}
       />
       
-      <DashboardProvider> {/* Añade el provider aquí */}
+      <DashboardProvider>
         <div className="flex flex-col flex-grow">
-          <Header 
-            sidebarExpanded={sidebarExpanded} 
+          <Header
+            sidebarExpanded={sidebarExpanded}
             userName={user?.name || ''}
             showAddWidget={activeDashboard !== 'onboarding'}
           />
           
-          <main className="flex-grow overflow-hidden">
+          <main className="flex-grow overflow-auto">
             <motion.div
               key={activeDashboard}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="h-full"
+              className="min-h-full pb-20"
             >
               {children}
             </motion.div>
           </main>
         </div>
-      </DashboardProvider> {/* Cierra el provider */}
+      </DashboardProvider>
     </div>
   );
 };

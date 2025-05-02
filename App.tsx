@@ -5,6 +5,7 @@ import MainLayout from './components/layout/MainLayout';
 import PersonalBenefitsDashboard from './components/DasBoard/PersonalBenefitsDashboard';
 import BenefitsManagementDashboard from './components/DasBoard/BenefitsManagementDashboard';
 import OnboardingDashboard from './components/DasBoard/OnboardingDashboard';
+import ReportsDashboard from './components/DasBoard/ReportsDashboard';
 
 // Internal component with authentication context access
 const AppContent: React.FC = () => {
@@ -48,6 +49,8 @@ const AppContent: React.FC = () => {
         return <BenefitsManagementDashboard />;
       case 'onboarding':
         return <OnboardingDashboard />;
+      case 'reports':
+        return <ReportsDashboard />;
       default:
         return <PersonalBenefitsDashboard />;
     }

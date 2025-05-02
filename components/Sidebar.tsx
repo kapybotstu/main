@@ -34,6 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     { id: 'personal-benefits', name: 'Beneficios Propios', icon: <Gift size={20} /> },
     { id: 'benefits-management', name: 'Gestión de Beneficios', icon: <Settings size={20} /> },
     { id: 'onboarding', name: 'Onboarding', icon: <Book size={20} /> },
+    { id: 'reports', name: 'Reportes', icon: <FileText size={20} /> },
   ];
   
   // Determinar qué dashboard está disponible para cada rol
@@ -45,13 +46,13 @@ const Sidebar: React.FC<SidebarProps> = ({
       return dashboardTypes;
     }
     
-    // Empleador puede ver gestión y onboarding
+    // Empleador puede ver gestión, onboarding y reportes
     if (user.role.employer) {
-      return dashboardTypes.filter(d => ['benefits-management', 'onboarding'].includes(d.id));
+      return dashboardTypes.filter(d => ['benefits-management', 'onboarding', 'reports'].includes(d.id));
     }
     
-    // Empleado solo ve beneficios propios
-    return dashboardTypes.filter(d => d.id === 'personal-benefits');
+    // Empleado ve beneficios propios y reportes básicos
+    return dashboardTypes.filter(d => ['personal-benefits', 'reports'].includes(d.id));
   };
 
   const availableDashboards = getAvailableDashboards();
@@ -136,23 +137,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
           
           <div className="space-y-1">
-            {/* Home */}
-            <button
-              className="w-full flex items-center p-2 rounded-md text-jobby-gray-100 hover:bg-jobby-purple/20"
-            >
-              <Home size={20} />
-              {expanded && (
-                <motion.span 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                  className="ml-3 text-sm"
-                >
-                  Inicio
-                </motion.span>
-              )}
-            </button>
-            
             {/* User Management (for admin and employer) */}
             {(user?.role.admin || user?.role.employer) && (
               <div>
@@ -319,28 +303,14 @@ const Sidebar: React.FC<SidebarProps> = ({
               </button>
             )}
             
-            {/* Payments */}
-            <button
-              className="w-full flex items-center p-2 rounded-md text-jobby-gray-100 hover:bg-jobby-purple/20"
-            >
-              <CreditCard size={20} />
-              {expanded && (
-                <motion.span 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                  className="ml-3 text-sm"
-                >
-                  Pagos
-                </motion.span>
-              )}
-            </button>
+            {/* Reports menu (moved from button to dashboard selection) */}
+            {/* Reports button is now main dashboard type */}
             
-            {/* Reports */}
+            {/* Help and Support */}
             <button
               className="w-full flex items-center p-2 rounded-md text-jobby-gray-100 hover:bg-jobby-purple/20"
             >
-              <FileText size={20} />
+              <HelpCircle size={20} />
               {expanded && (
                 <motion.span 
                   initial={{ opacity: 0 }} 
@@ -348,7 +318,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                   transition={{ delay: 0.1 }}
                   className="ml-3 text-sm"
                 >
-                  Reportes
+                  Ayuda
                 </motion.span>
               )}
             </button>
@@ -371,23 +341,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                 )}
               </button>
             )}
-            
-            {/* Help and Support */}
-            <button
-              className="w-full flex items-center p-2 rounded-md text-jobby-gray-100 hover:bg-jobby-purple/20"
-            >
-              <HelpCircle size={20} />
-              {expanded && (
-                <motion.span 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                  className="ml-3 text-sm"
-                >
-                  Ayuda
-                </motion.span>
-              )}
-            </button>
           </div>
         </nav>
       </div>

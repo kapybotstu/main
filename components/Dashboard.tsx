@@ -4,13 +4,13 @@ import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useDashboard } from '../context/DashboardContext';
 import WidgetContainer from './widgets/WidgetContainer';
-import { WidgetType } from '../types';
+import { WidgetType, Widget } from '../types';
 import { MOCK_WIDGETS } from '../data/mockData';
 
 // Enhanced type definition to support different dashboard types
 interface DashboardProps {
   onAddWidget?: () => void;
-  dashboardType?: 'personal-benefits' | 'benefits-management' | 'onboarding';
+  dashboardType?: 'personal-benefits' | 'benefits-management' | 'onboarding' | 'reports';
 }
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -33,7 +33,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   
   const initializeDashboard = () => {
     // Get widgets based on dashboard type
-    let dashboardWidgets = [];
+    let dashboardWidgets: Widget[] = [];
     
     switch(dashboardType) {
       case 'personal-benefits':
@@ -44,6 +44,11 @@ const Dashboard: React.FC<DashboardProps> = ({
       case 'benefits-management':
         dashboardWidgets = MOCK_WIDGETS.filter(w => 
           ['stats', 'chart', 'applications', 'connections'].includes(w.type)
+        );
+        break;
+      case 'reports':
+        dashboardWidgets = MOCK_WIDGETS.filter(w => 
+          ['stats', 'chart', 'tasks', 'messages', 'calendar'].includes(w.type)
         );
         break;
       default:
@@ -62,8 +67,10 @@ const Dashboard: React.FC<DashboardProps> = ({
     });
   };
   
-  const handleLayoutChange = (currentLayout: any, allLayouts: any) => {
+  const handleLayoutChange = (currentLayout: any[], allLayouts: any) => {
     updateLayout(allLayouts);
+    // Puedes usar currentLayout para algo aquí si es necesario
+    // console.log('Current layout:', currentLayout);
   };
 
   const widgetTypes: { type: WidgetType; label: string }[] = [
@@ -90,7 +97,9 @@ const Dashboard: React.FC<DashboardProps> = ({
     setSelectedWidgetType(type);
   };
   
-  const addWidgetToLayout = (widgetId: string) => {
+  const addWidgetToLayout = () => {
+    if (!selectedWidgetType) return;
+    
     const mockWidget = MOCK_WIDGETS.find(w => w.type === selectedWidgetType);
     if (mockWidget) {
       const newId = `w${Date.now()}`;
@@ -195,7 +204,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                       Cancel
                     </button>
                     <button
-                      onClick={() => addWidgetToLayout(selectedWidgetType)}
+                      onClick={addWidgetToLayout}
                       className="px-4 py-2 rounded-md bg-jobby-purple text-white hover:bg-jobby-purple-light"
                     >
                       Add Widget

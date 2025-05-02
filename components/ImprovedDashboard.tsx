@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { DashboardProvider } from '../../context/DashboardContext';
+import React, { useState } from 'react';
+import { DashboardProvider } from '../context/DashboardContext';
 import { 
-  BarChart3, PieChart, Calendar, MessageSquare, 
-  ListTodo, Briefcase, FileText, Users 
+  Calendar, Briefcase, FileText
 } from 'lucide-react';
 
 const ImprovedDashboard: React.FC = () => {
-  // We'll use the Dashboard component's context instead
-  const [isAddingWidget, setIsAddingWidget] = useState(false);
-  
-  const handleAddWidget = () => {
-    setIsAddingWidget(true);
-  };
+  // Definir estado para aplicarlo si es necesario en el futuro
+  const [activeSection, setActiveSection] = useState<string>('summary');
   
   return (
     <DashboardProvider>
@@ -87,7 +82,7 @@ const ImprovedDashboard: React.FC = () => {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center">
                         <div className="p-2 rounded-md bg-jobby-purple/10 text-jobby-purple mr-2">
-                          <ListTodo size={18} />
+                          <FileText size={18} />
                         </div>
                         <span className="font-medium text-jobby-gray-800">Education</span>
                       </div>

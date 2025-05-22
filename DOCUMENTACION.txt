@@ -1,0 +1,130 @@
+# DOCUMENTACIÓN DEL PROYECTO JOBBY
+
+## DESCRIPCIÓN GENERAL
+He construido una aplicación web para Jobby, plataforma de gestión de beneficios laborales con cuatro niveles de usuarios. La aplicación utiliza React en el frontend y Firebase (autenticación y base de datos en tiempo real) en el backend.
+
+## ESTRUCTURA DEL PROYECTO
+
+### 1. CONFIGURACIÓN INICIAL
+- Estructura de directorios para organizar el código
+- Configuración de Firebase (autenticación y database)
+- Sistema de rutas con React Router
+- Estilos CSS globales
+
+### 2. SISTEMA DE AUTENTICACIÓN
+- Identificación de nivel de usuario por dominio/formato de email:
+  * Nivel 1: @jobby.cl (Administradores Jobby)
+  * Nivel 2: admin@nombreempresa (RRHH de empresas)
+  * Nivel 3: usuario@nombreempresa (Usuarios finales)
+  * Nivel 4: @jobby.sup (Proveedores)
+- Formularios de login y registro
+- Protección de rutas según nivel de usuario
+
+### 3. SERVICIOS DE FIREBASE
+- Autenticación: registro, login, verificación
+- Base de datos: estructura para gestionar:
+  * Usuarios
+  * Empresas
+  * Beneficios Jobby
+  * Beneficios internos de empresas
+  * Solicitudes de beneficios
+  * Tokens para beneficios aprobados
+
+### 4. DASHBOARDS POR NIVEL
+- **Nivel 1 (Administración Jobby):**
+  * Gestión de empresas (alta, baja, modificación)
+  * Gestión de beneficios Jobby
+  * Aprobación de solicitudes
+  * Estadísticas generales
+
+- **Nivel 2 (RRHH):**
+  * Gestión de usuarios de la empresa
+  * Gestión de beneficios internos
+  * Aprobación de solicitudes internas
+  * Visualización de uso de beneficios
+
+- **Nivel 3 (Usuarios finales):**
+  * Visualización de beneficios disponibles (Jobby e internos)
+  * Solicitud de beneficios
+  * Seguimiento de solicitudes
+  * Gestión de tokens aprobados
+
+- **Nivel 4 (Proveedores):**
+  * Verificación de tokens
+  * Historial de tokens procesados
+
+### 5. GESTIÓN DE BENEFICIOS
+- **Beneficios Jobby:**
+  * Automáticos (restaurantes, experiencias)
+  * De gestión (requieren agendar con profesionales)
+  * De terceros (gamepass, entradas a eventos)
+
+- **Beneficios Internos:**
+  * Gestionados por cada empresa
+  * Personalizables según necesidades
+
+### 6. FLUJO DE TOKENS
+- Solicitud de beneficio por usuario
+- Aprobación por administrador correspondiente
+- Generación de token único
+- Verificación y uso por proveedor
+
+### 7. COMPONENTES UI
+- Layouts compartidos
+- Sistema de cards para dashboards
+- Tablas para listados
+- Formularios para gestión
+- Mensajes de alerta y notificación
+- Diseño responsive
+
+## ARCHIVOS PRINCIPALES CREADOS
+
+1. **Configuración Firebase:**
+   - `/src/services/firebase/config.js` - Configuración e inicialización de Firebase
+
+2. **Servicios:**
+   - `/src/services/firebase/auth/authService.js` - Gestión de autenticación
+   - `/src/services/firebase/database/databaseService.js` - Operaciones con la base de datos
+
+3. **Contexto y Rutas:**
+   - `/src/context/AuthContext.js` - Contexto de autenticación para toda la app
+   - `/src/routes/index.js` - Definición de rutas protegidas por nivel
+   - `/src/routes/ProtectedRoute.js` - Componente para proteger rutas
+
+4. **Autenticación:**
+   - `/src/pages/auth/Login.js` - Formulario de login
+   - `/src/pages/auth/Register.js` - Formulario de registro
+
+5. **Dashboards:**
+   - `/src/pages/level1/Level1Dashboard.js` - Dashboard para administradores Jobby
+   - `/src/pages/level2/Level2Dashboard.js` - Dashboard para RRHH de empresas
+   - `/src/pages/level3/Level3Dashboard.js` - Dashboard para usuarios finales
+   - `/src/pages/level4/Level4Dashboard.js` - Dashboard para proveedores
+   - `/src/pages/level4/TokenVerification.js` - Verificación de tokens
+
+6. **UI y Estilos:**
+   - `/src/layouts/MainLayout.js` - Layout principal compartido
+   - `/src/styles/index.css` - Estilos globales de la aplicación
+
+7. **Archivos base:**
+   - `/src/App.js` - Componente raíz
+   - `/src/index.js` - Punto de entrada de la aplicación
+   - `/public/index.html` - HTML base
+
+8. **Configuración del proyecto:**
+   - `/package.json` - Dependencias y scripts
+   - `/README.md` - Documentación general
+   - `/.gitignore` - Archivos excluidos del control de versiones
+
+## TECNOLOGÍAS UTILIZADAS
+- React 18
+- Firebase 9 (Auth y Realtime Database)
+- React Router 6
+- CSS puro (variables CSS para tematización)
+
+## CARACTERÍSTICAS IMPLEMENTADAS
+- Autenticación completa
+- Roles y permisos basados en niveles
+- Interfaz responsive
+- Flujo completo de solicitud-aprobación-uso de beneficios
+- Dashboards informativos por nivel

@@ -1,0 +1,249 @@
+/* Level 3 Modern Layout - Sidebar y Header unificado */
+
+/* Variables para Level 3 */
+:root {
+  --level3-primary: #667eea;
+  --level3-secondary: #764ba2;
+  --level3-accent: #f093fb;
+  --level3-success: #4facfe;
+  --level3-warning: #ffd89b;
+  --level3-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --level3-card-bg: rgba(255, 255, 255, 0.95);
+  --level3-glass: rgba(255, 255, 255, 0.25);
+  --level3-glass-border: rgba(255, 255, 255, 0.18);
+  --level3-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --level3-text: #2d3748;
+  --level3-text-light: #718096;
+}
+
+/* Aplicar solo a Level 3 */
+[data-level="3"] .app-container {
+  background: var(--level3-bg);
+  min-height: 100vh;
+}
+
+/* Header moderno para Level 3 */
+[data-level="3"] .header {
+  background: linear-gradient(135deg, var(--level3-primary) 0%, var(--level3-secondary) 100%);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--level3-shadow);
+  border: none;
+}
+
+[data-level="3"] .header .logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #ffffff, #f0f8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-level="3"] .user-info {
+  background: var(--level3-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--level3-glass-border);
+  padding: 0.75rem 1.25rem;
+  border-radius: 25px;
+  gap: 1.5rem;
+}
+
+[data-level="3"] .user-info span {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+[data-level="3"] .user-info button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+[data-level="3"] .user-info button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar moderno para Level 3 */
+[data-level="3"] .sidebar {
+  background: var(--level3-card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--level3-glass-border);
+  border-radius: 0 20px 20px 0;
+  padding: 2rem 1.5rem;
+  box-shadow: var(--level3-shadow);
+  width: 280px;
+  margin: 1rem 0 1rem 1rem;
+}
+
+[data-level="3"] .sidebar > div:first-child {
+  background: linear-gradient(135deg, var(--level3-primary), var(--level3-secondary));
+  color: white;
+  padding: 1rem 1.25rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+[data-level="3"] .sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+[data-level="3"] .sidebar li {
+  margin-bottom: 0.75rem;
+}
+
+[data-level="3"] .sidebar a {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-radius: 15px;
+  color: var(--level3-text);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: transparent;
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-level="3"] .sidebar a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--level3-primary), var(--level3-secondary));
+  transition: all 0.3s ease;
+  z-index: -1;
+  opacity: 0;
+}
+
+[data-level="3"] .sidebar a:hover {
+  color: white;
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+[data-level="3"] .sidebar a:hover::before {
+  left: 0;
+  opacity: 1;
+}
+
+/* Añadir iconos a los enlaces del sidebar */
+[data-level="3"] .sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+[data-level="3"] .sidebar a[href*="dashboard"]:before {
+  content: "🏠";
+  font-size: 1.1rem;
+  min-width: 1.5rem;
+}
+
+[data-level="3"] .sidebar a[href*="benefits"]:before {
+  content: "🎁";
+  font-size: 1.1rem;
+  min-width: 1.5rem;
+}
+
+[data-level="3"] .sidebar a[href*="requests"]:before {
+  content: "📋";
+  font-size: 1.1rem;
+  min-width: 1.5rem;
+}
+
+[data-level="3"] .sidebar a[href*="tokens"]:before {
+  content: "🎟️";
+  font-size: 1.1rem;
+  min-width: 1.5rem;
+}
+
+/* Content area para Level 3 */
+[data-level="3"] .content {
+  background: transparent;
+  padding: 2rem;
+  margin-right: 1rem;
+}
+
+/* Footer para Level 3 */
+[data-level="3"] .footer {
+  background: var(--level3-card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--level3-glass-border);
+  margin: 1rem;
+  border-radius: 15px;
+  color: var(--level3-text-light);
+  box-shadow: var(--level3-shadow);
+}
+
+/* Responsive para Level 3 */
+@media (max-width: 768px) {
+  [data-level="3"] .main-content {
+    flex-direction: column;
+  }
+  
+  [data-level="3"] .sidebar {
+    width: 100%;
+    margin: 0.5rem;
+    border-radius: 15px;
+  }
+  
+  [data-level="3"] .content {
+    margin: 0 0.5rem;
+  }
+  
+  [data-level="3"] .header {
+    padding: 1rem;
+  }
+  
+  [data-level="3"] .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+
+/* Animaciones y efectos adicionales */
+[data-level="3"] .sidebar {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+[data-level="3"] .content {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

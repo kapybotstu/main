@@ -1,0 +1,1408 @@
+/* Experiencia inmersiva a pantalla completa */
+.immersive-benefits {
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Carrusel inmersivo principal */
+.benefits-carousel {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+
+/* Efecto de blur en el fondo */
+.background-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.blur-background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(15px) brightness(0.5);
+  transform: scale(1.05);
+  opacity: 0.8;
+  transition: all 0.4s ease;
+}
+
+/* Sistema de filtrado */
+.filter-bar {
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.filter-container {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.filter-button {
+  background: transparent;
+  border: none;
+  color: rgba(50, 50, 50, 0.9);
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.filter-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: #2d3748;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.filter-button.active {
+  background: rgba(255, 255, 255, 0.9);
+  color: #2d3748;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.view-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-toggle {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #2d3748;
+  padding: 0.75rem;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.view-toggle:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+}
+
+/* Navegación del carrusel */
+.carousel-navigation {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  pointer-events: none;
+}
+
+.nav-arrow {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #2d3748;
+  padding: 1rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  pointer-events: all;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.05);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+}
+
+.nav-arrow:active {
+  transform: scale(0.98);
+}
+
+/* Contenedor de tarjetas de beneficio */
+.benefits-container {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  transition: transform 0.2s ease;
+  user-select: none;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  contain: layout style paint;
+}
+
+/* Tarjetas de beneficio inmersivas - OPTIMIZADO */
+.benefit-card-immersive {
+  position: absolute;
+  width: 380px;
+  height: 580px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 25px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  display: flex;
+  flex-direction: column;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0); /* Force GPU layer */
+}
+
+.benefit-card-immersive.active {
+  backdrop-filter: blur(20px); /* Solo la activa tiene blur */
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.benefit-card-immersive.prev {
+  filter: brightness(0.8);
+  /* Sin backdrop-filter para mejor rendimiento */
+}
+
+.benefit-card-immersive.next {
+  filter: brightness(0.8);
+  /* Sin backdrop-filter para mejor rendimiento */
+}
+
+/* Efectos de hover solo para carta activa */
+.benefit-card-immersive.active:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+}
+
+/* Cartas inactivas tienen hover más sutil */
+.benefit-card-immersive:not(.active):hover {
+  filter: brightness(1);
+  transform: translateY(-5px);
+}
+
+/* Sombras progresivas para efecto de stack */
+.benefit-card-immersive.prev,
+.benefit-card-immersive.next {
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Efecto de profundidad para cartas lejanas */
+.benefit-card-immersive:not(.active) {
+  transform-origin: center center;
+}
+
+/* Animación de entrada simplificada */
+.benefit-card-immersive {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mejora visual simplificada para mejor rendimiento */
+.benefits-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.03) 100%
+  );
+  pointer-events: none;
+  z-index: 4;
+  will-change: auto;
+}
+
+/* Estilo removido - ahora manejado por clases específicas */
+
+/* Imagen de la tarjeta */
+.card-image {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+.benefit-card-immersive:hover .card-image img {
+  transform: scale(1.05) translateZ(0);
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.3));
+}
+
+/* Contenido de la tarjeta */
+.card-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  line-height: 1.3;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-type {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.benefit-type.jobby {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.benefit-type.company {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.card-description {
+  flex: 1;
+}
+
+.card-description p {
+  margin: 0;
+  color: #4a5568;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.card-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.card-metadata span {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.category {
+  background: #f7fafc;
+  color: #4a5568;
+}
+
+.value {
+  background: #e6fffa;
+  color: #234e52;
+}
+
+.popularity {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+/* Acciones de la tarjeta */
+.card-actions {
+  margin-top: auto;
+}
+
+.redeem-button {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.redeem-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.redeem-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.redeem-button:hover::before {
+  left: 100%;
+}
+
+.button-icon, .button-arrow {
+  font-size: 1.125rem;
+}
+
+.button-arrow {
+  transition: transform 0.3s ease;
+}
+
+.redeem-button:hover .button-arrow {
+  transform: translateX(5px);
+}
+
+.status-indicator {
+  text-align: center;
+  padding: 1rem;
+}
+
+.approved, .pending {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.approved {
+  color: #22543d;
+}
+
+.pending {
+  color: #744210;
+}
+
+.redeemed {
+  color: #22543d;
+}
+
+/* Token cost display */
+.token-cost {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.token-icon {
+  font-size: 0.875rem;
+}
+
+.cost-amount {
+  font-weight: 700;
+}
+
+.cost-label {
+  opacity: 0.9;
+}
+
+/* Insufficient tokens indicator */
+.insufficient-tokens {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(220, 38, 38, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.insufficient-text {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.insufficient-tokens small {
+  color: #7f1d1d;
+  font-size: 0.75rem;
+}
+
+/* Experience cost in modal */
+.experience-cost {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.cost-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.experience-type {
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.experience-type.jobby {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.experience-type.company {
+  background: rgba(79, 172, 254, 0.1);
+  color: #4facfe;
+  border: 1px solid rgba(79, 172, 254, 0.2);
+}
+
+/* Token summary in modal */
+.token-summary {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 15px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.token-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.available-tokens {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.after-redemption {
+  color: #4a5568;
+  font-size: 0.875rem;
+}
+
+/* Success notification enhancements */
+.success-details h4 {
+  margin: 0 0 0.5rem 0;
+  color: #22543d;
+  font-size: 1.1rem;
+}
+
+.success-details p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+.notification-content {
+  padding: 1.5rem;
+  min-width: 300px;
+}
+
+/* Indicadores de progreso */
+.progress-indicators {
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(50, 50, 50, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.indicator.active {
+  background: #2d3748;
+  transform: scale(1.3);
+  box-shadow: 0 0 15px rgba(45, 55, 72, 0.6);
+  border-color: #2d3748;
+}
+
+.indicator:hover {
+  background: rgba(45, 55, 72, 0.7);
+  transform: scale(1.15);
+  border-color: rgba(45, 55, 72, 0.5);
+}
+
+/* Información del beneficio actual */
+.current-benefit-info {
+  position: absolute;
+  bottom: 1rem;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  text-align: center;
+}
+
+.info-content {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 1rem 2rem;
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.benefit-counter {
+  color: #2d3748;
+  font-weight: 700;
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.navigation-hint {
+  color: rgba(45, 55, 72, 0.8);
+  font-size: 0.75rem;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Vista Grid Alternativa */
+.grid-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.grid-modal {
+  width: 90%;
+  max-width: 1200px;
+  height: 90%;
+  background: white;
+  border-radius: 25px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+.grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8f9fa;
+}
+
+.grid-header h2 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.close-grid {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #a0aec0;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-grid:hover {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.benefits-grid {
+  flex: 1;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  overflow-y: auto;
+}
+
+.grid-benefit-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.grid-benefit-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.grid-card-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.grid-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.grid-benefit-card:hover .grid-card-image img {
+  transform: scale(1.1);
+}
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.grid-benefit-card:hover .grid-overlay {
+  opacity: 1;
+}
+
+.overlay-content {
+  color: white;
+  width: 100%;
+}
+
+.overlay-content h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.overlay-content p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+.type-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.type-badge.jobby {
+  background: rgba(102, 126, 234, 0.8);
+}
+
+.type-badge.company {
+  background: rgba(79, 172, 254, 0.8);
+}
+
+/* Modal para solicitar beneficios */
+.request-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.request-modal {
+  background: white;
+  border-radius: 25px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.request-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.request-modal-header h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #a0aec0;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.request-modal-body {
+  padding: 2rem;
+}
+
+.selected-benefit-info {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.benefit-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 15px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.benefit-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.benefit-details {
+  flex: 1;
+}
+
+.benefit-details h4 {
+  margin: 0 0 0.5rem 0;
+  color: #2d3748;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.benefit-details p {
+  margin: 0.5rem 0 0 0;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-jobby {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.badge-company {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+/* Formulario del modal */
+.request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.optional-label {
+  font-weight: 400;
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-group small {
+  color: #718096;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.cancel-button {
+  background: #f8f9fa;
+  color: #4a5568;
+  border: 2px solid #e2e8f0;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e0;
+}
+
+.submit-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Notificación de éxito */
+.success-notification {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1100;
+  animation: slideInRight 0.3s ease;
+}
+
+.notification-content {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 10px 25px rgba(72, 187, 120, 0.3);
+  max-width: 400px;
+}
+
+.success-icon {
+  font-size: 1.25rem;
+}
+
+.notification-content p {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.notification-content button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.notification-content button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Estados de carga y error */
+.immersive-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.loading-animation {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.pulse-ring {
+  width: 80px;
+  height: 80px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.delay-1 {
+  animation-delay: 0.5s;
+}
+
+.delay-2 {
+  animation-delay: 1s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.immersive-loading p {
+  font-size: 1.25rem;
+  font-weight: 500;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-state h2 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.error-state p {
+  color: #4a5568;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.retry-button,
+.reset-filter-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retry-button:hover,
+.reset-filter-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.empty-benefits-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  text-align: center;
+  padding: 2rem;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.empty-benefits-state h2 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.empty-benefits-state p {
+  color: #4a5568;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .benefit-card-immersive {
+    width: 350px;
+    height: 550px;
+  }
+  
+  .filter-container {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  
+  .filter-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .filter-container {
+    justify-content: center;
+  }
+  
+  .benefit-card-immersive {
+    width: 320px;
+    height: 500px;
+  }
+  
+  /* En móviles, mantener stack pero más compacto */
+  .benefits-container {
+    perspective: 800px;
+  }
+  
+  .carousel-navigation {
+    padding: 0 1rem;
+  }
+  
+  .nav-arrow {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+  }
+  
+  .card-header h3 {
+    font-size: 1.25rem;
+  }
+  
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  
+  .request-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .request-modal-body {
+    padding: 1.5rem;
+  }
+  
+  .selected-benefit-info {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .benefit-preview {
+    width: 100px;
+    height: 100px;
+    align-self: center;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .navigation-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .benefit-card-immersive {
+    width: 280px;
+    height: 450px;
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .filter-container {
+    padding: 0.25rem;
+  }
+  
+  .filter-button {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.75rem;
+  }
+  
+  .success-notification {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+  }
+  
+  .notification-content {
+    padding: 0.875rem 1.25rem;
+  }
+}

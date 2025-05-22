@@ -3,8 +3,20 @@
 Dashboard empresarial moderno con enfoque en legibilidad y funcionalidad
 */
 
-/* Reset específico SOLO para CompanyBenefitsManagement */
-.company-benefits-container * {
+/* Reset específico SOLO para CompanyBenefitsManagement - SIN selector universal */
+.company-benefits-container {
+  box-sizing: border-box;
+}
+
+.company-benefits-container .card,
+.company-benefits-container .card-header,
+.company-benefits-container .chart-container,
+.company-benefits-container .benefit-insights,
+.company-benefits-container .product-link-item,
+.company-benefits-container .form-group,
+.company-benefits-container .btn-primary,
+.company-benefits-container .btn-secondary,
+.company-benefits-container .modal-container {
   box-sizing: border-box;
 }
 

@@ -165,8 +165,8 @@
   transform: scale(0.98);
 }
 
-/* Contenedor de tarjetas de beneficio */
-.benefits-container {
+/* Contenedor de tarjetas de beneficio - SCOPED específicamente para AvailableBenefits */
+.immersive-benefits .benefits-container {
   position: relative;
   z-index: 5;
   display: flex;
@@ -257,7 +257,7 @@
 }
 
 /* Mejora visual simplificada para mejor rendimiento */
-.benefits-container::before {
+.immersive-benefits .benefits-container::before {
   content: '';
   position: absolute;
   top: 0;
@@ -1315,7 +1315,7 @@
   }
   
   /* En móviles, mantener stack pero más compacto */
-  .benefits-container {
+  .immersive-benefits .benefits-container {
     perspective: 800px;
   }
   

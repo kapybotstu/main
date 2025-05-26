@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { ref, onValue, query, orderByChild, equalTo } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
-import './Level3Dashboard.css';
+import './styles/pages/Dashboard.css';
+import TokenBalance from './components/TokenBalance';
 
 const Level3Dashboard = () => {
   const { currentUser, companyId } = useAuth();

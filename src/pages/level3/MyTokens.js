@@ -3,7 +3,8 @@ import { ref, onValue, get } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
-import './MyTokens.css';
+import './styles/pages/MyTokens.css';
+import TokenBalance from './components/TokenBalance';
 
 const MyTokens = () => {
   const { currentUser } = useAuth();

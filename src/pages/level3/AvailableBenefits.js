@@ -3,7 +3,8 @@ import { ref, onValue } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { redeemExperience } from '../../services/firebase/database/databaseService';
-import './AvailableBenefits.css';
+import './styles/pages/AvailableBenefits.css';
+import BenefitCard from './components/BenefitCard';
 
 const AvailableBenefits = () => {
   const { currentUser, companyId } = useAuth();
@@ -116,7 +117,7 @@ const AvailableBenefits = () => {
                   id: childSnapshot.key,
                   ...benefit,
                   isJobbyBenefit: true,
-                  image: benefit.image || '/api/placeholder/600/400',
+                  image: benefit.image || generatePlaceholder(benefit.name, '#667eea'),
                   gradient: getRandomGradient(),
                   tokenCost: benefit.tokenCost || 1 // Costo por defecto: 1 token
                 });
@@ -140,7 +141,7 @@ const AvailableBenefits = () => {
                     id: childSnapshot.key,
                     ...benefit,
                     isJobbyBenefit: false,
-                    image: benefit.image || '/api/placeholder/600/400',
+                    image: benefit.image || generatePlaceholder(benefit.name, '#4facfe'),
                     gradient: getRandomGradient(),
                     tokenCost: benefit.tokenCost || 1 // Costo por defecto: 1 token
                   });
@@ -182,6 +183,24 @@ const AvailableBenefits = () => {
       'linear-gradient(135deg, #e0c3fc 0%, #9bb5ff 100%)'
     ];
     return gradients[Math.floor(Math.random() * gradients.length)];
+  };
+
+  // Función para generar placeholder SVG
+  const generatePlaceholder = (text, color = '#667eea') => {
+    const svg = `
+      <svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'>
+        <defs>
+          <linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'>
+            <stop offset='0%' style='stop-color:${color};stop-opacity:1' />
+            <stop offset='100%' style='stop-color:${color}dd;stop-opacity:1' />
+          </linearGradient>
+        </defs>
+        <rect width='600' height='400' fill='url(#grad)'/>
+        <text x='50%' y='45%' font-family='Arial, sans-serif' font-size='28' fill='white' text-anchor='middle' dominant-baseline='middle' font-weight='bold'>${text || 'Beneficio'}</text>
+        <text x='50%' y='55%' font-family='Arial, sans-serif' font-size='16' fill='white' text-anchor='middle' dominant-baseline='middle' opacity='0.8'>Sin imagen disponible</text>
+      </svg>
+    `;
+    return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   };
 
   // Filtrado por categorías
@@ -450,7 +469,7 @@ const AvailableBenefits = () => {
       <div 
         className="benefits-carousel"
         style={{
-          background: currentBenefit ? currentBenefit.gradient : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'transparent',
           filter: isDragging ? 'brightness(0.8)' : 'none'
         }}
       >
@@ -461,6 +480,10 @@ const AvailableBenefits = () => {
               src={currentBenefit.image} 
               alt={currentBenefit.name}
               className="blur-background"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = generatePlaceholder(currentBenefit.name, currentBenefit.isJobbyBenefit ? '#667eea' : '#4facfe');
+              }}
             />
           )}
         </div>
@@ -595,55 +618,66 @@ const AvailableBenefits = () => {
                 }}
               >
                 <div className="card-image">
-                  <img src={benefit.image} alt={benefit.name} />
+                  <img 
+                    src={benefit.image} 
+                    alt={benefit.name}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = generatePlaceholder(benefit.name, benefit.isJobbyBenefit ? '#667eea' : '#4facfe');
+                    }}
+                  />
                   <div className="card-overlay"></div>
                 </div>
                 
                 <div className="card-content">
-                  <div className="card-header">
-                    <h3>{benefit.name}</h3>
-                    <span className={`benefit-type ${benefit.isJobbyBenefit ? 'jobby' : 'company'}`}>
-                      {benefit.isJobbyBenefit ? 'Jobby' : 'Empresa'}
-                    </span>
-                  </div>
-                  
-                  <div className="card-description">
-                    <p>{benefit.description}</p>
-                  </div>
-                  
-                  <div className="card-metadata">
-                    <span className="category">{benefit.category || 'General'}</span>
-                    <div className="token-cost">
-                      <span className="token-icon">🎟️</span>
-                      <span className="cost-amount">{benefit.tokenCost}</span>
-                      <span className="cost-label">token{benefit.tokenCost > 1 ? 's' : ''}</span>
+                  <div className="card-top">
+                    <div className="card-header">
+                      <h3>{benefit.name}</h3>
+                      <span className={`benefit-type ${benefit.isJobbyBenefit ? 'jobby' : 'company'}`}>
+                        {benefit.isJobbyBenefit ? 'Jobby' : 'Empresa'}
+                      </span>
                     </div>
-                    <span className="popularity">⭐ Popular</span>
+                    
+                    <div className="card-description">
+                      <p>{benefit.description}</p>
+                    </div>
                   </div>
                   
-                  <div className="card-actions">
-                    {isAlreadyRedeemed(benefit.id) ? (
-                      <div className="status-indicator">
-                        <span className="redeemed">✅ Ya canjeado</span>
+                  <div className="card-bottom">
+                    <div className="card-metadata">
+                      <span className="category">{benefit.category || 'General'}</span>
+                      <div className="token-cost">
+                        <span className="token-icon">🎟️</span>
+                        <span className="cost-amount">{benefit.tokenCost}</span>
+                        <span className="cost-label">token{benefit.tokenCost > 1 ? 's' : ''}</span>
                       </div>
-                    ) : !canAffordExperience(benefit.tokenCost) ? (
-                      <div className="insufficient-tokens">
-                        <span className="insufficient-text">🎟️ Tokens insuficientes</span>
-                        <small>Necesitas {benefit.tokenCost}, tienes {getAvailableTokens()}</small>
-                      </div>
-                    ) : (
-                      <button 
-                        className="redeem-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openRedemptionModal(benefit);
-                        }}
-                      >
-                        <span className="button-icon">🎟️</span>
-                        Canjear por {benefit.tokenCost} token{benefit.tokenCost > 1 ? 's' : ''}
-                        <span className="button-arrow">→</span>
-                      </button>
-                    )}
+                      <span className="popularity">⭐ Popular</span>
+                    </div>
+                    
+                    <div className="card-actions">
+                      {isAlreadyRedeemed(benefit.id) ? (
+                        <div className="status-indicator">
+                          <span className="redeemed">✅ Ya canjeado</span>
+                        </div>
+                      ) : !canAffordExperience(benefit.tokenCost) ? (
+                        <div className="insufficient-tokens">
+                          <span className="insufficient-text">🎟️ Tokens insuficientes</span>
+                          <small>Necesitas {benefit.tokenCost}, tienes {getAvailableTokens()}</small>
+                        </div>
+                      ) : (
+                        <button 
+                          className="redeem-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openRedemptionModal(benefit);
+                          }}
+                        >
+                          <span className="button-icon">🎟️</span>
+                          Canjear por {benefit.tokenCost} token{benefit.tokenCost > 1 ? 's' : ''}
+                          <span className="button-arrow">→</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -700,7 +734,14 @@ const AvailableBenefits = () => {
                   }}
                 >
                   <div className="grid-card-image">
-                    <img src={benefit.image} alt={benefit.name} />
+                    <img 
+                      src={benefit.image} 
+                      alt={benefit.name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = generatePlaceholder(benefit.name, benefit.isJobbyBenefit ? '#667eea' : '#4facfe');
+                      }}
+                    />
                     <div className="grid-overlay">
                       <div className="overlay-content">
                         <h4>{benefit.name}</h4>
@@ -735,7 +776,14 @@ const AvailableBenefits = () => {
             <div className="request-modal-body">
               <div className="selected-benefit-info">
                 <div className="benefit-preview">
-                  <img src={selectedExperience.image} alt={selectedExperience.name} />
+                  <img 
+                    src={selectedExperience.image} 
+                    alt={selectedExperience.name}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = generatePlaceholder(selectedExperience.name, selectedExperience.isJobbyBenefit ? '#667eea' : '#4facfe');
+                    }}
+                  />
                 </div>
                 <div className="benefit-details">
                   <h4>{selectedExperience.name}</h4>

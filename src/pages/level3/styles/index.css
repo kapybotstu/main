@@ -1,0 +1,12 @@
+/* Level 3 Styles Index */
+
+/* Import all shared styles */
+@import './shared/variables.css';
+@import './shared/base.css';
+@import './shared/animations.css';
+
+/* Import all component styles */
+@import './components/card.css';
+@import './components/modal.css';
+
+/* Page-specific styles are imported directly in their components */

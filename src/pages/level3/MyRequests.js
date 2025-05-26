@@ -3,7 +3,8 @@ import { ref, onValue, get, update } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
-import './MyRequests.css';
+import './styles/pages/MyRequests.css';
+import RequestCard from './components/RequestCard';
 
 const MyRequests = () => {
   const { currentUser, companyId } = useAuth();

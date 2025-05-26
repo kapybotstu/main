@@ -4,6 +4,11 @@ import { useAuth } from '../context/AuthContext';
 import { logoutUser } from '../services/firebase/auth/authService';
 import '../styles/level3-layout.css';
 
+// Import Level 3 styles when needed
+const loadLevel3Styles = () => {
+  import('../pages/level3/styles/index.css');
+};
+
 const MainLayout = () => {
   const { currentUser, userLevel } = useAuth();
   const navigate = useNavigate();
@@ -13,6 +18,11 @@ const MainLayout = () => {
     console.log("MainLayout rendered");
     console.log("Current location:", location.pathname);
     console.log("User level:", userLevel);
+    
+    // Load Level 3 styles when needed
+    if (userLevel === 3) {
+      loadLevel3Styles();
+    }
   }, [location, userLevel]);
 
   const handleLogout = async () => {

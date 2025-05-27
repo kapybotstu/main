@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, database } from '../services/firebase/config';
 import { subscribeToAuthChanges } from '../services/firebase/auth/authService';
 import { ref, get } from 'firebase/database';
+import { getUserSurveyStatus } from '../services/firebase/database/databaseService';
 
 const AuthContext = createContext();
 
@@ -13,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [companyId, setCompanyId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [surveyCompleted, setSurveyCompleted] = useState(null);
 
   useEffect(() => {
     console.log("AuthProvider initialized");
@@ -37,6 +39,29 @@ export const AuthProvider = ({ children }) => {
               setCompanyId(userData.companyId);
               console.log("Company ID set:", userData.companyId);
             }
+            
+            // Si es nivel 3, verificar si completó la encuesta
+            if (userData.level === 3) {
+              try {
+                // MODO DE PRUEBA: Siempre forzar encuesta para desarrollo
+                const SURVEY_TEST_MODE = true;
+                
+                if (SURVEY_TEST_MODE) {
+                  console.log("🧪 SURVEY TEST MODE: Forzando encuesta para desarrollo");
+                  setSurveyCompleted(false);
+                } else {
+                  const surveyStatus = await getUserSurveyStatus(user.uid);
+                  setSurveyCompleted(surveyStatus.surveyCompleted);
+                  console.log("Survey status:", surveyStatus);
+                }
+              } catch (err) {
+                console.error("Error checking survey status:", err);
+                setSurveyCompleted(false);
+              }
+            } else {
+              // Para otros niveles, marcar como completado para no interferir
+              setSurveyCompleted(true);
+            }
           } else {
             console.warn("User exists in authentication but no data in database!");
             setError('No se encontraron datos de usuario. Contacta al administrador.');
@@ -53,6 +78,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(null);
         setUserLevel(null);
         setCompanyId(null);
+        setSurveyCompleted(null);
       }
       
       setLoading(false);
@@ -69,7 +95,8 @@ export const AuthProvider = ({ children }) => {
     userLevel,
     companyId,
     loading,
-    error
+    error,
+    surveyCompleted
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/firebase/auth/authService';
+import { getUserSurveyStatus } from '../../services/firebase/database/databaseService';
 import { useAuth } from '../../context/AuthContext';
 import './Login.css';
 
@@ -13,7 +14,7 @@ const Login = () => {
   const [currentBenefitIndex, setCurrentBenefitIndex] = useState(0);
   
   const navigate = useNavigate();
-  const { currentUser, userLevel } = useAuth();
+  const { currentUser, userLevel, surveyCompleted } = useAuth();
   
   // Beneficios para el carrusel
   const benefitsShowcase = [
@@ -49,11 +50,19 @@ const Login = () => {
   
   // Redirigir si ya está autenticado
   useEffect(() => {
-    if (currentUser && userLevel) {
+    if (currentUser && userLevel && surveyCompleted !== null) {
       console.log("User authenticated, redirecting based on level:", userLevel);
-      redirectBasedOnUserLevel(userLevel);
+      console.log("Survey completed status:", surveyCompleted);
+      
+      // Si es nivel 3 y no ha completado la encuesta, redirigir a la encuesta
+      if (userLevel === 3 && !surveyCompleted) {
+        console.log("Level 3 user hasn't completed survey, redirecting to survey");
+        navigate('/level3/survey');
+      } else {
+        redirectBasedOnUserLevel(userLevel);
+      }
     }
-  }, [currentUser, userLevel]);
+  }, [currentUser, userLevel, surveyCompleted]);
   
   // Carrusel automático
   useEffect(() => {

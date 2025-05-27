@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ requiredLevel }) => {
-  const { currentUser, userLevel, loading, error } = useAuth();
+  const { currentUser, userLevel, loading, error, surveyCompleted } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   
   useEffect(() => {
     console.log("ProtectedRoute rendered:", {
@@ -12,9 +13,11 @@ const ProtectedRoute = ({ requiredLevel }) => {
       userLevel,
       requiredLevel,
       loading,
-      error
+      error,
+      surveyCompleted,
+      currentPath: location.pathname
     });
-  }, [currentUser, userLevel, requiredLevel, loading, error]);
+  }, [currentUser, userLevel, requiredLevel, loading, error, surveyCompleted, location]);
   
   // Si está cargando, muestra un spinner o nada
   if (loading) {
@@ -33,6 +36,12 @@ const ProtectedRoute = ({ requiredLevel }) => {
       currentUser.email && currentUser.email.endsWith('@jobby.cl')) {
     console.log("OVERRIDE: Email termina en @jobby.cl pero userLevel no es 1. Permitiendo acceso a nivel 1.");
     return <Outlet />;
+  }
+  
+  // Verificar si es nivel 3 y no ha completado la encuesta
+  if (userLevel === 3 && surveyCompleted === false && location.pathname !== '/level3/survey') {
+    console.log("Level 3 user hasn't completed survey, redirecting to survey");
+    return <Navigate to="/level3/survey" replace />;
   }
   
   // Si se especifica un nivel requerido, verificar

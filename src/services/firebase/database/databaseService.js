@@ -546,3 +546,68 @@ export const calculateExpiryDate = (days = 30) => {
   date.setDate(date.getDate() + days);
   return date.toISOString();
 };
+
+// ===== FUNCIONES PARA ENCUESTA DE PERFILAMIENTO =====
+
+// Obtener estado de encuesta del usuario
+export const getUserSurveyStatus = async (userId) => {
+  try {
+    const userRef = ref(database, `users/${userId}`);
+    const snapshot = await get(userRef);
+    
+    if (!snapshot.exists()) {
+      throw new Error('Usuario no encontrado');
+    }
+    
+    const userData = snapshot.val();
+    return {
+      surveyCompleted: userData.surveyCompleted || false,
+      surveyCompletedAt: userData.surveyCompletedAt || null,
+      benefitPreferences: userData.benefitPreferences || null
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Actualizar estado de encuesta del usuario
+export const updateUserSurveyStatus = async (userId, completed = true) => {
+  try {
+    const userRef = ref(database, `users/${userId}`);
+    const updates = {
+      surveyCompleted: completed,
+      surveyUpdatedAt: new Date().toISOString(),
+      ...(completed && { surveyCompletedAt: new Date().toISOString() })
+    };
+    
+    await update(userRef, updates);
+    return { success: true };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Guardar preferencias de beneficios del usuario
+export const saveSurveyPreferences = async (userId, preferences, generationalMemory = null) => {
+  try {
+    const userRef = ref(database, `users/${userId}`);
+    
+    const surveyData = {
+      benefitPreferences: preferences,
+      surveyCompleted: true,
+      surveyCompletedAt: new Date().toISOString(),
+      surveyUpdatedAt: new Date().toISOString()
+    };
+    
+    // Agregar dato generacional si se proporciona
+    if (generationalMemory) {
+      surveyData.generationalMemory = generationalMemory;
+    }
+    
+    await update(userRef, surveyData);
+    
+    return { success: true };
+  } catch (error) {
+    throw error;
+  }
+};

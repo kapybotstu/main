@@ -28,6 +28,7 @@ import Level3Dashboard from '../pages/level3/Level3Dashboard';
 import AvailableBenefits from '../pages/level3/AvailableBenefits';
 import MyRequests from '../pages/level3/MyRequests';
 import MyTokens from '../pages/level3/MyTokens';
+import ProfileSurvey from '../pages/level3/ProfileSurvey';
 
 // Nivel 4: Proveedores
 import Level4Dashboard from '../pages/level4/Level4Dashboard';
@@ -86,6 +87,11 @@ const AppRoutes = () => {
           <Route path="tokens" element={<MyTokens />} />
           <Route path="" element={<Navigate to="/level3/dashboard" replace />} />
         </Route>
+      </Route>
+      
+      {/* Ruta especial para la encuesta de nivel 3 (sin MainLayout) */}
+      <Route element={<ProtectedRoute requiredLevel={3} />}>
+        <Route path="/level3/survey" element={<ProfileSurvey />} />
       </Route>
       
       {/* Nivel 4: Proveedores */}

@@ -1,0 +1,83 @@
+// https://www.gabrielfleury.design
+
+body {
+  overflow: hidden;
+  background-color: #000;
+}
+
+.bg {
+  width: 100vw;
+  height: 100vh;
+}
+
+.callout {
+  position: absolute;
+  font-size: 50px;
+  top: 52%;
+  left: 50%;
+  font-weight: 900;
+  color: white;
+  z-index: 999;
+  text-align: center;
+  transform: translate(-50%,-50%);
+  white-space: nowrap;
+}
+
+.subtitle {
+  position: absolute;
+  font-size: 20px;
+  top: 52%;
+  left: 50%;
+  margin-top: 50px;
+  font-weight: 400;
+  color: white;
+  z-index: 999;
+  text-align: center;
+  transform: translate(-50%,-50%)
+}
+
+.panel1 {
+  width: 100vw;
+  height: 100vh;
+  background: rgb(255, 149, 236);
+  position: absolute;
+  @for $i from 1 through 12 {
+    &:nth-of-type(#{$i}) {
+      z-index: 12 - $i;
+      
+       $stop-position: 100% - ($i * 1%); 
+      
+      background: linear-gradient(
+        105deg,
+        rgba(255, 149, 236, 1) 0%,
+        rgba(255, 89, 226, 1) 6%,
+        rgba(255, 0, 211, 1) 19%,
+        rgba(255, 0, 0, 1) 72%,
+        rgba(0, 0, 0, 1) $stop-position
+      );
+    }
+  }
+}
+
+.panel2 {
+  width: 0;
+  height: 0;
+  background: rgb(255, 149, 236);
+  position: absolute;
+  @for $i from 1 through 12 {
+    &:nth-of-type(#{$i}) {
+      z-index: 12 - $i;
+      
+       $stop-position: 100% - ($i * 1%); 
+      
+      background: linear-gradient(
+        105deg,
+        rgba(255, 149, 236, 1) 0%,
+        rgba(255, 89, 226, 1) 6%,
+        rgba(255, 0, 211, 1) 19%,
+        rgba(255, 0, 0, 1) 72%,
+        rgba(0, 0, 0, 1) $stop-position
+      );
+    }
+  }
+}

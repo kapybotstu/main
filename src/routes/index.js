@@ -26,6 +26,7 @@ import CompanyRequestsManagement from '../pages/level2/CompanyRequestsManagement
 // Nivel 3: Usuario final de empresa
 import Level3Dashboard from '../pages/level3/Level3Dashboard';
 import AvailableBenefits from '../pages/level3/AvailableBenefits';
+import CompanyBenefits from '../pages/level3/CompanyBenefits';
 import MyRequests from '../pages/level3/MyRequests';
 import MyTokens from '../pages/level3/MyTokens';
 import ProfileSurvey from '../pages/level3/ProfileSurvey';
@@ -83,6 +84,7 @@ const AppRoutes = () => {
         <Route path="/level3" element={<MainLayout />}>
           <Route path="dashboard" element={<Level3Dashboard />} />
           <Route path="benefits" element={<AvailableBenefits />} />
+          <Route path="company-benefits" element={<CompanyBenefits />} />
           <Route path="requests" element={<MyRequests />} />
           <Route path="tokens" element={<MyTokens />} />
           <Route path="" element={<Navigate to="/level3/dashboard" replace />} />

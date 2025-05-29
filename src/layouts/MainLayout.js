@@ -112,7 +112,10 @@ const MainLayout = () => {
                   <Link to="/level3/dashboard">Dashboard</Link>
                 </li>
                 <li>
-                  <Link to="/level3/benefits">Beneficios Disponibles</Link>
+                  <Link to="/level3/benefits">Beneficios Flexibles Jobby</Link>
+                </li>
+                <li>
+                  <Link to="/level3/company-benefits">Beneficios Internos</Link>
                 </li>
                 <li>
                   <Link to="/level3/requests">Mis Solicitudes</Link>

@@ -12,6 +12,11 @@
   position: relative;
   overflow: hidden;
   background: #1a1a1a;
+  z-index: 1;
+  isolation: isolate;
+  margin: 1.5rem;
+  border-radius: 3rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Carousel container */
@@ -24,7 +29,8 @@
   align-items: center;
   transition: var(--transition-slow);
   overflow: hidden;
-  z-index: 1;
+  z-index: 2;
+  isolation: isolate;
 }
 
 /* Background blur effect */
@@ -36,6 +42,7 @@
   bottom: 0;
   z-index: -1;
   overflow: hidden;
+  border-radius: 3rem;
 }
 
 /* Overlay gradient for better contrast */
@@ -48,46 +55,53 @@
   bottom: 0;
   background: linear-gradient(to bottom, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0.6) 100%);
   pointer-events: none;
+  border-radius: 3rem;
 }
 
 .blur-background {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(50px) brightness(0.8) contrast(1.2) saturate(1.5);
-  transform: scale(1.3);
-  opacity: 0.4;
+  filter: blur(60px) brightness(0.7) contrast(1.3) saturate(1.6);
+  transform: scale(1.2);
+  opacity: 0.5;
   transition: var(--transition-normal);
+  border-radius: 3rem;
 }
 
 /* Filter bar */
-.filter-bar {
+.benefits-carousel .filter-bar {
   position: absolute;
   top: var(--spacing-xl);
   left: 0;
   right: 0;
-  z-index: 20;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 var(--spacing-xl);
   gap: var(--spacing-lg);
+  pointer-events: none;
 }
 
-.filter-container {
+.benefits-carousel .filter-bar > * {
+  pointer-events: auto;
+}
+
+.benefits-carousel .filter-container {
   display: flex;
   gap: var(--spacing-md);
   align-items: center;
 }
 
-.filter-left,
-.filter-right {
+.benefits-carousel .filter-left,
+.benefits-carousel .filter-right {
   display: flex;
   gap: var(--spacing-md);
   align-items: center;
 }
 
-.filter-button {
+.benefits-carousel .filter-button {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border-light);
@@ -102,23 +116,25 @@
   gap: var(--spacing-sm);
 }
 
-.filter-button:hover {
+.benefits-carousel .filter-button:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
 }
 
-.filter-button.active {
+.benefits-carousel .filter-button.active {
   background: var(--primary-gradient);
   border-color: transparent;
 }
 
-/* View controls */
-.view-controls {
-  display: flex;
-  gap: var(--spacing-md);
+/* View controls simplificado */
+.benefits-carousel .view-controls-simple {
+  position: absolute;
+  top: var(--spacing-xl);
+  right: var(--spacing-xl);
+  z-index: 10;
 }
 
-.view-toggle {
+.benefits-carousel .view-toggle {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border-light);
@@ -134,7 +150,7 @@
   font-size: var(--font-xl);
 }
 
-.view-toggle:hover {
+.benefits-carousel .view-toggle:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
 }

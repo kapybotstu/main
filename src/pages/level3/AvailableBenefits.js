@@ -9,8 +9,6 @@ import BenefitCard from './components/BenefitCard';
 const AvailableBenefits = () => {
   const { currentUser, companyId } = useAuth();
   const [jobbyBenefits, setJobbyBenefits] = useState([]);
-  const [companyBenefits, setCompanyBenefits] = useState([]);
-  const [allBenefits, setAllBenefits] = useState([]);
   const [filteredBenefits, setFilteredBenefits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,7 +26,6 @@ const AvailableBenefits = () => {
   // Estados para carrusel inmersivo
   const [currentBenefitIndex, setCurrentBenefitIndex] = useState(0);
   const [showGridView, setShowGridView] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('Todos');
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
@@ -37,8 +34,6 @@ const AvailableBenefits = () => {
   const carouselRef = useRef(null);
   const touchStartRef = useRef(0);
 
-  // Categorías para filtrado
-  const categories = ['Todos', 'Alimentación', 'Entretenimiento', 'Salud', 'Compras', 'General'];
 
   // Función para abrir modal de canje (definida PRIMERO)
   const openRedemptionModal = useCallback((experience) => {
@@ -127,31 +122,6 @@ const AvailableBenefits = () => {
           setJobbyBenefits(benefits);
         });
         
-        // Obtener beneficios de la empresa
-        if (companyId) {
-          const companyBenefitsRef = ref(database, `company_benefits/${companyId}`);
-          onValue(companyBenefitsRef, (snapshot) => {
-            const benefits = [];
-            if (snapshot.exists()) {
-              snapshot.forEach((childSnapshot) => {
-                const benefit = childSnapshot.val();
-                
-                if (benefit.status === 'active') {
-                  benefits.push({
-                    id: childSnapshot.key,
-                    ...benefit,
-                    isJobbyBenefit: false,
-                    image: benefit.image || generatePlaceholder(benefit.name, '#4facfe'),
-                    gradient: getRandomGradient(),
-                    tokenCost: benefit.tokenCost || 1 // Costo por defecto: 1 token
-                  });
-                }
-              });
-            }
-            
-            setCompanyBenefits(benefits);
-          });
-        }
         
         setLoading(false);
       } catch (err) {
@@ -163,12 +133,10 @@ const AvailableBenefits = () => {
     fetchBenefits();
   }, [currentUser, companyId]);
 
-  // Combinar todos los beneficios
+  // Establecer beneficios Jobby como filtrados
   useEffect(() => {
-    const combined = [...jobbyBenefits, ...companyBenefits];
-    setAllBenefits(combined);
-    setFilteredBenefits(combined);
-  }, [jobbyBenefits, companyBenefits]);
+    setFilteredBenefits(jobbyBenefits);
+  }, [jobbyBenefits]);
 
   // Función para obtener gradiente aleatorio
   const getRandomGradient = () => {
@@ -203,18 +171,6 @@ const AvailableBenefits = () => {
     return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   };
 
-  // Filtrado por categorías
-  const handleFilterChange = (category) => {
-    setActiveFilter(category);
-    if (category === 'Todos') {
-      setFilteredBenefits(allBenefits);
-    } else {
-      setFilteredBenefits(allBenefits.filter(benefit => 
-        benefit.category === category
-      ));
-    }
-    setCurrentBenefitIndex(0);
-  };
 
   // Navegación por teclado optimizada
   useEffect(() => {
@@ -420,7 +376,7 @@ const AvailableBenefits = () => {
           <div className="pulse-ring delay-1"></div>
           <div className="pulse-ring delay-2"></div>
         </div>
-        <p>Cargando beneficios increíbles...</p>
+        <p>Cargando beneficios flexibles Jobby...</p>
       </div>
     );
   }
@@ -452,10 +408,10 @@ const AvailableBenefits = () => {
     return (
       <div className="empty-benefits-state">
         <div className="empty-icon">🎁</div>
-        <h2>No hay beneficios disponibles</h2>
-        <p>No se encontraron beneficios para el filtro seleccionado.</p>
-        <button onClick={() => handleFilterChange('Todos')} className="reset-filter-button">
-          Ver todos los beneficios
+        <h2>No hay beneficios flexibles Jobby disponibles</h2>
+        <p>No se encontraron beneficios Jobby para el filtro seleccionado.</p>
+        <button onClick={() => window.location.reload()} className="reset-filter-button">
+          Recargar página
         </button>
       </div>
     );
@@ -488,29 +444,15 @@ const AvailableBenefits = () => {
           )}
         </div>
 
-        {/* Sistema de filtrado */}
-        <div className="filter-bar">
-          <div className="filter-container">
-            {categories.map((category) => (
-              <button
-                key={category}
-                className={`filter-button ${activeFilter === category ? 'active' : ''}`}
-                onClick={() => handleFilterChange(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-          
-          <div className="view-controls">
-            <button 
-              className="view-toggle"
-              onClick={() => setShowGridView(!showGridView)}
-              title="Vista de cuadrícula (G)"
-            >
-              {showGridView ? '🎡' : '⊞'}
-            </button>
-          </div>
+        {/* Vista de cuadrícula toggle */}
+        <div className="view-controls-simple">
+          <button 
+            className="view-toggle"
+            onClick={() => setShowGridView(!showGridView)}
+            title="Vista de cuadrícula (G)"
+          >
+            {showGridView ? '🎡' : '⊞'}
+          </button>
         </div>
 
         {/* Navegación del carrusel */}
@@ -714,7 +656,7 @@ const AvailableBenefits = () => {
         <div className="grid-modal-overlay">
           <div className="grid-modal">
             <div className="grid-header">
-              <h2>Todos los Beneficios</h2>
+              <h2>Beneficios Flexibles Jobby</h2>
               <button 
                 className="close-grid"
                 onClick={() => setShowGridView(false)}
@@ -764,7 +706,7 @@ const AvailableBenefits = () => {
         <div className="request-modal-overlay">
           <div className="request-modal">
             <div className="request-modal-header">
-              <h3>Canjear Experiencia</h3>
+              <h3>Canjear Beneficio Flexible Jobby</h3>
               <button 
                 className="close-button"
                 onClick={() => setShowRedemptionModal(false)}
@@ -792,8 +734,8 @@ const AvailableBenefits = () => {
                     <span className="cost-badge">
                       🎟️ {selectedExperience.tokenCost} token{selectedExperience.tokenCost > 1 ? 's' : ''}
                     </span>
-                    <span className={`experience-type ${selectedExperience.isJobbyBenefit ? 'jobby' : 'company'}`}>
-                      {selectedExperience.isJobbyBenefit ? 'Experiencia Jobby' : 'Experiencia de Empresa'}
+                    <span className="experience-type jobby">
+                      Beneficio Flexible Jobby
                     </span>
                   </div>
                 </div>
@@ -866,7 +808,7 @@ const AvailableBenefits = () => {
           <div className="notification-content">
             <span className="success-icon">🎉</span>
             <div className="success-details">
-              <h4>¡Experiencia canjeada!</h4>
+              <h4>¡Beneficio Jobby canjeado!</h4>
               <p><strong>{redemptionSuccess.experienceName}</strong></p>
               <p>Código de canje: <strong>{redemptionSuccess.redemptionCode}</strong></p>
               <p>Tokens restantes: <strong>{redemptionSuccess.remainingTokens}</strong></p>

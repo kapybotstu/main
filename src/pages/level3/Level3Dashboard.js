@@ -382,34 +382,6 @@ const Level3Dashboard = () => {
         </div>
       </div>
 
-      {/* Navegación rápida */}
-      <div className="quick-navigation">
-        <div className="nav-grid">
-          <Link to="/level3/benefits" className="nav-card benefits">
-            <div className="nav-icon">🎁</div>
-            <div className="nav-content">
-              <h4>Beneficios</h4>
-              <p>{stats.availableJobbyBenefits + stats.availableCompanyBenefits} disponibles</p>
-            </div>
-          </Link>
-          
-          <Link to="/level3/requests" className="nav-card requests">
-            <div className="nav-icon">📋</div>
-            <div className="nav-content">
-              <h4>Mis Solicitudes</h4>
-              <p>{stats.pendingRequests} pendientes</p>
-            </div>
-          </Link>
-          
-          <Link to="/level3/tokens" className="nav-card tokens">
-            <div className="nav-icon">🎫</div>
-            <div className="nav-content">
-              <h4>Mis Tokens</h4>
-              <p>{stats.activeTokens} activos</p>
-            </div>
-          </Link>
-        </div>
-      </div>
 
       {/* Modal de bienvenida */}
       {showWelcomeModal && (

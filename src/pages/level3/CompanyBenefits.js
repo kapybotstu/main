@@ -267,8 +267,12 @@ const CompanyBenefits = () => {
 
 
       <div className="benefits-grid">
-        {filteredBenefits.map((benefit) => (
-          <div key={benefit.id} className="company-benefit-card">
+        {filteredBenefits.map((benefit, index) => (
+          <div 
+            key={benefit.id} 
+            className="company-benefit-card"
+            style={{ '--card-index': index }}
+          >
             <div className="card-image">
               <img 
                 src={benefit.image} 

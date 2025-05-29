@@ -22,6 +22,12 @@
   min-height: 100vh;
 }
 
+[data-level="3"] .main-content {
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+}
+
 /* Header moderno para Level 3 */
 [data-level="3"] .header {
   background: linear-gradient(135deg, var(--level3-primary) 0%, var(--level3-secondary) 100%);
@@ -73,11 +79,14 @@
   background: var(--level3-card-bg);
   backdrop-filter: blur(10px);
   border: 1px solid var(--level3-glass-border);
-  border-radius: 0 20px 20px 0;
+  border-radius: 20px;
   padding: 2rem 1.5rem;
   box-shadow: var(--level3-shadow);
   width: 280px;
+  min-width: 280px;
+  max-width: 280px;
   margin: 1rem 0 1rem 1rem;
+  flex-shrink: 0;
 }
 
 [data-level="3"] .sidebar > div:first-child {
@@ -177,6 +186,8 @@
   background: transparent;
   padding: 2rem;
   margin-right: 1rem;
+  flex: 1;
+  overflow-x: hidden;
 }
 
 /* Footer para Level 3 */

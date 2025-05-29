@@ -97,6 +97,8 @@ const initSpotifyAnimation = () => {
 
   const numberOfPanels = 8;
   const rotationCoef = 5;
+  
+  // Usar dimensiones de viewport simples - scroll natural
   let elHeight = window.innerHeight / numberOfPanels;
   let elWidth = window.innerWidth / numberOfPanels;
 
@@ -121,12 +123,23 @@ const initSpotifyAnimation = () => {
     }
   });
 
+  // Manejar resize solo cuando sea necesario
+  let resizeTimeout;
   window.addEventListener("resize", () => {
-    elHeight = window.innerHeight / numberOfPanels;
-    elWidth = window.innerWidth / numberOfPanels;
-    tl.clear();
-    addItemsToTimeline();
-    tl.progress(0);
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      const newHeight = window.innerHeight;
+      const newWidth = window.innerWidth;
+      // Solo reiniciar si el cambio es significativo
+      if (Math.abs(newHeight - elHeight * numberOfPanels) > 50 || 
+          Math.abs(newWidth - elWidth * numberOfPanels) > 50) {
+        elHeight = newHeight / numberOfPanels;
+        elWidth = newWidth / numberOfPanels;
+        tl.clear();
+        addItemsToTimeline();
+        tl.progress(0);
+      }
+    }, 200);
   });
 
   addItemsToTimeline();
@@ -324,6 +337,24 @@ const ProfileSurvey = () => {
 
   // Hook para manejar las animaciones GSAP
   useGSAPEffect(animationBgRef);
+
+  // Bloquear scroll del body cuando este componente está montado
+  useEffect(() => {
+    // Bloquear scroll del body
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.height = '100vh';
+
+    return () => {
+      // Restaurar scroll al desmontar
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+    };
+  }, []);
+
 
   // Categorías de beneficios reales
   const benefitCategories = [
@@ -830,8 +861,8 @@ const ProfileSurvey = () => {
       <div className="survey-celebration">
         <div className="celebration-content">
           <div className="celebration-icon">🎊</div>
-          <h2>Test Completado!</h2>
-          <p>Test mensaje de éxito placeholder</p>
+          <h2>¡Perfil Completado!</h2>
+          <p>Tu diagnóstico personalizado está listo</p>
           <div className="loading-dots">
             <span></span>
             <span></span>

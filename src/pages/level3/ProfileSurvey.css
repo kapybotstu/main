@@ -1,25 +1,28 @@
 .profile-survey {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height */
   position: relative;
-  overflow: hidden;
   background: #000;
   contain: layout style paint;
   isolation: isolate;
+  overflow: hidden; /* BLOQUEAR todo scroll de página */
 }
 
 /* ===== FONDO SPOTIFY WRAPPED ORIGINAL ===== */
 .animated-bg {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height */
   z-index: 0;
   contain: strict;
   isolation: isolate;
   /* Optimizaciones WebKit adicionales */
   transform: translate3d(0,0,0);
   -webkit-transform-style: preserve-3d;
+  pointer-events: none; /* No interfiere con clics */
 }
 
 /* Estilos básicos para paneles - GSAP control total */
@@ -63,7 +66,8 @@
 .survey-container {
   position: relative;
   z-index: 10;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,6 +76,7 @@
   isolation: isolate;
   transform: translateZ(0);
   contain: layout style;
+  overflow: hidden; /* Bloquear scroll del container */
 }
 
 /* Barra de progreso estilo Jobby */
@@ -97,6 +102,7 @@
 .survey-content {
   width: 100%;
   max-width: 800px;
+  max-height: 80vh; /* Limitar altura total */
   background: transparent;
   border-radius: 20px;
   padding: 40px 40px;
@@ -107,6 +113,28 @@
   transform: translateZ(0);
   contain: layout style;
   isolation: isolate;
+  overflow-y: auto; /* AQUÍ es donde permitimos scroll interno */
+  /* Estilos de scrollbar personalizados */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(104, 211, 145, 0.5) transparent;
+}
+
+.survey-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.survey-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.survey-content::-webkit-scrollbar-thumb {
+  background: rgba(104, 211, 145, 0.5);
+  border-radius: 3px;
+}
+
+.survey-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(104, 211, 145, 0.7);
 }
 
 /* Intro Section estilo Spotify */
@@ -215,6 +243,8 @@
   margin-bottom: 20px;
   will-change: contents;
   contain: layout style;
+  max-height: 50vh; /* Limitar altura del grid */
+  overflow-y: auto; /* Scroll interno del grid */
 }
 
 .memory-card {
@@ -346,6 +376,8 @@
   margin-bottom: 30px;
   will-change: contents;
   contain: layout style;
+  max-height: 50vh; /* Limitar altura del grid */
+  overflow-y: auto; /* Scroll interno del grid */
 }
 
 .category-card {
@@ -710,6 +742,12 @@
   .survey-content {
     padding: 30px 20px;
     max-width: 95%;
+    max-height: 85vh; /* Más espacio en móvil */
+  }
+  
+  .memories-grid,
+  .categories-grid {
+    max-height: 40vh; /* Menor altura en móvil */
   }
   
   .survey-intro h2,

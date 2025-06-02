@@ -611,3 +611,38 @@ export const saveSurveyPreferences = async (userId, preferences, generationalMem
     throw error;
   }
 };
+
+// ===== THEME PREFERENCES =====
+
+// Save user's theme preference
+export const saveUserThemePreference = async (userId, theme) => {
+  try {
+    const userRef = ref(database, `users/${userId}`);
+    await update(userRef, {
+      themePreference: theme,
+      themeUpdatedAt: new Date().toISOString()
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving theme preference:', error);
+    throw error;
+  }
+};
+
+// Get user's theme preference
+export const getUserThemePreference = async (userId) => {
+  try {
+    const userRef = ref(database, `users/${userId}/themePreference`);
+    const snapshot = await get(userRef);
+    
+    if (snapshot.exists()) {
+      return snapshot.val();
+    }
+    
+    // Default to light theme if no preference exists
+    return 'light';
+  } catch (error) {
+    console.error('Error getting theme preference:', error);
+    return 'light'; // Default to light theme on error
+  }
+};

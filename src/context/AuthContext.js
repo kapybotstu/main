@@ -90,13 +90,19 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  // Function to update survey status
+  const updateSurveyStatus = (completed) => {
+    setSurveyCompleted(completed);
+  };
+
   const value = {
     currentUser,
     userLevel,
     companyId,
     loading,
     error,
-    surveyCompleted
+    surveyCompleted,
+    updateSurveyStatus
   };
 
   return (

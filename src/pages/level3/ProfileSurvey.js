@@ -321,7 +321,7 @@ const initSpotifyAnimation = () => {
 
 const ProfileSurvey = () => {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, updateSurveyStatus } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedPreferences, setSelectedPreferences] = useState([]);
   const [selectedGeneration, setSelectedGeneration] = useState(null);
@@ -571,11 +571,14 @@ const ProfileSurvey = () => {
         
         await saveSurveyPreferences(currentUser.uid, preferencesString, selectedGeneration);
         
+        // Update survey status in AuthContext
+        updateSurveyStatus(true);
+        
         // Mostrar celebración
         setShowCelebration(true);
         setTimeout(() => {
           navigate('/level3/dashboard');
-        }, 2000);
+        }, 3000); // Changed to 3 seconds
       } catch (error) {
         console.error('Error detallado al guardar preferencias:', error);
         alert(`Error al guardar tus preferencias: ${error.message}`);
@@ -860,13 +863,25 @@ const ProfileSurvey = () => {
     return (
       <div className="survey-celebration">
         <div className="celebration-content">
-          <div className="celebration-icon">🎊</div>
-          <h2>¡Perfil Completado!</h2>
-          <p>Tu diagnóstico personalizado está listo</p>
-          <div className="loading-dots">
-            <span></span>
-            <span></span>
-            <span></span>
+          <div className="ai-loading-animation">
+            <div className="ai-brain-icon">
+              <svg viewBox="0 0 100 100" className="ai-brain">
+                <circle cx="50" cy="50" r="45" className="brain-outline" />
+                <path d="M30 50 Q40 30, 50 50 T70 50" className="brain-wave brain-wave-1" />
+                <path d="M25 50 Q35 70, 45 50 T65 50 T85 50" className="brain-wave brain-wave-2" />
+                <path d="M20 50 Q30 40, 40 50 T60 50 T80 50" className="brain-wave brain-wave-3" />
+              </svg>
+            </div>
+            <h2 className="ai-loading-title">La IA de Jobby está perfeccionando tu experiencia</h2>
+            <div className="ai-progress-bar">
+              <div className="ai-progress-fill"></div>
+            </div>
+            <p className="ai-loading-subtitle">Analizando tus preferencias para crear beneficios personalizados</p>
+            <div className="loading-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
         </div>
       </div>

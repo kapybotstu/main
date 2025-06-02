@@ -1,0 +1,371 @@
+/* Benefits Management - Estilos específicos con namespace */
+/* Prefijo: .benefits-mgmt para evitar conflictos */
+
+.benefits-mgmt-container {
+  padding: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.benefits-mgmt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.benefits-mgmt-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.benefits-mgmt-btn-primary {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.benefits-mgmt-btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+/* Alerts */
+.benefits-mgmt-alert {
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.benefits-mgmt-alert-error {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.benefits-mgmt-alert-success {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+/* Card */
+.benefits-mgmt-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.benefits-mgmt-card-header {
+  background-color: #f9fafb;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.benefits-mgmt-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+/* Table */
+.benefits-mgmt-table-container {
+  overflow-x: auto;
+}
+
+.benefits-mgmt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.benefits-mgmt-table th,
+.benefits-mgmt-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 13px;
+}
+
+.benefits-mgmt-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.benefits-mgmt-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Badges */
+.benefits-mgmt-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.benefits-mgmt-badge-success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.benefits-mgmt-badge-info {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.benefits-mgmt-badge-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.benefits-mgmt-badge-error {
+  background-color: #fecaca;
+  color: #991b1b;
+}
+
+.benefits-mgmt-highlight-badge {
+  margin-left: 6px;
+  color: #f59e0b;
+}
+
+/* Action buttons */
+.benefits-mgmt-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.benefits-mgmt-btn-action {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.benefits-mgmt-btn-edit {
+  background-color: #2563eb;
+  color: white;
+}
+
+.benefits-mgmt-btn-edit:hover {
+  background-color: #1d4ed8;
+}
+
+.benefits-mgmt-btn-deactivate {
+  background-color: #dc2626;
+  color: white;
+}
+
+.benefits-mgmt-btn-deactivate:hover {
+  background-color: #b91c1c;
+}
+
+.benefits-mgmt-btn-activate {
+  background-color: #16a34a;
+  color: white;
+}
+
+.benefits-mgmt-btn-activate:hover {
+  background-color: #15803d;
+}
+
+/* Modal */
+.benefits-mgmt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.benefits-mgmt-modal {
+  background: white;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.benefits-mgmt-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.benefits-mgmt-modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.benefits-mgmt-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.benefits-mgmt-close-btn:hover {
+  color: #374151;
+}
+
+/* Form */
+.benefits-mgmt-form {
+  padding: 16px;
+}
+
+.benefits-mgmt-form-group {
+  margin-bottom: 12px;
+}
+
+.benefits-mgmt-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
+
+.benefits-mgmt-input,
+.benefits-mgmt-select,
+.benefits-mgmt-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.benefits-mgmt-input:focus,
+.benefits-mgmt-select:focus,
+.benefits-mgmt-textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.benefits-mgmt-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.benefits-mgmt-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.benefits-mgmt-checkbox-group .benefits-mgmt-label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.benefits-mgmt-checkbox {
+  width: auto;
+  margin: 0;
+}
+
+.benefits-mgmt-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 20px;
+}
+
+.benefits-mgmt-btn-secondary {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.benefits-mgmt-btn-secondary:hover {
+  background-color: #e5e7eb;
+}
+
+/* Loading state */
+.benefits-mgmt-loading {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+/* Empty state */
+.benefits-mgmt-empty {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .benefits-mgmt-container {
+    padding: 16px;
+  }
+  
+  .benefits-mgmt-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .benefits-mgmt-table th,
+  .benefits-mgmt-table td {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .benefits-mgmt-actions {
+    flex-direction: column;
+  }
+  
+  .benefits-mgmt-modal {
+    margin: 10px;
+    max-height: calc(100vh - 20px);
+  }
+}

@@ -1,0 +1,214 @@
+.achievements-management-simple {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.achievements-management-simple h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.tabs button {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.tabs button.active {
+  background: #007cba;
+  color: white;
+  border-color: #007cba;
+}
+
+.rules-section {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+}
+
+.create-rule {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.create-rule h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  height: 60px;
+  resize: vertical;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  color: #666;
+  font-size: 12px;
+}
+
+.create-rule button[type="submit"] {
+  background: #007cba;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.create-rule button[type="submit"]:hover {
+  background: #005a8b;
+}
+
+.rules-list h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.rules-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid #ddd;
+}
+
+.rules-list th,
+.rules-list td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.rules-list th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.rules-list button {
+  padding: 5px 10px;
+  margin: 0 2px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.rules-list button:hover {
+  background: #e5e5e5;
+}
+
+.analysis-section {
+  max-width: 800px;
+}
+
+.analysis-card {
+  background: #f9f9f9;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.analysis-card h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.analysis-card ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.analysis-card li {
+  margin-bottom: 5px;
+}
+
+.analysis-section button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.analysis-section button:hover {
+  background: #218838;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rules-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .rules-list table {
+    font-size: 12px;
+  }
+  
+  .rules-list th,
+  .rules-list td {
+    padding: 8px;
+  }
+}

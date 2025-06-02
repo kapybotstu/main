@@ -1,0 +1,90 @@
+/********************************************/
+/********************************************/
+/* Please ❤ this if you like it! */
+/* Follow Me https://codepen.io/designfenix */
+/********************************************/
+/********************************************/
+/**/
+/**/
+/**/
+/**/
+/**/
+/**/
+/**/
+:root {
+	--duration: 15s;
+}
+body {
+	background: #f7f7f7;
+	overflow: hidden;
+}
+.wrapper-images {
+	display: flex;
+	flex-direction: column;
+	height: 150vh;
+	justify-content: center;
+	left: 50%;
+	position: absolute;
+	top: 50%;
+	opacity: 0.8;
+	transform: translate3d(-50%, -50%, 0) perspective(800px) rotatey(-10deg)
+		rotate(10deg);
+}
+.images-line {
+	animation: runner var(--duration) linear infinite;
+	display: flex;
+	transform: translateX(23%);
+	&:hover {
+		animation-play-state: paused;
+	}
+	.line {
+		background-position: 50% 50%;
+		background-size: cover;
+		flex: none;
+		height: 20vh;
+		margin: clamp(15px, 3vw, 30px);
+		width: 20vh;
+		position: relative;
+		transition: ease-in-out all 0.3s;
+		.img {
+			position: absolute;
+			z-index: 2;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			background-position: 50% 50%;
+			background-size: cover;
+			transition: ease-in-out all 0.3s;
+		}
+		&:hover {
+			.img {
+				cursor: pointer;
+				transform: scale(1.1) translatez(0px);
+			}
+			&:after {
+				filter: blur(35px) opacity(0.8);
+			}
+		}
+		&:after {
+			content: "";
+			background: inherit;
+			display: block;
+			width: 100%;
+			height: 100%;
+			border-radius: 50%;
+			top: 3vh;
+			position: absolute;
+			background-size: cover;
+			z-index: -1;
+			transition: ease-in-out all 0.3s;
+			filter: blur(25px) opacity(0.8);
+		}
+	}
+}
+
+@keyframes runner {
+	to {
+		transform: translateX(-10.4%);
+	}
+}

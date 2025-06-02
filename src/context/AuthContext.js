@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
             if (userData.level === 3) {
               try {
                 // MODO DE PRUEBA: Siempre forzar encuesta para desarrollo
-                const SURVEY_TEST_MODE = true;
+                const SURVEY_TEST_MODE = false;
                 
                 if (SURVEY_TEST_MODE) {
                   console.log("🧪 SURVEY TEST MODE: Forzando encuesta para desarrollo");

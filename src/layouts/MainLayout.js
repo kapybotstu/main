@@ -242,9 +242,6 @@ const MainLayout = () => {
           {/* Menú para Nivel 3: Usuario final de empresa */}
           {userLevel === 3 && (
             <>
-              <div style={{padding: '10px', color: '#333', fontWeight: 'bold'}}>
-                Panel Nivel 3 - Usuario
-              </div>
               <ul>
                 <li>
                   <Link to="/level3/dashboard">Dashboard</Link>

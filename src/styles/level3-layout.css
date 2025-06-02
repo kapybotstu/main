@@ -320,27 +320,23 @@
 }
 
 [data-level="3"] .sidebar a[href*="dashboard"]:before {
-  content: "🏠";
-  font-size: 1.1rem;
-  min-width: 1.5rem;
+  content: "";
+  display: none;
 }
 
 [data-level="3"] .sidebar a[href*="benefits"]:before {
-  content: "🎁";
-  font-size: 1.1rem;
-  min-width: 1.5rem;
+  content: "";
+  display: none;
 }
 
 [data-level="3"] .sidebar a[href*="requests"]:before {
-  content: "📋";
-  font-size: 1.1rem;
-  min-width: 1.5rem;
+  content: "";
+  display: none;
 }
 
 [data-level="3"] .sidebar a[href*="tokens"]:before {
-  content: "🏆";
-  font-size: 1.1rem;
-  min-width: 1.5rem;
+  content: "";
+  display: none;
 }
 
 /* Content area para Level 3 */
@@ -412,7 +408,7 @@
 [data-theme="dark"][data-level="3"] .sidebar a[href*="benefits"]:before,
 [data-theme="dark"][data-level="3"] .sidebar a[href*="requests"]:before,
 [data-theme="dark"][data-level="3"] .sidebar a[href*="tokens"]:before {
-  opacity: 0.9;
+  display: none;
 }
 
 [data-theme="dark"][data-level="3"] .content {

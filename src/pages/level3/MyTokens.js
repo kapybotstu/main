@@ -163,7 +163,8 @@ const MyTokens = () => {
   
   return (
     <div className="tokens-container">
-      <h1>Mis Tokens</h1>
+      <h1>🏆 Desafíos y Logros</h1>
+      <p className="page-subtitle">Completa desafíos, gana recompensas y desbloquea nuevos beneficios</p>
       
       <div className="tokens-header">
         <div className="tokens-filter">
@@ -171,25 +172,25 @@ const MyTokens = () => {
             className={`filter-button ${filter === 'all' ? 'active' : ''}`}
             onClick={() => handleChangeFilter('all')}
           >
-            Todos
+            🎮 Todos
           </button>
           <button 
             className={`filter-button ${filter === 'active' ? 'active' : ''}`}
             onClick={() => handleChangeFilter('active')}
           >
-            Activos
+            🎯 Desafíos Activos
           </button>
           <button 
             className={`filter-button ${filter === 'used' ? 'active' : ''}`}
             onClick={() => handleChangeFilter('used')}
           >
-            Utilizados
+            🏅 Logros Completados
           </button>
           <button 
             className={`filter-button ${filter === 'expired' ? 'active' : ''}`}
             onClick={() => handleChangeFilter('expired')}
           >
-            Expirados
+            🔒 No Completados
           </button>
         </div>
       </div>

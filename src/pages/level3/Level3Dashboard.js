@@ -348,16 +348,16 @@ const Level3Dashboard = () => {
         {/* Beneficios populares (derecha) */}
         <div className="popular-benefits">
           <div className="section-header">
-            <h3>🔥 Tokens Activos</h3>
+            <h3>🏆 Desafíos Activos</h3>
             <Link to="/level3/tokens" className="see-all-link">Ver todos</Link>
           </div>
           
           <div className="benefits-preview">
             {recentTokens.length === 0 ? (
               <div className="empty-state">
-                <div className="empty-icon">🎫</div>
-                <p>No tienes tokens activos</p>
-                <Link to="/level3/benefits" className="empty-action">Solicitar beneficios</Link>
+                <div className="empty-icon">🎯</div>
+                <p>No tienes desafíos activos</p>
+                <Link to="/level3/benefits" className="empty-action">Explorar desafíos</Link>
               </div>
             ) : (
               recentTokens.map((token) => (

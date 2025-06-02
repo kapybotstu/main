@@ -766,3 +766,203 @@
     max-width: none;
   }
 }
+
+/* Dark mode styles for Company Benefits */
+[data-theme="dark"] .company-benefits {
+  color: #f3f4f6;
+}
+
+/* Header dark mode */
+[data-theme="dark"] .benefits-header {
+  background: #1f2937;
+  border-left-color: #667eea;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .benefits-header h1 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .benefits-header p {
+  color: #d1d5db;
+}
+
+/* Benefits grid dark mode */
+[data-theme="dark"] .benefit-card {
+  background: #1f2937;
+  border: 1px solid #374151;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .benefit-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+}
+
+[data-theme="dark"] .benefit-icon-wrapper {
+  background: #374151;
+}
+
+[data-theme="dark"] .benefit-card h3 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .benefit-description {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .benefit-meta {
+  background: #374151;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .benefit-meta-item {
+  color: #d1d5db;
+}
+
+/* Empty state dark mode */
+[data-theme="dark"] .empty-state {
+  background: rgba(31, 41, 55, 0.5);
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .empty-icon {
+  background: #374151;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .empty-state h3 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .empty-state p {
+  color: #d1d5db;
+}
+
+/* Loading state dark mode */
+[data-theme="dark"] .loading-state {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .loading-spinner {
+  border-color: rgba(156, 163, 175, 0.2);
+  border-top-color: #667eea;
+}
+
+/* Error state dark mode */
+[data-theme="dark"] .error-state {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .error-icon {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+[data-theme="dark"] .error-state h3 {
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .error-state p {
+  color: #fca5a5;
+}
+
+/* Modal dark mode */
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="dark"] .modal-content {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .modal-header {
+  background: #374151;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .close-button {
+  color: #9ca3af;
+  background: rgba(156, 163, 175, 0.1);
+}
+
+[data-theme="dark"] .close-button:hover {
+  background: rgba(156, 163, 175, 0.2);
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .modal-body {
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .selected-benefit-info {
+  background: #374151;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .form-group label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group textarea:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+[data-theme="dark"] .form-group small {
+  color: #9ca3af;
+}
+
+/* Buttons dark mode */
+[data-theme="dark"] .benefit-actions .btn-apply {
+  background: #667eea;
+  color: white;
+}
+
+[data-theme="dark"] .benefit-actions .btn-apply:hover {
+  background: #5a67d8;
+}
+
+[data-theme="dark"] .btn-secondary {
+  background: #374151;
+  color: #f3f4f6;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+  background: #4b5563;
+}
+
+/* Success notification dark mode */
+[data-theme="dark"] .success-notification {
+  background: #047857;
+  border: 1px solid #059669;
+}
+
+/* Category filters dark mode */
+[data-theme="dark"] .category-filter {
+  background: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .category-filter:hover {
+  background: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .category-filter.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}

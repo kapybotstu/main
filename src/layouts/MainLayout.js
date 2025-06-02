@@ -259,7 +259,7 @@ const MainLayout = () => {
                   <Link to="/level3/requests">Mis Solicitudes</Link>
                 </li>
                 <li>
-                  <Link to="/level3/tokens">Mis Tokens</Link>
+                  <Link to="/level3/tokens">Desafíos y Logros</Link>
                 </li>
               </ul>
             </>

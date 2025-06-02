@@ -583,3 +583,155 @@
     padding: 0 1rem;
   }
 }
+
+/* Dark mode styles */
+[data-theme="dark"] .hero-section {
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.7) 100%);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+[data-theme="dark"] .hero-content h2 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .hero-content p {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .floating-card {
+  background: rgba(31, 41, 55, 0.9);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .explanation-card {
+  background: #1f2937;
+  border: 1px solid #374151;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .explanation-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .explanation-card h4 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .explanation-card p {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .achievements-section {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .popular-benefits {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .section-header h3 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .see-all-link {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .see-all-link:hover {
+  color: #667eea;
+}
+
+[data-theme="dark"] .empty-state {
+  background: rgba(31, 41, 55, 0.5);
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .empty-state p {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .empty-action {
+  color: #667eea;
+}
+
+[data-theme="dark"] .empty-action:hover {
+  color: #7c3aed;
+}
+
+[data-theme="dark"] .achievement-item {
+  background: rgba(31, 41, 55, 0.5);
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .achievement-info h4 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .achievement-date {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .benefit-item {
+  background: rgba(31, 41, 55, 0.5);
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .benefit-name {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .benefit-meta {
+  color: #9ca3af;
+}
+
+/* Dashboard tokens info dark mode */
+[data-theme="dark"] .dashboard-tokens-info {
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.9) 100%);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+[data-theme="dark"] .company-info {
+  background: rgba(31, 41, 55, 0.7);
+  border: 1px solid rgba(75, 85, 99, 0.5);
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .token-card {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+}
+
+/* Additional dark mode fixes */
+[data-theme="dark"] .dashboard-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .dashboard-error p {
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .retry-button {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .retry-button:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+/* Loading states dark mode */
+[data-theme="dark"] .dashboard-loading {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .loading-spinner {
+  border-color: rgba(156, 163, 175, 0.2);
+  border-top-color: #667eea;
+}

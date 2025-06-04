@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ref, onValue, get } from 'firebase/database';
-import { database } from '../../services/firebase/config';
-import { useAuth } from '../../context/AuthContext';
+import { database } from '../../../services/firebase/config';
+import { useAuth } from '../../../context/AuthContext';
 import {
   getUserTokens,
   createUserToken,
   revokeToken,
   getJobbyBenefits,
   getCompanyBenefits
-} from '../../services/firebase/database/databaseService';
+} from '../../../services/firebase/database/databaseService';
 import './TokenManagement.css';
 
 const TokenManagement = () => {

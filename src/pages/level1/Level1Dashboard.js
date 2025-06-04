@@ -283,10 +283,10 @@ const Level1Dashboard = () => {
           <Link to="/level1/companies" className="action-button">
             Gestionar Empresas
           </Link>
-          <Link to="/level1/benefits" className="action-button">
+          <Link to="/level1/benefits/jobby" className="action-button">
             Gestionar Beneficios Jobby
           </Link>
-          <Link to="/level1/requests" className="action-button">
+          <Link to="/level1/benefits/requests" className="action-button">
             Ver Solicitudes Pendientes
           </Link>
           <Link to="/level1/providers" className="action-button">
@@ -295,11 +295,14 @@ const Level1Dashboard = () => {
           <Link to="/level1/tokens" className="action-button">
             Gestionar Tokens
           </Link>
-          <Link to="/level1/diagnostico-usuarios" className="action-button">
+          <Link to="/level1/users/list" className="action-button">
             Diagnóstico de Usuarios
           </Link>
-          <Link to="/level1/asignar-niveles" className="action-button">
+          <Link to="/level1/users/assign-levels" className="action-button">
             Asignar Niveles de Usuario
+          </Link>
+          <Link to="/level1/achievements" className="action-button">
+            Sistema de Logros
           </Link>
         </div>
       </div>

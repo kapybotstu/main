@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ref, get, set, update, remove, query, orderByChild, equalTo } from 'firebase/database';
-import { database } from '../../services/firebase/config';
-import { useAuth } from '../../context/AuthContext';
-import { registerUser } from '../../services/firebase/auth/authService';
+import { database } from '../../../services/firebase/config';
+import { useAuth } from '../../../context/AuthContext';
+import { registerUser } from '../../../services/firebase/auth/authService';
 import './ProviderManagement.css';
 
 const ProviderManagement = () => {
@@ -228,12 +228,12 @@ const ProviderManagement = () => {
   };
   
   return (
-    <div className="provider-management-container">
+    <div className="provider-mgmt-container">
       <h1>Gestión de Proveedores</h1>
       
-      <div className="action-bar">
+      <div className="provider-mgmt-action-bar">
         <button 
-          className="add-provider-btn" 
+          className="provider-mgmt-add-provider-btn" 
           onClick={() => setShowForm(!showForm)}
         >
           {showForm ? 'Cancelar' : 'Agregar Nuevo Proveedor'}
@@ -241,17 +241,17 @@ const ProviderManagement = () => {
       </div>
       
       {message.content && (
-        <div className={`message ${message.type}`}>
+        <div className={`provider-mgmt-message ${message.type}`}>
           {message.content}
         </div>
       )}
       
       {showForm && (
-        <div className="provider-form-container">
+        <div className="provider-mgmt-provider-form-container">
           <h2>{editMode ? 'Editar Proveedor' : 'Nuevo Proveedor'}</h2>
           
-          <form onSubmit={handleSubmit} className="provider-form">
-            <div className="form-group">
+          <form onSubmit={handleSubmit} className="provider-mgmt-provider-form">
+            <div className="provider-mgmt-form-group">
               <label htmlFor="email">Email:</label>
               <input
                 type="email"
@@ -268,7 +268,7 @@ const ProviderManagement = () => {
               )}
             </div>
             
-            <div className="form-group">
+            <div className="provider-mgmt-form-group">
               <label htmlFor="displayName">Nombre del Proveedor:</label>
               <input
                 type="text"
@@ -282,7 +282,7 @@ const ProviderManagement = () => {
             </div>
             
             {!editMode && (
-              <div className="form-group">
+              <div className="provider-mgmt-form-group">
                 <label htmlFor="password">Contraseña:</label>
                 <input
                   type="password"
@@ -296,7 +296,7 @@ const ProviderManagement = () => {
               </div>
             )}
             
-            <div className="form-group">
+            <div className="provider-mgmt-form-group">
               <label htmlFor="status">Estado:</label>
               <select
                 id="status"
@@ -310,7 +310,7 @@ const ProviderManagement = () => {
               </select>
             </div>
             
-            <div className="form-group">
+            <div className="provider-mgmt-form-group">
               <label htmlFor="category">Categoría:</label>
               <input
                 type="text"
@@ -322,7 +322,7 @@ const ProviderManagement = () => {
               />
             </div>
             
-            <div className="form-group">
+            <div className="provider-mgmt-form-group">
               <label htmlFor="description">Descripción:</label>
               <textarea
                 id="description"
@@ -334,7 +334,7 @@ const ProviderManagement = () => {
               ></textarea>
             </div>
             
-            <div className="form-group">
+            <div className="provider-mgmt-form-group">
               <label htmlFor="contactPhone">Teléfono de Contacto:</label>
               <input
                 type="tel"
@@ -346,11 +346,11 @@ const ProviderManagement = () => {
               />
             </div>
             
-            <div className="form-actions">
-              <button type="button" className="cancel-btn" onClick={resetForm}>
+            <div className="provider-mgmt-form-actions">
+              <button type="button" className="provider-mgmt-cancel-btn" onClick={resetForm}>
                 Cancelar
               </button>
-              <button type="submit" className="submit-btn">
+              <button type="submit" className="provider-mgmt-submit-btn">
                 {editMode ? 'Actualizar Proveedor' : 'Crear Proveedor'}
               </button>
             </div>
@@ -358,7 +358,7 @@ const ProviderManagement = () => {
         </div>
       )}
       
-      <div className="providers-list-container">
+      <div className="provider-mgmt-providers-list-container">
         <h2>Proveedores Registrados</h2>
         
         {loading ? (
@@ -366,8 +366,8 @@ const ProviderManagement = () => {
         ) : providers.length === 0 ? (
           <p>No hay proveedores registrados.</p>
         ) : (
-          <div className="table-container">
-            <table className="providers-table">
+          <div className="provider-mgmt-table-container">
+            <table className="provider-mgmt-providers-table">
               <thead>
                 <tr>
                   <th>Nombre</th>
@@ -386,15 +386,15 @@ const ProviderManagement = () => {
                     <td>{provider.category || 'N/A'}</td>
                     <td>{provider.contactPhone || 'N/A'}</td>
                     <td>
-                      <span className={`status-badge ${provider.status || 'active'}`}>
+                      <span className={`provider-mgmt-status-badge ${provider.status || 'active'}`}>
                         {provider.status === 'active' ? 'Activo' : 'Inactivo'}
                       </span>
                     </td>
                     <td>
-                      <div className="action-buttons">
+                      <div className="provider-mgmt-action-buttons">
                         <button
                           onClick={() => handleEdit(provider)}
-                          className="edit-btn"
+                          className="provider-mgmt-edit-btn"
                           title="Editar proveedor"
                         >
                           ✏️
@@ -403,7 +403,7 @@ const ProviderManagement = () => {
                         {provider.status === 'active' ? (
                           <button
                             onClick={() => handleUpdateStatus(provider.id, 'inactive')}
-                            className="deactivate-btn"
+                            className="provider-mgmt-deactivate-btn"
                             title="Desactivar proveedor"
                           >
                             🚫
@@ -411,7 +411,7 @@ const ProviderManagement = () => {
                         ) : (
                           <button
                             onClick={() => handleUpdateStatus(provider.id, 'active')}
-                            className="activate-btn"
+                            className="provider-mgmt-activate-btn"
                             title="Activar proveedor"
                           >
                             ✅

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
-import { database } from '../../services/firebase/config';
-import { updateUserLevel, getAllUsers } from '../../services/firebase/database/databaseService';
-import { useAuth } from '../../context/AuthContext';
+import { database } from '../../../services/firebase/config';
+import { updateUserLevel, getAllUsers } from '../../../services/firebase/database/databaseService';
+import { useAuth } from '../../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import './AsignarNiveles.css';
 

@@ -204,13 +204,25 @@ const MainLayout = () => {
                   <Link to="/level1/companies">Gestión de Empresas</Link>
                 </li>
                 <li>
-                  <Link to="/level1/benefits">Beneficios Jobby</Link>
+                  <Link to="/level1/benefits/jobby">Beneficios Jobby</Link>
                 </li>
                 <li>
-                  <Link to="/level1/requests">Solicitudes</Link>
+                  <Link to="/level1/benefits/requests">Solicitudes</Link>
                 </li>
                 <li>
                   <Link to="/level1/providers">Gestión de Proveedores</Link>
+                </li>
+                <li>
+                  <Link to="/level1/tokens">Gestión de Tokens</Link>
+                </li>
+                <li>
+                  <Link to="/level1/users/list">Diagnóstico Usuarios</Link>
+                </li>
+                <li>
+                  <Link to="/level1/users/assign-levels">Asignar Niveles</Link>
+                </li>
+                <li>
+                  <Link to="/level1/achievements">Sistema de Logros</Link>
                 </li>
               </ul>
             </>
@@ -293,13 +305,25 @@ const MainLayout = () => {
                   <Link to="/level1/companies">Gestión de Empresas</Link>
                 </li>
                 <li>
-                  <Link to="/level1/benefits">Beneficios Jobby</Link>
+                  <Link to="/level1/benefits/jobby">Beneficios Jobby</Link>
                 </li>
                 <li>
-                  <Link to="/level1/requests">Solicitudes</Link>
+                  <Link to="/level1/benefits/requests">Solicitudes</Link>
                 </li>
                 <li>
                   <Link to="/level1/providers">Gestión de Proveedores</Link>
+                </li>
+                <li>
+                  <Link to="/level1/tokens">Gestión de Tokens</Link>
+                </li>
+                <li>
+                  <Link to="/level1/users/list">Diagnóstico Usuarios</Link>
+                </li>
+                <li>
+                  <Link to="/level1/users/assign-levels">Asignar Niveles</Link>
+                </li>
+                <li>
+                  <Link to="/level1/achievements">Sistema de Logros</Link>
                 </li>
               </ul>
             </>

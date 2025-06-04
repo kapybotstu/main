@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ref, onValue, push, update, remove } from 'firebase/database';
-import { database } from '../../services/firebase/config';
+import { ref, onValue, push, update } from 'firebase/database';
+import { database } from '../../../services/firebase/config';
+import './JobbyBenefitsManagement.css';
 
 const JobbyBenefitsManagement = () => {
   const [benefits, setBenefits] = useState([]);
@@ -219,11 +220,11 @@ const JobbyBenefitsManagement = () => {
   }
   
   return (
-    <div className="benefits-container">
-      <div className="page-header">
+    <div className="jobby-benefits-container">
+      <div className="jobby-benefits-page-header">
         <h1>Gestión de Beneficios Jobby</h1>
         <button 
-          className="btn-primary" 
+          className="jobby-benefits-btn-primary" 
           onClick={() => {
             setEditMode(false);
             setNewBenefit({
@@ -244,20 +245,20 @@ const JobbyBenefitsManagement = () => {
         </button>
       </div>
       
-      {error && <div className="error-alert">{error}</div>}
-      {success && <div className="success-alert">{success}</div>}
+      {error && <div className="jobby-benefits-alert jobby-benefits-alert-error">{error}</div>}
+      {success && <div className="jobby-benefits-alert jobby-benefits-alert-success">{success}</div>}
       
       {/* Lista de beneficios */}
-      <div className="card mt-4">
-        <div className="card-header">
-          <h2 className="card-title">Beneficios Registrados</h2>
+      <div className="jobby-benefits-card jobby-benefits-mt-4">
+        <div className="jobby-benefits-card-header">
+          <h2 className="jobby-benefits-card-title">Beneficios Registrados</h2>
         </div>
         
         {benefits.length === 0 ? (
           <p>No hay beneficios registrados aún.</p>
         ) : (
-          <div className="table-container">
-            <table>
+          <div className="jobby-benefits-table-container">
+            <table className="jobby-benefits-table">
               <thead>
                 <tr>
                   <th>Título</th>
@@ -275,10 +276,10 @@ const JobbyBenefitsManagement = () => {
                   <tr key={benefit.id}>
                     <td>
                       {benefit.title}
-                      {benefit.isHighlighted && <span className="highlight-badge">⭐</span>}
+                      {benefit.isHighlighted && <span className="jobby-benefits-highlight-badge">⭐</span>}
                     </td>
                     <td>
-                      <span className={`badge ${getBenefitTypeClass(benefit.type)}`}>
+                      <span className={`jobby-benefits-badge jobby-benefits-${getBenefitTypeClass(benefit.type)}`}>
                         {getBenefitTypeLabel(benefit.type)}
                       </span>
                     </td>
@@ -287,14 +288,14 @@ const JobbyBenefitsManagement = () => {
                     <td>{benefit.provider || '-'}</td>
                     <td>{benefit.availableTokens || 0}</td>
                     <td>
-                      <span className={`badge badge-${benefit.status === 'active' ? 'success' : 'error'}`}>
+                      <span className={`jobby-benefits-badge jobby-benefits-badge-${benefit.status === 'active' ? 'success' : 'danger'}`}>
                         {benefit.status === 'active' ? 'Activo' : 'Inactivo'}
                       </span>
                     </td>
                     <td>
-                      <div className="action-buttons small">
+                      <div className="jobby-benefits-action-buttons small">
                         <button 
-                          className="btn-action edit"
+                          className="jobby-benefits-btn-action edit"
                           onClick={() => handleEditBenefit(benefit)}
                         >
                           Editar
@@ -302,14 +303,14 @@ const JobbyBenefitsManagement = () => {
                         
                         {benefit.status === 'active' ? (
                           <button 
-                            className="btn-action deactivate"
+                            className="jobby-benefits-btn-action deactivate"
                             onClick={() => handleDeactivateBenefit(benefit.id)}
                           >
                             Desactivar
                           </button>
                         ) : (
                           <button 
-                            className="btn-action activate"
+                            className="jobby-benefits-btn-action activate"
                             onClick={() => handleActivateBenefit(benefit.id)}
                           >
                             Activar
@@ -327,15 +328,15 @@ const JobbyBenefitsManagement = () => {
       
       {/* Modal para crear/editar beneficio */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
+        <div className="jobby-benefits-modal-overlay">
+          <div className="jobby-benefits-modal-content">
+            <div className="jobby-benefits-modal-header">
               <h2>{editMode ? 'Editar Beneficio' : 'Agregar Beneficio'}</h2>
-              <button className="close-button" onClick={() => setShowModal(false)}>×</button>
+              <button className="jobby-benefits-modal-close" onClick={() => setShowModal(false)}>×</button>
             </div>
             
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
+              <div className="jobby-benefits-form-group">
                 <label htmlFor="title">Título *</label>
                 <input
                   id="title"
@@ -347,7 +348,7 @@ const JobbyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="jobby-benefits-form-group">
                 <label htmlFor="description">Descripción *</label>
                 <textarea
                   id="description"
@@ -359,7 +360,7 @@ const JobbyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="jobby-benefits-form-group">
                 <label htmlFor="type">Tipo de Beneficio *</label>
                 <select
                   id="type"
@@ -374,7 +375,7 @@ const JobbyBenefitsManagement = () => {
                 </select>
               </div>
               
-              <div className="form-group">
+              <div className="jobby-benefits-form-group">
                 <label htmlFor="value">Valor</label>
                 <input
                   id="value"
@@ -386,7 +387,7 @@ const JobbyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="jobby-benefits-form-group">
                 <label htmlFor="provider">Proveedor</label>
                 <input
                   id="provider"
@@ -397,7 +398,7 @@ const JobbyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="jobby-benefits-form-group">
                 <label htmlFor="category">Categoría</label>
                 <input
                   id="category"
@@ -409,7 +410,7 @@ const JobbyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="jobby-benefits-form-group">
                 <label htmlFor="image">URL de Imagen</label>
                 <input
                   id="image"
@@ -420,7 +421,7 @@ const JobbyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="jobby-benefits-form-group">
                 <label htmlFor="availableTokens">Tokens Disponibles</label>
                 <input
                   id="availableTokens"
@@ -432,7 +433,7 @@ const JobbyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group checkbox-group">
+              <div className="jobby-benefits-form-group jobby-benefits-checkbox-group">
                 <label>
                   <input
                     type="checkbox"
@@ -444,11 +445,11 @@ const JobbyBenefitsManagement = () => {
                 </label>
               </div>
               
-              <div className="form-actions">
-                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
+              <div className="jobby-benefits-form-actions">
+                <button type="button" className="jobby-benefits-btn-cancel" onClick={() => setShowModal(false)}>
                   Cancelar
                 </button>
-                <button type="submit" className="btn-primary">
+                <button type="submit" className="jobby-benefits-btn-primary">
                   {editMode ? 'Actualizar' : 'Crear'}
                 </button>
               </div>
@@ -461,3 +462,4 @@ const JobbyBenefitsManagement = () => {
 };
 
 export default JobbyBenefitsManagement;
+

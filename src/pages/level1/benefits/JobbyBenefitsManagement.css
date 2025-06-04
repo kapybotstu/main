@@ -1,0 +1,329 @@
+/* Jobby Benefits Management Specific Styles */
+.jobby-benefits-container {
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+}
+
+.jobby-benefits-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  width: 100%;
+}
+
+.jobby-benefits-page-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.jobby-benefits-btn-primary {
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.jobby-benefits-btn-primary:hover {
+  background-color: #7c3aed;
+}
+
+.jobby-benefits-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  display: block;
+}
+
+.jobby-benefits-card-header {
+  padding: 15px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.jobby-benefits-card-title {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.jobby-benefits-table-container {
+  overflow-x: auto;
+  padding: 20px;
+  width: 100%;
+}
+
+.jobby-benefits-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.jobby-benefits-table th,
+.jobby-benefits-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.jobby-benefits-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+}
+
+.jobby-benefits-table td {
+  color: #333;
+  font-size: 14px;
+}
+
+.jobby-benefits-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.jobby-benefits-badge-success {
+  background-color: #10b981;
+  color: white;
+}
+
+.jobby-benefits-badge-warning {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.jobby-benefits-badge-info {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.jobby-benefits-badge-danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.jobby-benefits-highlight-badge {
+  color: #f59e0b;
+  margin-left: 5px;
+}
+
+.jobby-benefits-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.jobby-benefits-action-buttons.small {
+  gap: 5px;
+}
+
+.jobby-benefits-btn-action {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.jobby-benefits-btn-action.edit {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.jobby-benefits-btn-action.edit:hover {
+  background-color: #2563eb;
+}
+
+.jobby-benefits-btn-action.deactivate {
+  background-color: #ef4444;
+  color: white;
+}
+
+.jobby-benefits-btn-action.deactivate:hover {
+  background-color: #dc2626;
+}
+
+.jobby-benefits-btn-action.activate {
+  background-color: #10b981;
+  color: white;
+}
+
+.jobby-benefits-btn-action.activate:hover {
+  background-color: #059669;
+}
+
+/* Modal styles */
+.jobby-benefits-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.jobby-benefits-modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.jobby-benefits-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.jobby-benefits-modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.jobby-benefits-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jobby-benefits-modal-close:hover {
+  color: #333;
+}
+
+.jobby-benefits-form-group {
+  margin-bottom: 15px;
+}
+
+.jobby-benefits-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.jobby-benefits-form-group input,
+.jobby-benefits-form-group select,
+.jobby-benefits-form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.jobby-benefits-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.jobby-benefits-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jobby-benefits-checkbox-group input[type="checkbox"] {
+  width: auto;
+}
+
+.jobby-benefits-form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.jobby-benefits-btn-cancel {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.jobby-benefits-btn-cancel:hover {
+  background-color: #4b5563;
+}
+
+.jobby-benefits-alert {
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.jobby-benefits-alert-error {
+  background-color: #fee;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.jobby-benefits-alert-success {
+  background-color: #f0fdf4;
+  color: #059669;
+  border: 1px solid #bbf7d0;
+}
+
+.jobby-benefits-mt-4 {
+  margin-top: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .jobby-benefits-container {
+    padding: 10px;
+  }
+  
+  .jobby-benefits-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .jobby-benefits-table-container {
+    padding: 10px;
+  }
+  
+  .jobby-benefits-action-buttons {
+    flex-direction: column;
+  }
+}

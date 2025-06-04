@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
-import { database } from '../../services/firebase/config';
+import { database } from '../../../services/firebase/config';
 import './ObtenerUsers.css';
 
 const ObtenerUsers = () => {

@@ -1,0 +1,388 @@
+/* Company Management Specific Styles */
+.company-mgmt-container {
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+}
+
+.company-mgmt-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  width: 100%;
+}
+
+.company-mgmt-page-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.company-mgmt-btn-primary {
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.company-mgmt-btn-primary:hover {
+  background-color: #7c3aed;
+}
+
+.company-mgmt-btn-secondary {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.company-mgmt-btn-secondary:hover {
+  background-color: #4b5563;
+}
+
+.company-mgmt-error-alert {
+  background-color: #fee;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.company-mgmt-success-alert {
+  background-color: #f0fdf4;
+  color: #059669;
+  border: 1px solid #bbf7d0;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.company-mgmt-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  display: block;
+}
+
+.company-mgmt-card-header {
+  padding: 15px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.company-mgmt-card-title {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.company-mgmt-table-container {
+  overflow-x: auto;
+  padding: 20px;
+  width: 100%;
+}
+
+.company-mgmt-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.company-mgmt-table th,
+.company-mgmt-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.company-mgmt-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+}
+
+.company-mgmt-table td {
+  color: #333;
+  font-size: 14px;
+}
+
+.company-mgmt-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.company-mgmt-badge-success {
+  background-color: #10b981;
+  color: white;
+}
+
+.company-mgmt-badge-error {
+  background-color: #ef4444;
+  color: white;
+}
+
+.company-mgmt-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.company-mgmt-action-buttons.small {
+  gap: 5px;
+}
+
+.company-mgmt-btn-action {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.company-mgmt-btn-action.edit {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.company-mgmt-btn-action.edit:hover {
+  background-color: #2563eb;
+}
+
+.company-mgmt-btn-action.deactivate {
+  background-color: #ef4444;
+  color: white;
+}
+
+.company-mgmt-btn-action.deactivate:hover {
+  background-color: #dc2626;
+}
+
+.company-mgmt-btn-action.activate {
+  background-color: #10b981;
+  color: white;
+}
+
+.company-mgmt-btn-action.activate:hover {
+  background-color: #059669;
+}
+
+.company-mgmt-btn-action.create-admin {
+  background-color: #8b5cf6;
+  color: white;
+}
+
+.company-mgmt-btn-action.create-admin:hover {
+  background-color: #7c3aed;
+}
+
+/* Modal styles */
+.company-mgmt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.company-mgmt-modal-container {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.company-mgmt-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.company-mgmt-modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.company-mgmt-close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.company-mgmt-close-button:hover {
+  color: #333;
+}
+
+.company-mgmt-form-group {
+  margin-bottom: 15px;
+}
+
+.company-mgmt-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.company-mgmt-form-group input,
+.company-mgmt-form-group select,
+.company-mgmt-form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.company-mgmt-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.company-mgmt-form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.company-mgmt-mt-4 {
+  margin-top: 1.5rem;
+}
+
+/* Loading state */
+.company-mgmt-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Empty state */
+.company-mgmt-empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.company-mgmt-empty-state p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Form validation */
+.company-mgmt-form-group input:invalid {
+  border-color: #ef4444;
+}
+
+.company-mgmt-form-group input:valid {
+  border-color: #10b981;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .company-mgmt-container {
+    padding: 10px;
+  }
+  
+  .company-mgmt-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .company-mgmt-table-container {
+    padding: 10px;
+  }
+  
+  .company-mgmt-action-buttons {
+    flex-direction: column;
+  }
+  
+  .company-mgmt-modal-container {
+    margin: 10px;
+    max-width: none;
+    width: calc(100vw - 20px);
+  }
+  
+  .company-mgmt-form-actions {
+    flex-direction: column;
+  }
+  
+  .company-mgmt-btn-primary,
+  .company-mgmt-btn-secondary {
+    width: 100%;
+  }
+}
+
+/* Dark theme support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .company-mgmt-card {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .company-mgmt-card-header {
+    background-color: #374151;
+  }
+  
+  .company-mgmt-table th {
+    background-color: #374151;
+    color: #d1d5db;
+  }
+  
+  .company-mgmt-table td {
+    color: #f9fafb;
+  }
+  
+  .company-mgmt-modal-container {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+}

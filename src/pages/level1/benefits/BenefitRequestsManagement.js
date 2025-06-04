@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, get } from 'firebase/database';
-import { database } from '../../services/firebase/config';
-import { useAuth } from '../../context/AuthContext';
-import { updateBenefitRequest } from '../../services/firebase/database/databaseService';
+import { database } from '../../../services/firebase/config';
+import { useAuth } from '../../../context/AuthContext';
+import { updateBenefitRequest } from '../../../services/firebase/database/databaseService';
 import './BenefitRequestsManagement.css';
 
 const BenefitRequestsManagement = () => {

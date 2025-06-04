@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ref, push, onValue, remove, update } from 'firebase/database';
-import { database } from '../../services/firebase/config';
-import { useAuth } from '../../context/AuthContext';
-import achievementsService from '../../services/achievementsService';
+import { database } from '../../../services/firebase/config';
+import { useAuth } from '../../../context/AuthContext';
+import achievementsService from '../../../services/achievementsService';
 import './AchievementsManagement.css';
 
 const AchievementsManagement = () => {

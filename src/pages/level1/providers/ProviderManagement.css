@@ -1,0 +1,370 @@
+/* Provider Management Specific Styles */
+.provider-mgmt-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: block;
+}
+
+.provider-mgmt-container h1 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 24px;
+}
+
+.provider-mgmt-action-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+}
+
+.provider-mgmt-add-provider-btn {
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.provider-mgmt-add-provider-btn:hover {
+  background-color: #7c3aed;
+}
+
+.provider-mgmt-message {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.provider-mgmt-message.success {
+  background-color: #f0fdf4;
+  color: #059669;
+  border: 1px solid #bbf7d0;
+}
+
+.provider-mgmt-message.error {
+  background-color: #fee;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.provider-mgmt-provider-form-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: block;
+}
+
+.provider-mgmt-provider-form-container h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.provider-mgmt-provider-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.provider-mgmt-form-group {
+  margin-bottom: 1rem;
+}
+
+.provider-mgmt-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.provider-mgmt-form-group input,
+.provider-mgmt-form-group select,
+.provider-mgmt-form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.provider-mgmt-form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.provider-mgmt-form-group small {
+  display: block;
+  margin-top: 0.25rem;
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.provider-mgmt-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.provider-mgmt-submit-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.provider-mgmt-submit-btn:hover {
+  background-color: #059669;
+}
+
+.provider-mgmt-cancel-btn {
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.provider-mgmt-cancel-btn:hover {
+  background-color: #4b5563;
+}
+
+.provider-mgmt-providers-list-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: block;
+}
+
+.provider-mgmt-providers-list-container h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.provider-mgmt-table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.provider-mgmt-providers-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.provider-mgmt-providers-table th {
+  text-align: left;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  color: #495057;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.provider-mgmt-providers-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  color: #212529;
+  font-size: 14px;
+}
+
+.provider-mgmt-providers-table tr:last-child td {
+  border-bottom: none;
+}
+
+.provider-mgmt-providers-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.provider-mgmt-providers-table tr.inactive-row {
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.provider-mgmt-status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.provider-mgmt-status-badge.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.provider-mgmt-status-badge.inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.provider-mgmt-action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.provider-mgmt-action-buttons button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.provider-mgmt-action-buttons button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.provider-mgmt-edit-btn {
+  color: #3b82f6;
+}
+
+.provider-mgmt-edit-btn:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.provider-mgmt-deactivate-btn {
+  color: #ef4444;
+}
+
+.provider-mgmt-deactivate-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.provider-mgmt-activate-btn {
+  color: #10b981;
+}
+
+.provider-mgmt-activate-btn:hover {
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+/* Loading state */
+.provider-mgmt-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Empty state */
+.provider-mgmt-empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.provider-mgmt-empty-state p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Form validation styles */
+.provider-mgmt-form-group input:invalid {
+  border-color: #ef4444;
+}
+
+.provider-mgmt-form-group input:valid {
+  border-color: #10b981;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .provider-mgmt-container {
+    padding: 1rem;
+  }
+  
+  .provider-mgmt-provider-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .provider-mgmt-providers-table {
+    min-width: 700px;
+  }
+  
+  .provider-mgmt-form-actions {
+    flex-direction: column;
+  }
+  
+  .provider-mgmt-submit-btn,
+  .provider-mgmt-cancel-btn {
+    width: 100%;
+  }
+  
+  .provider-mgmt-action-bar {
+    justify-content: center;
+  }
+  
+  .provider-mgmt-add-provider-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .provider-mgmt-provider-form-container,
+  .provider-mgmt-providers-list-container {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .provider-mgmt-container h1,
+  .provider-mgmt-provider-form-container h2,
+  .provider-mgmt-providers-list-container h2 {
+    color: #f9fafb;
+  }
+  
+  .provider-mgmt-providers-table th {
+    background-color: #374151;
+    color: #d1d5db;
+  }
+  
+  .provider-mgmt-providers-table td {
+    color: #f9fafb;
+  }
+  
+  .provider-mgmt-providers-table tr:hover {
+    background-color: #374151;
+  }
+  
+  .provider-mgmt-form-group label {
+    color: #d1d5db;
+  }
+  
+  .provider-mgmt-form-group input,
+  .provider-mgmt-form-group select,
+  .provider-mgmt-form-group textarea {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+}

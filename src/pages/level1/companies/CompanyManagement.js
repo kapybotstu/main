@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, push, update, remove } from 'firebase/database';
-import { database } from '../../services/firebase/config';
-import { registerUser } from '../../services/firebase/auth/authService';
+import { database } from '../../../services/firebase/config';
+import { registerUser } from '../../../services/firebase/auth/authService';
+import './CompanyManagement.css';
 
 const CompanyManagement = () => {
   const [companies, setCompanies] = useState([]);
@@ -259,11 +260,11 @@ const CompanyManagement = () => {
   }
   
   return (
-    <div className="companies-container">
-      <div className="page-header">
+    <div className="company-mgmt-container">
+      <div className="company-mgmt-page-header">
         <h1>Gestión de Empresas</h1>
         <button 
-          className="btn-primary" 
+          className="company-mgmt-btn-primary" 
           onClick={() => {
             setEditMode(false);
             setNewCompany({
@@ -281,20 +282,20 @@ const CompanyManagement = () => {
         </button>
       </div>
       
-      {error && <div className="error-alert">{error}</div>}
-      {success && <div className="success-alert">{success}</div>}
+      {error && <div className="company-mgmt-error-alert">{error}</div>}
+      {success && <div className="company-mgmt-success-alert">{success}</div>}
       
       {/* Lista de empresas */}
-      <div className="card mt-4">
-        <div className="card-header">
-          <h2 className="card-title">Empresas Registradas</h2>
+      <div className="company-mgmt-card company-mgmt-mt-4">
+        <div className="company-mgmt-card-header">
+          <h2 className="company-mgmt-card-title">Empresas Registradas</h2>
         </div>
         
         {companies.length === 0 ? (
           <p>No hay empresas registradas aún.</p>
         ) : (
-          <div className="table-container">
-            <table>
+          <div className="company-mgmt-table-container">
+            <table className="company-mgmt-table">
               <thead>
                 <tr>
                   <th>Nombre</th>
@@ -315,14 +316,14 @@ const CompanyManagement = () => {
                     <td>{company.contactPhone || '-'}</td>
                     <td>{new Date(company.createdAt).toLocaleDateString()}</td>
                     <td>
-                      <span className={`badge badge-${company.status === 'active' ? 'success' : 'error'}`}>
+                      <span className={`company-mgmt-badge company-mgmt-badge-${company.status === 'active' ? 'success' : 'error'}`}>
                         {company.status === 'active' ? 'Activa' : 'Inactiva'}
                       </span>
                     </td>
                     <td>
-                      <div className="action-buttons small">
+                      <div className="company-mgmt-action-buttons small">
                         <button 
-                          className="btn-action edit"
+                          className="company-mgmt-btn-action edit"
                           onClick={() => handleEditCompany(company)}
                         >
                           Editar
@@ -330,14 +331,14 @@ const CompanyManagement = () => {
                         
                         {company.status === 'active' ? (
                           <button 
-                            className="btn-action deactivate"
+                            className="company-mgmt-btn-action deactivate"
                             onClick={() => handleDeactivateCompany(company.id)}
                           >
                             Desactivar
                           </button>
                         ) : (
                           <button 
-                            className="btn-action activate"
+                            className="company-mgmt-btn-action activate"
                             onClick={() => handleActivateCompany(company.id)}
                           >
                             Activar
@@ -345,7 +346,7 @@ const CompanyManagement = () => {
                         )}
                         
                         <button 
-                          className="btn-action create-admin"
+                          className="company-mgmt-btn-action create-admin"
                           onClick={() => handleShowCreateAdmin(company)}
                         >
                           Crear Admin
@@ -362,15 +363,15 @@ const CompanyManagement = () => {
       
       {/* Modal para crear/editar empresa */}
       {showCompanyModal && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
+        <div className="company-mgmt-modal-overlay">
+          <div className="company-mgmt-modal-container">
+            <div className="company-mgmt-modal-header">
               <h2>{editMode ? 'Editar Empresa' : 'Agregar Empresa'}</h2>
-              <button className="close-button" onClick={() => setShowCompanyModal(false)}>×</button>
+              <button className="company-mgmt-close-button" onClick={() => setShowCompanyModal(false)}>×</button>
             </div>
             
             <form onSubmit={handleCompanySubmit}>
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="name">Nombre de la Empresa *</label>
                 <input
                   id="name"
@@ -382,7 +383,7 @@ const CompanyManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="contactName">Nombre de Contacto *</label>
                 <input
                   id="contactName"
@@ -394,7 +395,7 @@ const CompanyManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="contactEmail">Email de Contacto *</label>
                 <input
                   id="contactEmail"
@@ -406,7 +407,7 @@ const CompanyManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="contactPhone">Teléfono de Contacto</label>
                 <input
                   id="contactPhone"
@@ -417,7 +418,7 @@ const CompanyManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="maxUsers">Número Máximo de Usuarios</label>
                 <input
                   id="maxUsers"
@@ -429,7 +430,7 @@ const CompanyManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="address">Dirección</label>
                 <input
                   id="address"
@@ -440,11 +441,11 @@ const CompanyManagement = () => {
                 />
               </div>
               
-              <div className="form-actions">
-                <button type="button" className="btn-secondary" onClick={() => setShowCompanyModal(false)}>
+              <div className="company-mgmt-form-actions">
+                <button type="button" className="company-mgmt-btn-secondary" onClick={() => setShowCompanyModal(false)}>
                   Cancelar
                 </button>
-                <button type="submit" className="btn-primary">
+                <button type="submit" className="company-mgmt-btn-primary">
                   {editMode ? 'Actualizar' : 'Crear'}
                 </button>
               </div>
@@ -455,15 +456,15 @@ const CompanyManagement = () => {
       
       {/* Modal para crear administrador */}
       {showAdminModal && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
+        <div className="company-mgmt-modal-overlay">
+          <div className="company-mgmt-modal-container">
+            <div className="company-mgmt-modal-header">
               <h2>Crear Administrador de Empresa</h2>
-              <button className="close-button" onClick={() => setShowAdminModal(false)}>×</button>
+              <button className="company-mgmt-close-button" onClick={() => setShowAdminModal(false)}>×</button>
             </div>
             
             <form onSubmit={handleAdminSubmit}>
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="displayName">Nombre Completo *</label>
                 <input
                   id="displayName"
@@ -475,7 +476,7 @@ const CompanyManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="email">Correo Electrónico *</label>
                 <input
                   id="email"
@@ -488,7 +489,7 @@ const CompanyManagement = () => {
                 <small>Debe comenzar con admin@</small>
               </div>
               
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="password">Contraseña *</label>
                 <input
                   id="password"
@@ -501,7 +502,7 @@ const CompanyManagement = () => {
                 <small>Mínimo 6 caracteres</small>
               </div>
               
-              <div className="form-group">
+              <div className="company-mgmt-form-group">
                 <label htmlFor="confirmPassword">Confirmar Contraseña *</label>
                 <input
                   id="confirmPassword"
@@ -513,11 +514,11 @@ const CompanyManagement = () => {
                 />
               </div>
               
-              <div className="form-actions">
-                <button type="button" className="btn-secondary" onClick={() => setShowAdminModal(false)}>
+              <div className="company-mgmt-form-actions">
+                <button type="button" className="company-mgmt-btn-secondary" onClick={() => setShowAdminModal(false)}>
                   Cancelar
                 </button>
-                <button type="submit" className="btn-primary">
+                <button type="submit" className="company-mgmt-btn-primary">
                   Crear Administrador
                 </button>
               </div>

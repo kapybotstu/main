@@ -9,13 +9,14 @@ import MainLayout from '../layouts/MainLayout';
 
 // Nivel 1: Administración Jobby
 import Level1Dashboard from '../pages/level1/Level1Dashboard';
-import CompanyManagement from '../pages/level1/CompanyManagement';
-import JobbyBenefitsManagement from '../pages/level1/JobbyBenefitsManagement';
-import BenefitRequestsManagement from '../pages/level1/BenefitRequestsManagement';
-import ProviderManagement from '../pages/level1/ProviderManagement';
-import TokenManagement from '../pages/level1/TokenManagement';
-import ObtenerUsers from '../pages/level1/ObtenerUsers';
-import AsignarNiveles from '../pages/level1/AsignarNiveles';
+import CompanyManagement from '../pages/level1/companies/CompanyManagement';
+import JobbyBenefitsManagement from '../pages/level1/benefits/JobbyBenefitsManagement';
+import BenefitRequestsManagement from '../pages/level1/benefits/BenefitRequestsManagement';
+import ProviderManagement from '../pages/level1/providers/ProviderManagement';
+import TokenManagement from '../pages/level1/tokens/TokenManagement';
+import ObtenerUsers from '../pages/level1/users/ObtenerUsers';
+import AsignarNiveles from '../pages/level1/users/AsignarNiveles';
+import AchievementsManagement from '../pages/level1/achievements/AchievementsManagement';
 
 // Nivel 2: Recursos Humanos de empresa
 import Level2Dashboard from '../pages/level2/Level2Dashboard';
@@ -58,12 +59,17 @@ const AppRoutes = () => {
             </React.Suspense>
           } />
           <Route path="companies" element={<CompanyManagement />} />
-          <Route path="benefits" element={<JobbyBenefitsManagement />} />
-          <Route path="requests" element={<BenefitRequestsManagement />} />
+          <Route path="benefits">
+            <Route path="jobby" element={<JobbyBenefitsManagement />} />
+            <Route path="requests" element={<BenefitRequestsManagement />} />
+          </Route>
+          <Route path="users">
+            <Route path="list" element={<ObtenerUsers />} />
+            <Route path="assign-levels" element={<AsignarNiveles />} />
+          </Route>
           <Route path="providers" element={<ProviderManagement />} />
           <Route path="tokens" element={<TokenManagement />} />
-          <Route path="diagnostico-usuarios" element={<ObtenerUsers />} />
-          <Route path="asignar-niveles" element={<AsignarNiveles />} />
+          <Route path="achievements" element={<AchievementsManagement />} />
           <Route path="" element={<Navigate to="/level1/dashboard" replace />} />
         </Route>
       </Route>

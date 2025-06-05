@@ -745,7 +745,19 @@
   text-align: center;
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  min-width: 200px;
+  min-width: 180px;
+}
+
+/* Tokens Jobby (Flexibles) - Azul */
+.new-token-widget.jobby-tokens {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* Tokens Empresa - Verde */
+.new-token-widget.company-tokens {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
 }
 
 .new-token-widget .token-icon {

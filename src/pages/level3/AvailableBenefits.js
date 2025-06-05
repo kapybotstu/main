@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
-import { requestBenefitWithTokens } from '../../services/firebase/database/databaseService';
+import { requestBenefitWithTokens, getJobbyTokenBalance } from '../../services/firebase/database/databaseService';
 import './styles/index.css'; // Import Level 3 styles
 import './styles/pages/AvailableBenefits.css';
 import BenefitCard from './components/BenefitCard';
@@ -91,15 +91,18 @@ const AvailableBenefits = () => {
       }
       
       try {
-        // Obtener balance de tokens del usuario (user_blank_tokens)
-        const userTokensRef = ref(database, `user_blank_tokens/${currentUser.uid}/balance`);
-        onValue(userTokensRef, (snapshot) => {
-          if (snapshot.exists()) {
-            setUserTokenBalance(snapshot.val());
-          } else {
+        // Obtener balance de tokens Jobby del usuario
+        const loadJobbyTokenBalance = async () => {
+          try {
+            const balance = await getJobbyTokenBalance(currentUser.uid);
+            setUserTokenBalance(balance);
+          } catch (error) {
+            console.error('Error loading Jobby token balance:', error);
             setUserTokenBalance(0);
           }
-        });
+        };
+        
+        loadJobbyTokenBalance();
 
         // Obtener canjes del usuario para comprobar experiencias ya canjeadas
         const userRedemptionsRef = ref(database, 'experience_redemptions');

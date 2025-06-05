@@ -203,13 +203,96 @@
 
 [data-theme="dark"] .user-dropdown-menu a,
 [data-theme="dark"] .user-dropdown-menu button {
-  color: #d1d5db;
+  color: #d1d5db !important;
+  background: transparent !important;
 }
 
 [data-theme="dark"] .user-dropdown-menu a:hover,
 [data-theme="dark"] .user-dropdown-menu button:hover {
-  background: #374151;
-  color: #f3f4f6;
+  background: #374151 !important;
+  color: #f3f4f6 !important;
+}
+
+/* Específicamente para el botón de cerrar sesión - TODOS LOS NIVELES */
+html[data-theme="dark"] .user-dropdown-menu button[onClick*="logout"],
+html[data-theme="dark"] .user-dropdown-menu button[onClick*="signOut"],
+html[data-theme="dark"] .user-dropdown-menu .logout-button,
+html[data-theme="dark"] .user-dropdown-menu .sign-out-button,
+html[data-theme="dark"] .user-dropdown-menu button:last-child {
+  color: #d1d5db !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+html[data-theme="dark"] .user-dropdown-menu button[onClick*="logout"]:hover,
+html[data-theme="dark"] .user-dropdown-menu button[onClick*="signOut"]:hover,
+html[data-theme="dark"] .user-dropdown-menu .logout-button:hover,
+html[data-theme="dark"] .user-dropdown-menu .sign-out-button:hover,
+html[data-theme="dark"] .user-dropdown-menu button:last-child:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+/* Estilos adicionales específicos para nivel 1 y otros niveles */
+[data-level="1"][data-theme="dark"] .user-dropdown-menu button,
+[data-level="2"][data-theme="dark"] .user-dropdown-menu button,
+[data-level="4"][data-theme="dark"] .user-dropdown-menu button {
+  color: #d1d5db !important;
+  background: transparent !important;
+}
+
+[data-level="1"][data-theme="dark"] .user-dropdown-menu button:hover,
+[data-level="2"][data-theme="dark"] .user-dropdown-menu button:hover,
+[data-level="4"][data-theme="dark"] .user-dropdown-menu button:hover {
+  background: #374151 !important;
+  color: #f3f4f6 !important;
+}
+
+/* Botón específico de logout para todos los niveles */
+[data-level="1"][data-theme="dark"] .user-dropdown-menu button:last-child,
+[data-level="2"][data-theme="dark"] .user-dropdown-menu button:last-child,
+[data-level="3"][data-theme="dark"] .user-dropdown-menu button:last-child,
+[data-level="4"][data-theme="dark"] .user-dropdown-menu button:last-child {
+  color: #d1d5db !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+[data-level="1"][data-theme="dark"] .user-dropdown-menu button:last-child:hover,
+[data-level="2"][data-theme="dark"] .user-dropdown-menu button:last-child:hover,
+[data-level="3"][data-theme="dark"] .user-dropdown-menu button:last-child:hover,
+[data-level="4"][data-theme="dark"] .user-dropdown-menu button:last-child:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+/* Estilos específicos para el botón que contiene "Cerrar Sesión" */
+[data-theme="dark"] .user-dropdown-menu button:contains("Cerrar Sesión"),
+[data-theme="dark"] .user-dropdown-menu button[onclick*="logout"],
+[data-theme="dark"] .user-dropdown-menu button[onclick*="handleLogout"] {
+  color: #d1d5db !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+[data-theme="dark"] .user-dropdown-menu button:contains("Cerrar Sesión"):hover,
+[data-theme="dark"] .user-dropdown-menu button[onclick*="logout"]:hover,
+[data-theme="dark"] .user-dropdown-menu button[onclick*="handleLogout"]:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+/* Asegurar que el SVG del botón logout sea visible */
+[data-theme="dark"] .user-dropdown-menu button:last-child svg,
+[data-theme="dark"] .user-dropdown-menu button[onclick*="logout"] svg,
+[data-theme="dark"] .user-dropdown-menu button[onclick*="handleLogout"] svg {
+  stroke: #d1d5db !important;
+}
+
+[data-theme="dark"] .user-dropdown-menu button:last-child:hover svg,
+[data-theme="dark"] .user-dropdown-menu button[onclick*="logout"]:hover svg,
+[data-theme="dark"] .user-dropdown-menu button[onclick*="handleLogout"]:hover svg {
+  stroke: #ffffff !important;
 }
 
 /* Dark mode body styles */

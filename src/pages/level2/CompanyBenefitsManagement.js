@@ -274,22 +274,26 @@ const CompanyBenefitsManagement = () => {
   
   if (!companyId) {
     return (
-      <div className="company-benefits-container">
-        <h1>Gestión de Beneficios Internos</h1>
-        <div className="error-alert">
-          No se ha asignado una empresa a este usuario. Por favor, contacte con el administrador de Jobby.
+      <div className="level2-benefits-container">
+        <div className="level2-benefits-header">
+          <h1>Gestión de Beneficios Internos</h1>
+        </div>
+        <div className="level2-benefits-content">
+          <div className="level2-error-alert">
+            No se ha asignado una empresa a este usuario. Por favor, contacte con el administrador de Jobby.
+          </div>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="company-benefits-container">
-      {/* PAGE HEADER (NO es una card) - Título y botón principal FIJO ARRIBA */}
-      <div className="page-header">
+    <div className="level2-benefits-container">
+      {/* HEADER PRINCIPAL FIJO */}
+      <div className="level2-benefits-header">
         <h1>Gestión de Beneficios Internos</h1>
         <button 
-          className="btn-primary" 
+          className="level2-btn-primary" 
           onClick={() => {
             setEditMode(false);
             setNewBenefit({
@@ -307,59 +311,61 @@ const CompanyBenefitsManagement = () => {
         </button>
       </div>
       
-      {/* CONTENIDO DEL DASHBOARD - Todo debajo del header */}
-      <div className="dashboard-content">
-        {error && <div className="error-alert">{error}</div>}
-        {success && <div className="success-alert">{success}</div>}
+      {/* CONTENIDO DEL DASHBOARD */}
+      <div className="level2-benefits-content">
+        {error && <div className="level2-error-alert">{error}</div>}
+        {success && <div className="level2-success-alert">{success}</div>}
         
-        {/* GRID DE CONTENIDO - Solo las 3 cards principales */}
-        <div className="main-layout">
-        {/* Card 1: Uso de Beneficios (gráfico) - ancho completo */}
-        <div className="stats-section">
-          <div className="card">
-            <div className="card-header">
-              <h2 className="card-title">Uso de Beneficios</h2>
-              <div className="card-subtitle">Análisis de beneficios Jobby vs. beneficios de empresa</div>
+        {/* LAYOUT PRINCIPAL */}
+        <div className="level2-main-layout">
+        {/* Card 1: Uso de Beneficios (gráfico) */}
+        <div className="level2-stats-section">
+          <div className="level2-card">
+            <div className="level2-card-header">
+              <h2 className="level2-card-title">Uso de Beneficios</h2>
+              <div className="level2-card-subtitle">Análisis de beneficios Jobby vs. beneficios de empresa</div>
             </div>
             
-            <div className="chart-section">
-              <BenefitUsageChart 
-                jobbyBenefitData={jobbyBenefitStats} 
-                companyBenefitData={companyBenefitStats} 
-              />
+            <div className="level2-chart-section">
+              <div className="level2-chart-container">
+                <BenefitUsageChart 
+                  jobbyBenefitData={jobbyBenefitStats} 
+                  companyBenefitData={companyBenefitStats} 
+                />
+              </div>
             </div>
           </div>
         </div>
         
         {/* Card 2: Enlaces a Productos */}
-        <div className="links-section">
-          <div className="card">
-            <div className="card-header">
-              <h2 className="card-title">Enlaces a Productos</h2>
-              <div className="card-subtitle">Últimas solicitudes con enlaces de productos</div>
+        <div className="level2-links-section">
+          <div className="level2-card">
+            <div className="level2-card-header">
+              <h2 className="level2-card-title">Enlaces a Productos</h2>
+              <div className="level2-card-subtitle">Últimas solicitudes con enlaces de productos</div>
             </div>
             
-            <div className="benefit-insights">
-              <div className="links-container">
+            <div className="level2-benefit-insights">
+              <div className="level2-links-container">
                 {benefitRequests
                   .filter(req => req.productLink && req.isBenefitJobby)
                   .slice(0, 8)
                   .map((req, index) => (
-                    <div key={req.id} className="product-link-item">
-                      <span className="employee-name">
+                    <div key={req.id} className="level2-product-link-item">
+                      <span className="level2-employee-name">
                         {req.userEmail || req.userName || 'Usuario'}
                       </span>
-                      <a href={req.productLink} target="_blank" rel="noopener noreferrer" className="product-link">
+                      <a href={req.productLink} target="_blank" rel="noopener noreferrer" className="level2-product-link">
                         {req.productLink}
                       </a>
-                      <span className="request-date">
+                      <span className="level2-request-date">
                         {new Date(req.requestDate).toLocaleDateString()}
                       </span>
                     </div>
                   ))}
                 
                 {benefitRequests.filter(req => req.productLink && req.isBenefitJobby).length === 0 && (
-                  <div className="no-links-message">
+                  <div className="level2-no-links-message">
                     No hay enlaces a productos solicitados todavía.
                   </div>
                 )}
@@ -369,21 +375,21 @@ const CompanyBenefitsManagement = () => {
         </div>
         
         {/* Card 3: Beneficios Internos (tabla) */}
-        <div className="benefits-section">
-          <div className="card">
-            <div className="card-header">
-              <h2 className="card-title">Beneficios Internos</h2>
-              <div className="card-subtitle">Lista de beneficios creados por la empresa</div>
+        <div className="level2-benefits-section">
+          <div className="level2-card">
+            <div className="level2-card-header">
+              <h2 className="level2-card-title">Beneficios Internos</h2>
+              <div className="level2-card-subtitle">Lista de beneficios creados por la empresa</div>
             </div>
             
             {companyBenefits.length === 0 ? (
-              <div className="no-data-message">
+              <div className="level2-no-data-message">
                 <p>No hay beneficios internos registrados aún.</p>
               </div>
             ) : (
-              <div className="table-container">
-                <div className="table-wrapper">
-                  <table>
+              <div className="level2-table-container">
+                <div className="level2-table-wrapper">
+                  <table className="level2-table">
                     <thead>
                       <tr>
                         <th>Información del Beneficio</th>
@@ -395,31 +401,31 @@ const CompanyBenefitsManagement = () => {
                       {companyBenefits.map((benefit) => (
                         <tr key={benefit.id}>
                           <td>
-                            <div className="benefit-title">
+                            <div className="level2-benefit-title">
                               {benefit.title}
                             </div>
-                            <div className="benefit-description">
+                            <div className="level2-benefit-description">
                               {benefit.description.length > 60 
                                 ? `${benefit.description.substring(0, 60)}...` 
                                 : benefit.description}
                             </div>
                           </td>
                           <td>
-                            <span className={`badge badge-${benefit.status === 'active' ? 'success' : 'error'}`}>
+                            <span className={`level2-badge level2-badge-${benefit.status === 'active' ? 'success' : 'error'}`}>
                               {benefit.status === 'active' ? 'Activo' : 'Inactivo'}
                             </span>
                           </td>
                           <td>
-                            <div className="action-buttons">
+                            <div className="level2-action-buttons">
                               <button 
-                                className="btn-action edit"
+                                className="level2-btn-action edit"
                                 onClick={() => handleEditBenefit(benefit)}
                               >
                                 Editar
                               </button>
                               
                               <button 
-                                className={`btn-action ${benefit.status === 'active' ? 'deactivate' : 'activate'}`}
+                                className={`level2-btn-action ${benefit.status === 'active' ? 'deactivate' : 'activate'}`}
                                 onClick={() => handleToggleStatus(benefit.id, benefit.status)}
                               >
                                 {benefit.status === 'active' ? 'Desactivar' : 'Activar'}
@@ -440,15 +446,15 @@ const CompanyBenefitsManagement = () => {
       
       {/* Modal para crear/editar beneficio */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
+        <div className="level2-modal-overlay">
+          <div className="level2-modal-container">
+            <div className="level2-modal-header">
               <h2>{editMode ? 'Editar Beneficio Interno' : 'Agregar Beneficio Interno'}</h2>
-              <button className="close-button" onClick={() => setShowModal(false)}>×</button>
+              <button className="level2-close-button" onClick={() => setShowModal(false)}>×</button>
             </div>
             
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
+            <form className="level2-form" onSubmit={handleSubmit}>
+              <div className="level2-form-group">
                 <label htmlFor="title">Título *</label>
                 <input
                   id="title"
@@ -460,7 +466,7 @@ const CompanyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="level2-form-group">
                 <label htmlFor="description">Descripción *</label>
                 <textarea
                   id="description"
@@ -472,7 +478,7 @@ const CompanyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="level2-form-group">
                 <label htmlFor="availableTokens">Tokens Disponibles</label>
                 <input
                   id="availableTokens"
@@ -485,7 +491,7 @@ const CompanyBenefitsManagement = () => {
                 <small>Número máximo de veces que se puede usar este beneficio</small>
               </div>
               
-              <div className="form-group">
+              <div className="level2-form-group">
                 <label htmlFor="limitPerUser">Límite por Usuario</label>
                 <input
                   id="limitPerUser"
@@ -498,7 +504,7 @@ const CompanyBenefitsManagement = () => {
                 <small>Número máximo de veces que un usuario puede solicitar este beneficio</small>
               </div>
               
-              <div className="form-group">
+              <div className="level2-form-group">
                 <label htmlFor="startDate">Fecha de Inicio</label>
                 <input
                   id="startDate"
@@ -509,7 +515,7 @@ const CompanyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-group">
+              <div className="level2-form-group">
                 <label htmlFor="endDate">Fecha de Fin</label>
                 <input
                   id="endDate"
@@ -520,11 +526,11 @@ const CompanyBenefitsManagement = () => {
                 />
               </div>
               
-              <div className="form-actions">
-                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
+              <div className="level2-form-actions">
+                <button type="button" className="level2-btn-secondary" onClick={() => setShowModal(false)}>
                   Cancelar
                 </button>
-                <button type="submit" className="btn-primary">
+                <button type="submit" className="level2-btn-primary">
                   {editMode ? 'Actualizar' : 'Crear'}
                 </button>
               </div>

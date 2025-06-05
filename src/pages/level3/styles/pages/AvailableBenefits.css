@@ -1092,3 +1092,99 @@
 [data-theme="dark"] .card-metadata .popular-tag {
   color: #f87171;
 }
+
+/* Benefit type badges en modo oscuro - Mayor especificidad */
+[data-theme="dark"] .benefit-card-immersive .card-header .benefit-type.jobby,
+[data-theme="dark"] .card-header .benefit-type.jobby,
+[data-theme="dark"] .benefit-type.jobby {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="dark"] .benefit-card-immersive .card-header .benefit-type.company,
+[data-theme="dark"] .card-header .benefit-type.company,
+[data-theme="dark"] .benefit-type.company {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="dark"] .benefit-card-immersive .card-header .benefit-type,
+[data-theme="dark"] .card-header .benefit-type,
+[data-theme="dark"] .benefit-type {
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Card badges container */
+[data-theme="dark"] .card-badges {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Token cost en modo oscuro */
+[data-theme="dark"] .token-cost {
+  background: rgba(102, 126, 234, 0.2);
+  color: #9ca3af;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+/* Popular badge en modo oscuro */
+[data-theme="dark"] .popular-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Otros elementos del carrusel en modo oscuro */
+[data-theme="dark"] .card-content {
+  background: #374151;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .card-actions button {
+  background: #667eea;
+  color: white;
+  border: none;
+}
+
+[data-theme="dark"] .card-actions button:hover {
+  background: #5a67d8;
+}
+
+/* SOLUCIÓN DEFINITIVA para benefit-type en carrusel */
+html[data-theme="dark"] .benefit-card-immersive .benefit-type.jobby,
+html[data-theme="dark"] .benefit-type.jobby {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+}
+
+html[data-theme="dark"] .benefit-card-immersive .benefit-type.company,
+html[data-theme="dark"] .benefit-type.company {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+}
+
+/* Forzar estilos en card header específicamente */
+html[data-theme="dark"] .card-header .benefit-type {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}

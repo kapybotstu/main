@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ref, onValue, get, update } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
+import { getJobbyTokenBalance, getCompanyTokenBalance, getJobbyTokenHistory, getCompanyTokenHistory } from '../../services/firebase/database/databaseService';
 import { Link } from 'react-router-dom';
 import './styles/pages/MyRequests.css';
 import './components/TokenModal.css'; // CSS independiente para el modal de token
@@ -20,11 +21,13 @@ const MyRequests = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [expandedRows, setExpandedRows] = useState({});
   
-  // Estados para gestión de tokens
-  const [tokenBalance, setTokenBalance] = useState(0);
-  const [tokenHistory, setTokenHistory] = useState([]);
+  // Estados para gestión de tokens separados
+  const [jobbyTokenBalance, setJobbyTokenBalance] = useState(0);
+  const [companyTokenBalance, setCompanyTokenBalance] = useState(0);
+  const [jobbyTokenHistory, setJobbyTokenHistory] = useState([]);
+  const [companyTokenHistory, setCompanyTokenHistory] = useState([]);
   const [showTokenHistory, setShowTokenHistory] = useState(false);
-  const [historyFilter, setHistoryFilter] = useState('all');
+  const [historyFilter, setHistoryFilter] = useState('jobby'); // 'jobby' o 'company'
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -34,32 +37,24 @@ const MyRequests = () => {
       }
       
       try {
-        // Obtener balance de tokens del usuario
-        const balanceRef = ref(database, `user_blank_tokens/${currentUser.uid}/balance`);
-        onValue(balanceRef, (snapshot) => {
-          setTokenBalance(snapshot.exists() ? snapshot.val() : 0);
-        });
-        
-        // Obtener historial de tokens
-        const historyRef = ref(database, `user_blank_tokens/${currentUser.uid}/history`);
-        onValue(historyRef, (snapshot) => {
-          const historyList = [];
-          
-          if (snapshot.exists()) {
-            snapshot.forEach((childSnapshot) => {
-              historyList.push({
-                id: childSnapshot.key,
-                ...childSnapshot.val(),
-                createdAt: new Date(childSnapshot.val().createdAt)
-              });
-            });
+        // Obtener balances separados de tokens
+        const loadTokenData = async () => {
+          try {
+            const jobbyBalance = await getJobbyTokenBalance(currentUser.uid);
+            const companyBalance = await getCompanyTokenBalance(currentUser.uid);
+            const jobbyHistory = await getJobbyTokenHistory(currentUser.uid);
+            const companyHistory = await getCompanyTokenHistory(currentUser.uid);
             
-            // Ordenar por fecha (más recientes primero)
-            historyList.sort((a, b) => b.createdAt - a.createdAt);
+            setJobbyTokenBalance(jobbyBalance);
+            setCompanyTokenBalance(companyBalance);
+            setJobbyTokenHistory(jobbyHistory);
+            setCompanyTokenHistory(companyHistory);
+          } catch (error) {
+            console.error('Error loading token data:', error);
           }
-          
-          setTokenHistory(historyList);
-        });
+        };
+        
+        loadTokenData();
         
         // Obtener todas las solicitudes del usuario
         const requestsRef = ref(database, 'benefit_requests');
@@ -213,27 +208,27 @@ const MyRequests = () => {
   
   // Funciones para historial de tokens
   const filteredTokenHistory = () => {
-    if (historyFilter === 'all') {
-      return tokenHistory;
+    if (historyFilter === 'jobby') {
+      return jobbyTokenHistory;
+    } else if (historyFilter === 'company') {
+      return companyTokenHistory;
     }
     
-    return tokenHistory.filter(item => item.type === historyFilter);
+    return [];
   };
   
   const getTypeText = (type) => {
     switch (type) {
-      case 'add': return 'Añadido';
-      case 'remove': return 'Quitado';
-      case 'used': return 'Canjeado';
+      case 'addition': return 'Añadido';
+      case 'deduction': return 'Canjeado';
       default: return type;
     }
   };
   
   const getTypeClass = (type) => {
     switch (type) {
-      case 'add': return 'type-add';
-      case 'remove': return 'type-remove';
-      case 'used': return 'type-used';
+      case 'addition': return 'type-add';
+      case 'deduction': return 'type-used';
       default: return '';
     }
   };
@@ -312,9 +307,15 @@ const MyRequests = () => {
             <p>Gestiona y revisa el estado de tus solicitudes de beneficios</p>
           </div>
           <div className="header-actions">
-            <div className="token-balance-display">
-              <span className="balance-label">Balance:</span>
-              <span className="balance-amount">🎟️ {tokenBalance}</span>
+            <div className="token-balances-display">
+              <div className="token-balance-item">
+                <span className="balance-label">Flexibles:</span>
+                <span className="balance-amount">💰 {jobbyTokenBalance}</span>
+              </div>
+              <div className="token-balance-item">
+                <span className="balance-label">Empresa:</span>
+                <span className="balance-amount">🏢 {companyTokenBalance}</span>
+              </div>
               <button 
                 className="history-toggle-btn"
                 onClick={() => setShowTokenHistory(!showTokenHistory)}
@@ -361,25 +362,19 @@ const MyRequests = () => {
             </button>
           </div>
           
-          {/* Filtros del historial */}
+          {/* Tabs para tipo de tokens */}
           <div className="history-filter-tabs">
             <button
-              className={`filter-tab ${historyFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setHistoryFilter('all')}
+              className={`filter-tab ${historyFilter === 'jobby' ? 'active' : ''}`}
+              onClick={() => setHistoryFilter('jobby')}
             >
-              Todas
+              💰 Tokens Flexibles
             </button>
             <button
-              className={`filter-tab ${historyFilter === 'add' ? 'active' : ''}`}
-              onClick={() => setHistoryFilter('add')}
+              className={`filter-tab ${historyFilter === 'company' ? 'active' : ''}`}
+              onClick={() => setHistoryFilter('company')}
             >
-              Recibidos
-            </button>
-            <button
-              className={`filter-tab ${historyFilter === 'used' ? 'active' : ''}`}
-              onClick={() => setHistoryFilter('used')}
-            >
-              Canjeados
+              🏢 Tokens Empresa
             </button>
           </div>
           

@@ -881,3 +881,558 @@
     min-width: 600px;
   }
 }
+
+/* CSS para tokens separados */
+.token-balances-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.token-balance-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.balance-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.balance-amount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+/* ===== MODO OSCURO PARA MIS SOLICITUDES ===== */
+
+[data-theme="dark"] .modern-requests {
+  background: transparent;
+  color: #f3f4f6;
+}
+
+/* Header en modo oscuro */
+[data-theme="dark"] .requests-header {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .header-info h1 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .header-info p {
+  color: #d1d5db;
+}
+
+/* Token balances en modo oscuro */
+[data-theme="dark"] .token-balances-display {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+[data-theme="dark"] .balance-label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .balance-amount {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .history-toggle-btn {
+  background: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .history-toggle-btn:hover {
+  background: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .new-request-button {
+  background: #667eea;
+  color: white;
+}
+
+[data-theme="dark"] .new-request-button:hover {
+  background: #5a67d8;
+}
+
+/* Notificaciones en modo oscuro */
+[data-theme="dark"] .success-notification {
+  background: #1f2937;
+  border: 1px solid #059669;
+  color: #d1fae5;
+}
+
+[data-theme="dark"] .error-notification {
+  background: #1f2937;
+  border: 1px solid #dc2626;
+  color: #fecaca;
+}
+
+/* Historial de tokens en modo oscuro */
+[data-theme="dark"] .token-history-section {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .history-header h2 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .close-history-btn {
+  background: #374151;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .close-history-btn:hover {
+  background: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .history-filter-tabs .filter-tab {
+  background: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .history-filter-tabs .filter-tab:hover {
+  background: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .history-filter-tabs .filter-tab.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+[data-theme="dark"] .history-list {
+  background: #374151;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .history-item {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .history-item:hover {
+  background: #374151;
+}
+
+[data-theme="dark"] .history-amount {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .history-reason {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .history-date {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .empty-history {
+  color: #9ca3af;
+}
+
+/* Tabs de filtros en modo oscuro */
+[data-theme="dark"] .filter-tabs {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .tab-button {
+  background: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .tab-button:hover {
+  background: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .tab-button.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+/* Contenido de solicitudes en modo oscuro */
+[data-theme="dark"] .requests-content {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+[data-theme="dark"] .requests-table {
+  background: #1f2937;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .requests-table th {
+  background: #374151;
+  color: #f3f4f6;
+  border-bottom: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .requests-table td {
+  border-bottom: 1px solid #374151;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .requests-table tr:hover {
+  background: #374151;
+}
+
+/* Estados de solicitudes en modo oscuro */
+[data-theme="dark"] .status-pending {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+[data-theme="dark"] .status-approved {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+[data-theme="dark"] .status-rejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Modal de tokens en modo oscuro */
+[data-theme="dark"] .token-modal-overlay {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="dark"] .token-modal {
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .modal-header {
+  background: #374151;
+  border-bottom: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .modal-header h3 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .modal-close-btn {
+  background: #4b5563;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .modal-close-btn:hover {
+  background: #6b7280;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .modal-body {
+  color: #d1d5db;
+}
+
+/* Botones en modo oscuro */
+[data-theme="dark"] .btn-primary {
+  background: #667eea;
+  color: white;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: #5a67d8;
+}
+
+[data-theme="dark"] .btn-secondary {
+  background: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+  background: #4b5563;
+  color: #f3f4f6;
+}
+
+/* Estado de carga en modo oscuro */
+[data-theme="dark"] .loading-state {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .spinner {
+  border-color: rgba(156, 163, 175, 0.2);
+  border-top-color: #667eea;
+}
+
+/* Estado vacío en modo oscuro */
+[data-theme="dark"] .empty-state {
+  background: rgba(31, 41, 55, 0.5);
+  border: 1px solid #374151;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .empty-state h3 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .empty-state p {
+  color: #d1d5db;
+}
+
+/* ===== COMPONENTES ESPECÍFICOS DE SOLICITUDES EN MODO OSCURO ===== */
+
+/* Contenedor de tabs */
+[data-theme="dark"] .tabs-container {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+/* Filter tabs específicos */
+[data-theme="dark"] .filter-tab {
+  background: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .filter-tab:hover {
+  background: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .filter-tab.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+[data-theme="dark"] .tab-icon {
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .tab-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  border-radius: 12px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Grid de solicitudes */
+[data-theme="dark"] .requests-grid {
+  background: transparent;
+  gap: 1.5rem;
+}
+
+/* Request cards */
+[data-theme="dark"] .request-card {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .request-card:hover {
+  border-color: #4b5563;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Card image overlay */
+[data-theme="dark"] .card-overlay {
+  background: linear-gradient(to top, rgba(31, 41, 55, 0.8), transparent);
+}
+
+/* Status badges */
+[data-theme="dark"] .status-badge.status-approved {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+[data-theme="dark"] .status-badge.status-pending {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+[data-theme="dark"] .status-badge.status-rejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Card content */
+[data-theme="dark"] .card-content {
+  background: #1f2937;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .card-header h3 {
+  color: #f3f4f6;
+}
+
+/* Card badges */
+[data-theme="dark"] .card-badges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* SOLUCIÓN DEFINITIVA para benefit-type en request cards */
+html[data-theme="dark"] .request-card .card-header .benefit-type.jobby,
+html[data-theme="dark"] .request-card .benefit-type.jobby,
+html[data-theme="dark"] .card-badges .benefit-type.jobby,
+[data-theme="dark"] .benefit-type.jobby {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+html[data-theme="dark"] .request-card .card-header .benefit-type.company,
+html[data-theme="dark"] .request-card .benefit-type.company,
+html[data-theme="dark"] .card-badges .benefit-type.company,
+[data-theme="dark"] .benefit-type.company {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+[data-theme="dark"] .token-paid-badge {
+  background: rgba(102, 126, 234, 0.2);
+  color: #9ca3af;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+/* Card description */
+[data-theme="dark"] .card-description p {
+  color: #d1d5db;
+}
+
+/* Card metadata */
+[data-theme="dark"] .card-metadata {
+  background: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+}
+
+[data-theme="dark"] .metadata-item {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .metadata-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .metadata-value {
+  color: #f3f4f6;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .metadata-item.tokens-paid {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+/* Token info */
+[data-theme="dark"] .token-info {
+  background: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+[data-theme="dark"] .token-status {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .token-status-text.token-active {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .token-status-text.token-used {
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .token-status-text.token-expired {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .token-expiry {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+/* Card actions */
+[data-theme="dark"] .card-actions {
+  background: #1f2937;
+  border-top: 1px solid #374151;
+  padding: 1rem;
+}
+
+[data-theme="dark"] .action-button.primary {
+  background: #667eea;
+  color: white;
+  border: none;
+}
+
+[data-theme="dark"] .action-button.primary:hover {
+  background: #5a67d8;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .action-button.secondary {
+  background: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+}
+
+[data-theme="dark"] .action-button.secondary:hover {
+  background: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .button-icon {
+  opacity: 0.9;
+}

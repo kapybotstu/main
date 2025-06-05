@@ -227,13 +227,32 @@
 
 [data-level="3"][data-theme="dark"] .user-dropdown-menu a,
 [data-level="3"][data-theme="dark"] .user-dropdown-menu button {
-  color: #d1d5db;
+  color: #d1d5db !important;
+  background: transparent !important;
 }
 
 [data-level="3"][data-theme="dark"] .user-dropdown-menu a:hover,
 [data-level="3"][data-theme="dark"] .user-dropdown-menu button:hover {
-  background: #374151;
-  color: #f3f4f6;
+  background: #374151 !important;
+  color: #f3f4f6 !important;
+}
+
+/* Específicamente para el botón de cerrar sesión */
+[data-level="3"][data-theme="dark"] .user-dropdown-menu button[onClick*="logout"],
+[data-level="3"][data-theme="dark"] .user-dropdown-menu button[onClick*="signOut"],
+[data-level="3"][data-theme="dark"] .user-dropdown-menu .logout-button,
+[data-level="3"][data-theme="dark"] .user-dropdown-menu .sign-out-button {
+  color: #d1d5db !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+[data-level="3"][data-theme="dark"] .user-dropdown-menu button[onClick*="logout"]:hover,
+[data-level="3"][data-theme="dark"] .user-dropdown-menu button[onClick*="signOut"]:hover,
+[data-level="3"][data-theme="dark"] .user-dropdown-menu .logout-button:hover,
+[data-level="3"][data-theme="dark"] .user-dropdown-menu .sign-out-button:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
 }
 
 /* Sidebar moderno para Level 3 */

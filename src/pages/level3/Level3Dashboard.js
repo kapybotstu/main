@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ref, onValue, query, orderByChild, equalTo, set } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
+import { getJobbyTokenBalance, getCompanyTokenBalance } from '../../services/firebase/database/databaseService';
 import './styles/index.css'; // Import Level 3 styles
 import './styles/pages/Dashboard.css';
 import TokenBalance from './components/TokenBalance';
@@ -16,7 +17,8 @@ const Level3Dashboard = () => {
     activeTokens: 0,
     currentMonthTokens: 0,
     previousMonthTokens: 0,
-    userTokenBalance: 0 // Balance real de tokens para gastar
+    jobbyTokenBalance: 0, // Balance de tokens Jobby (beneficios flexibles)
+    companyTokenBalance: 0 // Balance de tokens Empresa (beneficios internos)
   });
   const [recentRequests, setRecentRequests] = useState([]);
   const [recentTokens, setRecentTokens] = useState([]);
@@ -177,28 +179,30 @@ const Level3Dashboard = () => {
           }));
         });
 
-        // Obtener balance real de tokens del usuario (user_blank_tokens)
-        const userTokensRef = ref(database, `user_blank_tokens/${currentUser.uid}/balance`);
-        onValue(userTokensRef, (snapshot) => {
-          let balance = snapshot.exists() ? snapshot.val() : 0;
-          
-          // Si no hay balance, inicializar con 20 tokens de prueba
-          if (!snapshot.exists() || balance === 0) {
-            console.log('Inicializando tokens de prueba...');
-            const tokenRef = ref(database, `user_blank_tokens/${currentUser.uid}`);
-            set(tokenRef, {
-              balance: 20,
-              lastUpdated: Date.now()
-            });
-            balance = 20;
+        // Obtener balances reales de tokens Jobby y Empresa (sin mock data)
+        const loadTokenBalances = async () => {
+          try {
+            const jobbyBalance = await getJobbyTokenBalance(currentUser.uid);
+            const companyBalance = await getCompanyTokenBalance(currentUser.uid);
+            
+            console.log('Balances reales cargados - Jobby:', jobbyBalance, 'Empresa:', companyBalance);
+            setStats(prevStats => ({
+              ...prevStats,
+              jobbyTokenBalance: jobbyBalance,
+              companyTokenBalance: companyBalance
+            }));
+          } catch (error) {
+            console.error('Error loading token balances:', error);
+            // En caso de error, mostrar 0
+            setStats(prevStats => ({
+              ...prevStats,
+              jobbyTokenBalance: 0,
+              companyTokenBalance: 0
+            }));
           }
-          
-          console.log('Balance de tokens cargado:', balance);
-          setStats(prevStats => ({
-            ...prevStats,
-            userTokenBalance: balance
-          }));
-        });
+        };
+        
+        loadTokenBalances();
         
         setLoading(false);
       } catch (error) {
@@ -225,14 +229,10 @@ const Level3Dashboard = () => {
     localStorage.setItem('jobby_welcome_seen', 'true');
   };
 
-  // Asegurar que siempre muestre un número válido
-  const totalAvailableTokens = typeof stats.userTokenBalance === 'number' && stats.userTokenBalance >= 0 
-    ? stats.userTokenBalance 
-    : 25; // Valor por defecto
-  
+
   console.log('Dashboard stats:', stats);
-  console.log('totalAvailableTokens:', totalAvailableTokens);
-  console.log('userTokenBalance direct:', stats.userTokenBalance);
+  console.log('Jobby tokens:', stats.jobbyTokenBalance);
+  console.log('Company tokens:', stats.companyTokenBalance);
 
   if (loading) {
     return (
@@ -271,11 +271,19 @@ const Level3Dashboard = () => {
           </div>
           
           <div className="tokens-summary">
-            <div className="new-token-widget">
+            <div className="new-token-widget jobby-tokens">
               <div className="token-icon">💰</div>
               <div className="token-info">
-                <div className="token-value">{totalAvailableTokens}</div>
-                <div className="token-text">Tokens Disponibles</div>
+                <div className="token-value">{stats.jobbyTokenBalance}</div>
+                <div className="token-text">Tokens Flexibles</div>
+              </div>
+            </div>
+            
+            <div className="new-token-widget company-tokens">
+              <div className="token-icon">🏢</div>
+              <div className="token-info">
+                <div className="token-value">{stats.companyTokenBalance}</div>
+                <div className="token-text">Tokens Empresa</div>
               </div>
             </div>
             

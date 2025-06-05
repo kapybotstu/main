@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
-import { redeemExperience } from '../../services/firebase/database/databaseService';
+import { redeemExperience, getCompanyTokenBalance } from '../../services/firebase/database/databaseService';
 import './styles/pages/CompanyBenefits.css';
 
 const CompanyBenefits = () => {
@@ -30,13 +30,19 @@ const CompanyBenefits = () => {
       }
       
       try {
-        // Obtener balance real de tokens del usuario
-        const userTokensRef = ref(database, `user_blank_tokens/${currentUser.uid}/balance`);
-        onValue(userTokensRef, (snapshot) => {
-          const balance = snapshot.exists() ? snapshot.val() : 0;
-          console.log('CompanyBenefits - Balance de tokens cargado:', balance);
-          setUserTokenBalance(balance);
-        });
+        // Obtener balance de tokens Empresa del usuario
+        const loadCompanyTokenBalance = async () => {
+          try {
+            const balance = await getCompanyTokenBalance(currentUser.uid);
+            console.log('CompanyBenefits - Balance de tokens Empresa cargado:', balance);
+            setUserTokenBalance(balance);
+          } catch (error) {
+            console.error('Error loading Company token balance:', error);
+            setUserTokenBalance(0);
+          }
+        };
+        
+        loadCompanyTokenBalance();
 
         // Obtener canjes del usuario
         const userRedemptionsRef = ref(database, 'experience_redemptions');

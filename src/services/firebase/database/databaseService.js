@@ -892,3 +892,250 @@ export const getUserThemePreference = async (userId) => {
     return 'light'; // Default to light theme on error
   }
 };
+
+// ===== SERVICIOS DE TOKENS SEPARADOS =====
+
+// Obtener balance de tokens Jobby (beneficios flexibles)
+export const getJobbyTokenBalance = async (userId) => {
+  try {
+    const jobbyRef = ref(database, `user_blank_tokens/${userId}/jobby_balance`);
+    const jobbySnapshot = await get(jobbyRef);
+    
+    if (jobbySnapshot.exists()) {
+      return jobbySnapshot.val();
+    }
+    
+    // Si no existe jobby_balance, verificar si existe balance legacy
+    const legacyRef = ref(database, `user_blank_tokens/${userId}/balance`);
+    const legacySnapshot = await get(legacyRef);
+    
+    if (legacySnapshot.exists()) {
+      const legacyBalance = legacySnapshot.val();
+      console.log(`Migrando balance legacy ${legacyBalance} a jobby_balance para usuario ${userId}`);
+      
+      // Migrar el balance legacy a jobby_balance
+      await update(ref(database, `user_blank_tokens/${userId}`), {
+        jobby_balance: legacyBalance,
+        company_balance: 0, // Inicializar company_balance en 0
+        migration_date: new Date().toISOString()
+      });
+      
+      return legacyBalance;
+    }
+    
+    return 0;
+  } catch (error) {
+    console.error('Error getting Jobby token balance:', error);
+    return 0;
+  }
+};
+
+// Obtener balance de tokens Empresa (beneficios internos)
+export const getCompanyTokenBalance = async (userId) => {
+  try {
+    const tokenRef = ref(database, `user_blank_tokens/${userId}/company_balance`);
+    const snapshot = await get(tokenRef);
+    return snapshot.exists() ? snapshot.val() : 0;
+  } catch (error) {
+    console.error('Error getting Company token balance:', error);
+    return 0;
+  }
+};
+
+// Gastar tokens Jobby
+export const spendJobbyTokens = async (userId, amount, reason = 'Benefit redemption') => {
+  try {
+    const currentBalance = await getJobbyTokenBalance(userId);
+    
+    if (currentBalance < amount) {
+      throw new Error(`Insufficient Jobby tokens. Required: ${amount}, Available: ${currentBalance}`);
+    }
+    
+    const newBalance = currentBalance - amount;
+    const timestamp = new Date().toISOString();
+    
+    // Actualizar balance
+    await update(ref(database, `user_blank_tokens/${userId}`), {
+      jobby_balance: newBalance
+    });
+    
+    // Registrar en historial
+    const historyRef = push(ref(database, `user_blank_tokens/${userId}/jobby_history`));
+    await set(historyRef, {
+      type: 'deduction',
+      amount: amount,
+      reason: reason,
+      timestamp: timestamp,
+      balance_after: newBalance
+    });
+    
+    return { success: true, newBalance };
+  } catch (error) {
+    console.error('Error spending Jobby tokens:', error);
+    throw error;
+  }
+};
+
+// Gastar tokens Empresa
+export const spendCompanyTokens = async (userId, amount, reason = 'Company benefit redemption') => {
+  try {
+    const currentBalance = await getCompanyTokenBalance(userId);
+    
+    if (currentBalance < amount) {
+      throw new Error(`Insufficient Company tokens. Required: ${amount}, Available: ${currentBalance}`);
+    }
+    
+    const newBalance = currentBalance - amount;
+    const timestamp = new Date().toISOString();
+    
+    // Actualizar balance
+    await update(ref(database, `user_blank_tokens/${userId}`), {
+      company_balance: newBalance
+    });
+    
+    // Registrar en historial
+    const historyRef = push(ref(database, `user_blank_tokens/${userId}/company_history`));
+    await set(historyRef, {
+      type: 'deduction',
+      amount: amount,
+      reason: reason,
+      timestamp: timestamp,
+      balance_after: newBalance
+    });
+    
+    return { success: true, newBalance };
+  } catch (error) {
+    console.error('Error spending Company tokens:', error);
+    throw error;
+  }
+};
+
+// Añadir tokens Jobby
+export const addJobbyTokens = async (userId, amount, reason = 'Token allocation') => {
+  try {
+    const currentBalance = await getJobbyTokenBalance(userId);
+    const newBalance = currentBalance + amount;
+    const timestamp = new Date().toISOString();
+    
+    // Actualizar balance
+    await update(ref(database, `user_blank_tokens/${userId}`), {
+      jobby_balance: newBalance
+    });
+    
+    // Registrar en historial
+    const historyRef = push(ref(database, `user_blank_tokens/${userId}/jobby_history`));
+    await set(historyRef, {
+      type: 'addition',
+      amount: amount,
+      reason: reason,
+      timestamp: timestamp,
+      balance_after: newBalance
+    });
+    
+    return { success: true, newBalance };
+  } catch (error) {
+    console.error('Error adding Jobby tokens:', error);
+    throw error;
+  }
+};
+
+// Añadir tokens Empresa
+export const addCompanyTokens = async (userId, amount, reason = 'Company token allocation') => {
+  try {
+    const currentBalance = await getCompanyTokenBalance(userId);
+    const newBalance = currentBalance + amount;
+    const timestamp = new Date().toISOString();
+    
+    // Actualizar balance
+    await update(ref(database, `user_blank_tokens/${userId}`), {
+      company_balance: newBalance
+    });
+    
+    // Registrar en historial
+    const historyRef = push(ref(database, `user_blank_tokens/${userId}/company_history`));
+    await set(historyRef, {
+      type: 'addition',
+      amount: amount,
+      reason: reason,
+      timestamp: timestamp,
+      balance_after: newBalance
+    });
+    
+    return { success: true, newBalance };
+  } catch (error) {
+    console.error('Error adding Company tokens:', error);
+    throw error;
+  }
+};
+
+// Obtener historial de tokens Jobby
+export const getJobbyTokenHistory = async (userId) => {
+  try {
+    const historyRef = ref(database, `user_blank_tokens/${userId}/jobby_history`);
+    const snapshot = await get(historyRef);
+    
+    const history = [];
+    if (snapshot.exists()) {
+      snapshot.forEach((childSnapshot) => {
+        history.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val()
+        });
+      });
+    }
+    
+    // Ordenar por timestamp descendente (más reciente primero)
+    return history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  } catch (error) {
+    console.error('Error getting Jobby token history:', error);
+    return [];
+  }
+};
+
+// Obtener historial de tokens Empresa
+export const getCompanyTokenHistory = async (userId) => {
+  try {
+    const historyRef = ref(database, `user_blank_tokens/${userId}/company_history`);
+    const snapshot = await get(historyRef);
+    
+    const history = [];
+    if (snapshot.exists()) {
+      snapshot.forEach((childSnapshot) => {
+        history.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val()
+        });
+      });
+    }
+    
+    // Ordenar por timestamp descendente (más reciente primero)
+    return history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  } catch (error) {
+    console.error('Error getting Company token history:', error);
+    return [];
+  }
+};
+
+// FUNCIÓN DE EMERGENCIA: Restaurar balance real del usuario
+export const resetUserTokensToReal = async (userId, realJobbyBalance = 1, realCompanyBalance = 0) => {
+  try {
+    console.log(`🔧 RESET: Restaurando balance real para usuario ${userId}`);
+    console.log(`💰 Jobby: ${realJobbyBalance}, 🏢 Empresa: ${realCompanyBalance}`);
+    
+    const userTokensRef = ref(database, `user_blank_tokens/${userId}`);
+    
+    // Resetear completamente con los valores reales
+    await set(userTokensRef, {
+      jobby_balance: realJobbyBalance,
+      company_balance: realCompanyBalance,
+      reset_at: new Date().toISOString(),
+      reset_reason: 'Remove fake data, restore real balance'
+    });
+    
+    console.log('✅ Balance real restaurado exitosamente');
+    return { success: true, jobbyBalance: realJobbyBalance, companyBalance: realCompanyBalance };
+  } catch (error) {
+    console.error('Error resetting user tokens:', error);
+    throw error;
+  }
+};

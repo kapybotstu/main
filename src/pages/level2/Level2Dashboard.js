@@ -150,7 +150,7 @@ const Level2Dashboard = () => {
   
   if (!companyId || !companyData) {
     return (
-      <div className="dashboard-container">
+      <div className="level2-dashboard-container">
         <h1>Dashboard Recursos Humanos</h1>
         <div className="error-alert">
           No se ha asignado una empresa a este usuario. Por favor, contacte con el administrador de Jobby.
@@ -160,35 +160,35 @@ const Level2Dashboard = () => {
   }
   
   return (
-    <div className="dashboard-container">
+    <div className="level2-dashboard-container">
       <h1>Dashboard Recursos Humanos</h1>
-      <p className="welcome-message">
+      <p className="level2-welcome-message">
         Bienvenido, {currentUser?.displayName || 'Administrador'} | Empresa: {companyData.name}
       </p>
       
-      <div className="dashboard-grid">
-        <div className="stats-card">
-          <div className="stats-card-title">Usuarios</div>
-          <div className="stats-card-value">{stats.companyUsers}</div>
-          <div className="stats-card-description">Usuarios de la empresa</div>
+      <div className="level2-dashboard-grid">
+        <div className="level2-stats-card">
+          <div className="level2-stats-card-title">Usuarios</div>
+          <div className="level2-stats-card-value">{stats.companyUsers}</div>
+          <div className="level2-stats-card-description">Usuarios de la empresa</div>
         </div>
         
-        <div className="stats-card">
-          <div className="stats-card-title">Beneficios Internos</div>
-          <div className="stats-card-value">{stats.companyBenefits}</div>
-          <div className="stats-card-description">Beneficios activos</div>
+        <div className="level2-stats-card">
+          <div className="level2-stats-card-title">Beneficios Internos</div>
+          <div className="level2-stats-card-value">{stats.companyBenefits}</div>
+          <div className="level2-stats-card-description">Beneficios activos</div>
         </div>
         
-        <div className="stats-card">
-          <div className="stats-card-title">Solicitudes Pendientes</div>
-          <div className="stats-card-value">{stats.pendingRequests}</div>
-          <div className="stats-card-description">Requieren aprobación</div>
+        <div className="level2-stats-card">
+          <div className="level2-stats-card-title">Solicitudes Pendientes</div>
+          <div className="level2-stats-card-value">{stats.pendingRequests}</div>
+          <div className="level2-stats-card-description">Requieren aprobación</div>
         </div>
         
-        <div className="stats-card">
-          <div className="stats-card-title">Tokens Activos</div>
-          <div className="stats-card-value">{stats.activeTokens}</div>
-          <div className="stats-card-description">Tokens para beneficios</div>
+        <div className="level2-stats-card">
+          <div className="level2-stats-card-title">Tokens Activos</div>
+          <div className="level2-stats-card-value">{stats.activeTokens}</div>
+          <div className="level2-stats-card-description">Tokens para beneficios</div>
         </div>
       </div>
       
@@ -208,9 +208,9 @@ const Level2Dashboard = () => {
       </div>
       
       <div className="recent-users mt-5">
-        <div className="card">
-          <div className="card-header">
-            <h2 className="card-title">Usuarios Recientes</h2>
+        <div className="level2-card">
+          <div className="level2-card-header">
+            <h2 className="level2-card-title">Usuarios Recientes</h2>
             <Link to="/level2/users">Ver todos</Link>
           </div>
           
@@ -242,9 +242,9 @@ const Level2Dashboard = () => {
       </div>
       
       <div className="benefits-analysis mt-5">
-        <div className="card">
-          <div className="card-header">
-            <h2 className="card-title">Análisis de Beneficios</h2>
+        <div className="level2-card">
+          <div className="level2-card-header">
+            <h2 className="level2-card-title">Análisis de Beneficios</h2>
           </div>
           
           <div className="analysis-content p-4">

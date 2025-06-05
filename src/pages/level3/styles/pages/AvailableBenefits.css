@@ -99,9 +99,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(60px) brightness(0.7) contrast(1.3) saturate(1.6);
+  filter: blur(2px) brightness(0.7) contrast(1.3) saturate(1.6);
   transform: scale(1.2);
-  opacity: 0.5;
+  opacity: 0.8;
   transition: var(--transition-normal);
   border-radius: 3rem;
 }

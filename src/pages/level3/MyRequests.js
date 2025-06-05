@@ -481,9 +481,6 @@ const MyRequests = () => {
                   <div className="card-header">
                     <h3>{request.benefitName}</h3>
                     <div className="card-badges">
-                      <span className={`benefit-type ${request.isBenefitJobby ? 'jobby' : 'company'}`}>
-                        {request.isBenefitJobby ? 'Jobby' : 'Empresa'}
-                      </span>
                       {request.paidWithTokens && (
                         <span className="token-paid-badge" title="Pagado con tokens">
                           🎟️ {request.tokenCost}

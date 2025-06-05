@@ -160,8 +160,9 @@ export const getCompanyBenefits = async (companyId) => {
 // Solicitar beneficio con pago de tokens (nivel 3)
 export const requestBenefitWithTokens = async (userId, benefitId, isBenefitJobby, companyId, tokenCost, additionalData = {}) => {
   try {
-    // 1. Verificar tokens disponibles del usuario
-    const userTokensRef = ref(database, `user_blank_tokens/${userId}/balance`);
+    // 1. Verificar tokens disponibles del usuario según el tipo de beneficio
+    const tokenType = isBenefitJobby ? 'jobby_balance' : 'company_balance';
+    const userTokensRef = ref(database, `user_blank_tokens/${userId}/${tokenType}`);
     const tokensSnapshot = await get(userTokensRef);
     
     let availableTokens = 0;
@@ -171,7 +172,8 @@ export const requestBenefitWithTokens = async (userId, benefitId, isBenefitJobby
     
     // 2. Verificar si tiene suficientes tokens
     if (availableTokens < tokenCost) {
-      throw new Error(`No tienes suficientes tokens. Necesitas ${tokenCost} tokens, pero solo tienes ${availableTokens}.`);
+      const tokenTypeName = isBenefitJobby ? 'tokens Jobby' : 'tokens de empresa';
+      throw new Error(`No tienes suficientes ${tokenTypeName}. Necesitas ${tokenCost} tokens, pero solo tienes ${availableTokens}.`);
     }
     
     // 3. Obtener información del beneficio y su tipo
@@ -270,14 +272,16 @@ export const requestBenefitWithTokens = async (userId, benefitId, isBenefitJobby
     const currentTimeMs = Date.now();
     const newBalance = availableTokens - tokenCost;
     
-    // Actualizar balance
+    // Actualizar balance según el tipo de beneficio
+    const balanceField = isBenefitJobby ? 'jobby_balance' : 'company_balance';
     await update(ref(database, `user_blank_tokens/${userId}`), {
-      balance: newBalance,
+      [balanceField]: newBalance,
       lastUpdated: currentTimeMs
     });
     
-    // 8. Registrar en historial de tokens
-    const historyRef = ref(database, `user_blank_tokens/${userId}/history`);
+    // 8. Registrar en historial de tokens correspondiente
+    const historyType = isBenefitJobby ? 'jobby_history' : 'company_history';
+    const historyRef = ref(database, `user_blank_tokens/${userId}/${historyType}`);
     await push(historyRef, {
       type: 'used',
       amount: tokenCost,
@@ -285,6 +289,7 @@ export const requestBenefitWithTokens = async (userId, benefitId, isBenefitJobby
       requestId: requestId,
       tokenId: tokenId,
       benefitId: benefitId,
+      tokenType: isBenefitJobby ? 'jobby' : 'company',
       createdAt: currentTimeMs,
       balanceBefore: availableTokens,
       balanceAfter: newBalance
@@ -333,8 +338,9 @@ export const requestBenefitTraditional = async (userId, benefitId, isBenefitJobb
 // Canjear experiencia por tokens
 export const redeemExperience = async (userId, benefitId, isBenefitJobby, companyId, tokenCost, additionalData = {}) => {
   try {
-    // 1. Verificar tokens disponibles del usuario (usar user_blank_tokens)
-    const userTokensRef = ref(database, `user_blank_tokens/${userId}/balance`);
+    // 1. Verificar tokens disponibles del usuario según el tipo
+    const tokenType = isBenefitJobby ? 'jobby_balance' : 'company_balance';
+    const userTokensRef = ref(database, `user_blank_tokens/${userId}/${tokenType}`);
     const tokensSnapshot = await get(userTokensRef);
     
     let availableTokens = 0;
@@ -344,7 +350,8 @@ export const redeemExperience = async (userId, benefitId, isBenefitJobby, compan
     
     // 2. Verificar si tiene suficientes tokens
     if (availableTokens < tokenCost) {
-      throw new Error(`No tienes suficientes tokens. Necesitas ${tokenCost} tokens, pero solo tienes ${availableTokens}.`);
+      const tokenTypeName = isBenefitJobby ? 'tokens Jobby' : 'tokens de empresa';
+      throw new Error(`No tienes suficientes ${tokenTypeName}. Necesitas ${tokenCost} tokens, pero solo tienes ${availableTokens}.`);
     }
     
     // 3. Obtener información del beneficio
@@ -390,20 +397,23 @@ export const redeemExperience = async (userId, benefitId, isBenefitJobby, compan
     const currentTime = Date.now();
     const newBalance = availableTokens - tokenCost;
     
-    // Actualizar balance
+    // Actualizar balance según el tipo
+    const balanceField = isBenefitJobby ? 'jobby_balance' : 'company_balance';
     await update(ref(database, `user_blank_tokens/${userId}`), {
-      balance: newBalance,
+      [balanceField]: newBalance,
       lastUpdated: currentTime
     });
     
-    // 7. Registrar en historial de tokens
-    const historyRef = ref(database, `user_blank_tokens/${userId}/history`);
+    // 7. Registrar en historial de tokens correspondiente
+    const historyType = isBenefitJobby ? 'jobby_history' : 'company_history';
+    const historyRef = ref(database, `user_blank_tokens/${userId}/${historyType}`);
     await push(historyRef, {
       type: 'used',
       amount: tokenCost,
       reason: `Canjeado por: ${benefitName}`,
       redemptionId: redemptionId,
       benefitId: benefitId,
+      tokenType: isBenefitJobby ? 'jobby' : 'company',
       createdAt: currentTime,
       balanceBefore: availableTokens,
       balanceAfter: newBalance

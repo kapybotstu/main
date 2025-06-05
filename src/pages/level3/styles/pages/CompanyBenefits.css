@@ -179,6 +179,9 @@
   height: 200px;
   overflow: hidden;
   position: relative;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
 }
 
 .company-benefit-card .card-image img {
@@ -186,6 +189,7 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
+  display: block;
 }
 
 .company-benefit-card:hover .card-image img {

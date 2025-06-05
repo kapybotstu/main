@@ -279,7 +279,6 @@ const CompanyBenefits = () => {
             <div className="card-content">
               <div className="card-header">
                 <h3>{benefit.name}</h3>
-                <span className="benefit-type company">Empresa</span>
               </div>
               
               <div className="card-description">
@@ -311,7 +310,7 @@ const CompanyBenefits = () => {
                     onClick={() => openRedemptionModal(benefit)}
                   >
                     <span className="button-icon">🎟️</span>
-                    Canjear por {benefit.tokenCost} token{benefit.tokenCost > 1 ? 's' : ''}
+                    Canjear por {benefit.tokenCost} token{benefit.tokenCost > 1 ? 's' : ''} de empresa
                   </button>
                 )}
               </div>
@@ -409,7 +408,7 @@ const CompanyBenefits = () => {
                     ) : (
                       <>
                         <span>🎟️</span>
-                        Canjear por {selectedExperience.tokenCost} token{selectedExperience.tokenCost > 1 ? 's' : ''}
+                        Canjear por {selectedExperience.tokenCost} token{selectedExperience.tokenCost > 1 ? 's' : ''} de empresa
                       </>
                     )}
                   </button>

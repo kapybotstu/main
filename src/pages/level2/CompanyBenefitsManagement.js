@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ref, onValue, push, update, get } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 import BenefitUsageChart from '../../components/BenefitUsageChart';
 import EmployeeBenefitUsageChart from '../../components/EmployeeBenefitUsageChart';
+import { getCompanyTokenStatistics } from '../../services/firebase/database/databaseService';
 import './CompanyBenefitsManagement.css';
 
 const CompanyBenefitsManagement = () => {
@@ -35,6 +37,16 @@ const CompanyBenefitsManagement = () => {
   const [benefitRequests, setBenefitRequests] = useState([]);
   const [jobbyBenefitStats, setJobbyBenefitStats] = useState([]);
   const [companyBenefitStats, setCompanyBenefitStats] = useState([]);
+  
+  // Estado para tokens
+  const [tokenStats, setTokenStats] = useState({
+    totalUsers: 0,
+    activeUsers: 0,
+    totalAvailable: 0,
+    totalDistributed: 0,
+    totalUsed: 0,
+    averageBalance: 0
+  });
   
   useEffect(() => {
     if (!companyId) {
@@ -140,10 +152,21 @@ const CompanyBenefitsManagement = () => {
     // Pequeño retraso para asegurar que tenemos los usuarios antes de buscar solicitudes
     const timer = setTimeout(() => {
       fetchBenefitRequests();
+      fetchTokenStats();
     }, 1000);
     
     return () => clearTimeout(timer);
   }, [companyId]);
+
+  // Obtener estadísticas de tokens
+  const fetchTokenStats = async () => {
+    try {
+      const stats = await getCompanyTokenStatistics(companyId);
+      setTokenStats(stats);
+    } catch (error) {
+      console.error('Error obteniendo estadísticas de tokens:', error);
+    }
+  };
   
   // Manejar cambios en formulario
   const handleChange = (e) => {
@@ -316,6 +339,49 @@ const CompanyBenefitsManagement = () => {
         {error && <div className="level2-error-alert">{error}</div>}
         {success && <div className="level2-success-alert">{success}</div>}
         
+        {/* ESTADÍSTICAS DE TOKENS */}
+        <div className="level2-tokens-overview">
+          <div className="level2-tokens-stats-grid">
+            <div className="level2-token-stat-card">
+              <div className="level2-token-stat-icon">💰</div>
+              <div className="level2-token-stat-content">
+                <div className="level2-token-stat-value">{tokenStats.totalAvailable}</div>
+                <div className="level2-token-stat-label">Tokens Disponibles</div>
+              </div>
+            </div>
+
+            <div className="level2-token-stat-card">
+              <div className="level2-token-stat-icon">👥</div>
+              <div className="level2-token-stat-content">
+                <div className="level2-token-stat-value">{tokenStats.activeUsers}</div>
+                <div className="level2-token-stat-label">Usuarios Activos</div>
+              </div>
+            </div>
+
+            <div className="level2-token-stat-card">
+              <div className="level2-token-stat-icon">🎯</div>
+              <div className="level2-token-stat-content">
+                <div className="level2-token-stat-value">{tokenStats.totalUsed}</div>
+                <div className="level2-token-stat-label">Tokens Utilizados</div>
+              </div>
+            </div>
+
+            <div className="level2-token-stat-card">
+              <div className="level2-token-stat-icon">📊</div>
+              <div className="level2-token-stat-content">
+                <div className="level2-token-stat-value">{tokenStats.averageBalance}</div>
+                <div className="level2-token-stat-label">Promedio por Usuario</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="level2-tokens-actions">
+            <Link to="/level2/tokens" className="level2-btn-tokens">
+              Gestionar Tokens de Empresa
+            </Link>
+          </div>
+        </div>
+
         {/* LAYOUT PRINCIPAL */}
         <div className="level2-main-layout">
         {/* Card 1: Uso de Beneficios (gráfico) */}

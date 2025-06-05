@@ -136,6 +136,122 @@ Sistema de diseño empresarial moderno con enfoque en análisis y gestión
   border-left: 4px solid #38a169;
 }
 
+/* OVERVIEW DE TOKENS */
+.level2-tokens-overview {
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0;
+}
+
+.level2-tokens-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.level2-token-stat-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.level2-token-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4a90e2, #357abd, #2c5aa0);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.level2-token-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+}
+
+.level2-token-stat-card:hover::before {
+  opacity: 1;
+}
+
+.level2-token-stat-icon {
+  font-size: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.level2-token-stat-content {
+  flex: 1;
+}
+
+.level2-token-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.level2-token-stat-label {
+  font-size: 0.85rem;
+  color: #718096;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.level2-tokens-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.level2-btn-tokens {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(74, 144, 226, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.level2-btn-tokens:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(74, 144, 226, 0.4);
+  text-decoration: none;
+  color: white;
+}
+
+.level2-btn-tokens::before {
+  content: '🎯';
+  font-size: 1.1rem;
+}
+
 /* LAYOUT PRINCIPAL */
 .level2-main-layout {
   padding: 2rem;
@@ -718,6 +834,11 @@ Sistema de diseño empresarial moderno con enfoque en análisis y gestión
 }
 
 @media (max-width: 1200px) {
+  .level2-tokens-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
   .level2-main-layout {
     grid-template-areas: 
       "stats"
@@ -742,6 +863,34 @@ Sistema de diseño empresarial moderno con enfoque en análisis y gestión
   
   .level2-benefits-header h1 {
     font-size: 1.75rem;
+  }
+  
+  .level2-tokens-overview {
+    padding: 1rem;
+  }
+  
+  .level2-tokens-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .level2-token-stat-card {
+    padding: 1rem;
+  }
+  
+  .level2-token-stat-icon {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+  }
+  
+  .level2-token-stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .level2-btn-tokens {
+    padding: 0.875rem 2rem;
+    font-size: 0.9rem;
   }
   
   .level2-main-layout {

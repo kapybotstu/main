@@ -21,6 +21,7 @@ import AchievementsManagement from '../pages/level1/achievements/AchievementsMan
 // Nivel 2: Recursos Humanos de empresa
 import Level2Dashboard from '../pages/level2/Level2Dashboard';
 import CompanyBenefitsManagement from '../pages/level2/CompanyBenefitsManagement';
+import CompanyTokensManagement from '../pages/level2/CompanyTokensManagement';
 import CompanyUsersManagement from '../pages/level2/CompanyUsersManagement';
 import CompanyRequestsManagement from '../pages/level2/CompanyRequestsManagement';
 
@@ -79,6 +80,7 @@ const AppRoutes = () => {
         <Route path="/level2" element={<MainLayout />}>
           <Route path="dashboard" element={<Level2Dashboard />} />
           <Route path="benefits" element={<CompanyBenefitsManagement />} />
+          <Route path="tokens" element={<CompanyTokensManagement />} />
           <Route path="users" element={<CompanyUsersManagement />} />
           <Route path="requests" element={<CompanyRequestsManagement />} />
           <Route path="" element={<Navigate to="/level2/dashboard" replace />} />

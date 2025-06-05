@@ -1092,8 +1092,8 @@ export const getJobbyTokenHistory = async (userId) => {
   }
 };
 
-// Obtener historial de tokens Empresa
-export const getCompanyTokenHistory = async (userId) => {
+// Obtener historial de tokens Empresa para un usuario específico
+export const getUserCompanyTokenHistory = async (userId) => {
   try {
     const historyRef = ref(database, `user_blank_tokens/${userId}/company_history`);
     const snapshot = await get(historyRef);
@@ -1109,9 +1109,9 @@ export const getCompanyTokenHistory = async (userId) => {
     }
     
     // Ordenar por timestamp descendente (más reciente primero)
-    return history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    return history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   } catch (error) {
-    console.error('Error getting Company token history:', error);
+    console.error('Error getting user Company token history:', error);
     return [];
   }
 };
@@ -1136,6 +1136,357 @@ export const resetUserTokensToReal = async (userId, realJobbyBalance = 1, realCo
     return { success: true, jobbyBalance: realJobbyBalance, companyBalance: realCompanyBalance };
   } catch (error) {
     console.error('Error resetting user tokens:', error);
+    throw error;
+  }
+};
+
+// ===== FUNCIONES PARA GESTIÓN DE TOKENS NIVEL 2 (EMPRESA) =====
+
+// Obtener balance de tokens de empresa para múltiples usuarios
+export const getCompanyUsersTokenBalance = async (companyId) => {
+  try {
+    const usersRef = ref(database, 'users');
+    const usersSnapshot = await get(usersRef);
+    
+    const companyUsers = [];
+    
+    if (usersSnapshot.exists()) {
+      // Obtener usuarios de la empresa
+      usersSnapshot.forEach((childSnapshot) => {
+        const userData = childSnapshot.val();
+        
+        if (userData.companyId === companyId && userData.level === 3) {
+          companyUsers.push({
+            id: childSnapshot.key,
+            ...userData
+          });
+        }
+      });
+    }
+    
+    // Obtener balance de tokens para cada usuario
+    const usersWithTokens = [];
+    for (const user of companyUsers) {
+      try {
+        const tokensRef = ref(database, `user_blank_tokens/${user.id}`);
+        const tokensSnapshot = await get(tokensRef);
+        const tokensData = tokensSnapshot.val() || {};
+        
+        usersWithTokens.push({
+          ...user,
+          companyBalance: tokensData.company_balance || 0,
+          jobbyBalance: tokensData.jobby_balance || 0,
+          lastUpdated: tokensData.lastUpdated || null
+        });
+      } catch (error) {
+        console.error(`Error obteniendo tokens para usuario ${user.id}:`, error);
+        usersWithTokens.push({
+          ...user,
+          companyBalance: 0,
+          jobbyBalance: 0,
+          lastUpdated: null
+        });
+      }
+    }
+    
+    return usersWithTokens;
+  } catch (error) {
+    console.error('Error getting company users token balance:', error);
+    throw error;
+  }
+};
+
+// Asignar tokens de empresa a un usuario específico
+export const assignCompanyTokensToUser = async (companyId, userId, amount, reason, adminId, adminEmail) => {
+  try {
+    if (amount <= 0) {
+      throw new Error('La cantidad debe ser mayor a 0');
+    }
+    
+    // Verificar que el usuario pertenece a la empresa
+    const userRef = ref(database, `users/${userId}`);
+    const userSnapshot = await get(userRef);
+    
+    if (!userSnapshot.exists()) {
+      throw new Error('Usuario no encontrado');
+    }
+    
+    const userData = userSnapshot.val();
+    if (userData.companyId !== companyId) {
+      throw new Error('El usuario no pertenece a esta empresa');
+    }
+    
+    if (userData.level !== 3) {
+      throw new Error('Solo se pueden asignar tokens a empleados (nivel 3)');
+    }
+    
+    // Obtener balance actual
+    const tokensRef = ref(database, `user_blank_tokens/${userId}`);
+    const tokensSnapshot = await get(tokensRef);
+    const currentData = tokensSnapshot.val() || {};
+    const currentBalance = currentData.company_balance || 0;
+    const newBalance = currentBalance + amount;
+    
+    // Actualizar balance
+    await update(tokensRef, {
+      company_balance: newBalance,
+      lastUpdated: new Date().toISOString()
+    });
+    
+    // Registrar en historial
+    const historyRef = ref(database, `user_blank_tokens/${userId}/company_history`);
+    await push(historyRef, {
+      type: 'add',
+      amount: amount,
+      reason: reason || 'Asignación manual',
+      adminId: adminId,
+      adminEmail: adminEmail,
+      companyId: companyId,
+      createdAt: new Date().toISOString(),
+      balanceBefore: currentBalance,
+      balanceAfter: newBalance
+    });
+    
+    return { 
+      success: true, 
+      newBalance: newBalance,
+      amountAdded: amount 
+    };
+  } catch (error) {
+    console.error('Error assigning company tokens:', error);
+    throw error;
+  }
+};
+
+// Asignación masiva de tokens de empresa
+export const bulkAssignCompanyTokens = async (companyId, userIds, amount, reason, adminId, adminEmail) => {
+  try {
+    if (amount <= 0) {
+      throw new Error('La cantidad debe ser mayor a 0');
+    }
+    
+    if (!userIds || userIds.length === 0) {
+      throw new Error('Debe seleccionar al menos un usuario');
+    }
+    
+    const results = [];
+    const errors = [];
+    
+    for (const userId of userIds) {
+      try {
+        const result = await assignCompanyTokensToUser(companyId, userId, amount, reason, adminId, adminEmail);
+        results.push({ userId, ...result });
+      } catch (error) {
+        console.error(`Error asignando tokens a usuario ${userId}:`, error);
+        errors.push({ userId, error: error.message });
+      }
+    }
+    
+    return {
+      success: results.length > 0,
+      successCount: results.length,
+      errorCount: errors.length,
+      results,
+      errors
+    };
+  } catch (error) {
+    console.error('Error in bulk token assignment:', error);
+    throw error;
+  }
+};
+
+// Obtener estadísticas de tokens de empresa
+export const getCompanyTokenStatistics = async (companyId) => {
+  try {
+    const users = await getCompanyUsersTokenBalance(companyId);
+    
+    const stats = {
+      totalUsers: users.length,
+      activeUsers: 0,
+      totalAvailable: 0,
+      totalDistributed: 0,
+      totalUsed: 0,
+      averageBalance: 0
+    };
+    
+    // Calcular estadísticas básicas
+    for (const user of users) {
+      const balance = user.companyBalance || 0;
+      stats.totalAvailable += balance;
+      if (balance > 0) {
+        stats.activeUsers++;
+      }
+    }
+    
+    if (users.length > 0) {
+      stats.averageBalance = Math.round(stats.totalAvailable / users.length);
+    }
+    
+    // Obtener historial para calcular total distribuido y usado
+    const tokensRef = ref(database, 'user_blank_tokens');
+    const tokensSnapshot = await get(tokensRef);
+    
+    if (tokensSnapshot.exists()) {
+      tokensSnapshot.forEach((userSnapshot) => {
+        const userId = userSnapshot.key;
+        const user = users.find(u => u.id === userId);
+        
+        if (user) { // Solo contar historial de usuarios de esta empresa
+          const companyHistoryRef = userSnapshot.child('company_history');
+          
+          if (companyHistoryRef.exists()) {
+            companyHistoryRef.forEach((historySnapshot) => {
+              const historyData = historySnapshot.val();
+              
+              if (historyData.type === 'add') {
+                stats.totalDistributed += historyData.amount || 0;
+              } else if (historyData.type === 'used') {
+                stats.totalUsed += historyData.amount || 0;
+              }
+            });
+          }
+        }
+      });
+    }
+    
+    return stats;
+  } catch (error) {
+    console.error('Error getting company token statistics:', error);
+    throw error;
+  }
+};
+
+// Obtener historial completo de tokens de empresa
+export const getCompanyTokenHistory = async (companyId, limit = 50) => {
+  try {
+    const users = await getCompanyUsersTokenBalance(companyId);
+    const userIds = users.map(u => u.id);
+    
+    const history = [];
+    
+    const tokensRef = ref(database, 'user_blank_tokens');
+    const tokensSnapshot = await get(tokensRef);
+    
+    if (tokensSnapshot.exists()) {
+      tokensSnapshot.forEach((userSnapshot) => {
+        const userId = userSnapshot.key;
+        
+        // Solo incluir historial de usuarios de esta empresa
+        if (userIds.includes(userId)) {
+          const companyHistoryRef = userSnapshot.child('company_history');
+          
+          if (companyHistoryRef.exists()) {
+            companyHistoryRef.forEach((historySnapshot) => {
+              const historyData = historySnapshot.val();
+              const user = users.find(u => u.id === userId);
+              
+              history.push({
+                id: historySnapshot.key,
+                userId: userId,
+                userName: user?.displayName || 'Usuario desconocido',
+                userEmail: user?.email || '',
+                ...historyData
+              });
+            });
+          }
+        }
+      });
+    }
+    
+    // Ordenar por fecha más reciente
+    history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    return history.slice(0, limit);
+  } catch (error) {
+    console.error('Error getting company token history:', error);
+    throw error;
+  }
+};
+
+// Obtener solicitudes de beneficios internos de empresa
+export const getCompanyBenefitRequests = async (companyId) => {
+  try {
+    const requestsRef = ref(database, 'benefit_requests');
+    const requestsSnapshot = await get(requestsRef);
+    
+    const requests = [];
+    
+    if (requestsSnapshot.exists()) {
+      requestsSnapshot.forEach((childSnapshot) => {
+        const requestData = childSnapshot.val();
+        
+        // Solo solicitudes de beneficios internos de esta empresa
+        if (requestData.companyId === companyId && !requestData.isBenefitJobby) {
+          requests.push({
+            id: childSnapshot.key,
+            ...requestData
+          });
+        }
+      });
+    }
+    
+    return requests.sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate));
+  } catch (error) {
+    console.error('Error getting company benefit requests:', error);
+    throw error;
+  }
+};
+
+// Crear token para beneficio interno de empresa (cuando se aprueba una solicitud)
+export const createCompanyBenefitToken = async (requestId, companyId, adminId) => {
+  try {
+    // Obtener datos de la solicitud
+    const requestRef = ref(database, `benefit_requests/${requestId}`);
+    const requestSnapshot = await get(requestRef);
+    
+    if (!requestSnapshot.exists()) {
+      throw new Error('Solicitud no encontrada');
+    }
+    
+    const requestData = requestSnapshot.val();
+    
+    // Verificar que es una solicitud de beneficio interno de esta empresa
+    if (requestData.companyId !== companyId || requestData.isBenefitJobby) {
+      throw new Error('Esta solicitud no pertenece a los beneficios internos de la empresa');
+    }
+    
+    if (requestData.status !== 'pending') {
+      throw new Error('La solicitud ya ha sido procesada');
+    }
+    
+    // Generar token de beneficio
+    const tokenRef = push(ref(database, 'benefit_tokens'));
+    const tokenId = tokenRef.key;
+    const tokenCode = generateRandomToken();
+    
+    await set(tokenRef, {
+      requestId: requestId,
+      tokenCode: tokenCode,
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      expiresAt: calculateExpiryDate(30), // 30 días por defecto
+      createdBy: adminId,
+      benefitId: requestData.benefitId,
+      userId: requestData.userId,
+      benefitName: requestData.benefitName,
+      companyId: companyId
+    });
+    
+    // Actualizar solicitud como aprobada
+    await update(requestRef, {
+      status: 'approved',
+      adminId: adminId,
+      processedDate: new Date().toISOString(),
+      tokenId: tokenId
+    });
+    
+    return {
+      success: true,
+      tokenId: tokenId,
+      tokenCode: tokenCode
+    };
+  } catch (error) {
+    console.error('Error creating company benefit token:', error);
     throw error;
   }
 };

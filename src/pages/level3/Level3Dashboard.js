@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ref, onValue, query, orderByChild, equalTo } from 'firebase/database';
+import { ref, onValue, query, orderByChild, equalTo, set } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
+import './styles/index.css'; // Import Level 3 styles
 import './styles/pages/Dashboard.css';
 import TokenBalance from './components/TokenBalance';
 
@@ -14,7 +15,8 @@ const Level3Dashboard = () => {
     pendingRequests: 0,
     activeTokens: 0,
     currentMonthTokens: 0,
-    previousMonthTokens: 0
+    previousMonthTokens: 0,
+    userTokenBalance: 0 // Balance real de tokens para gastar
   });
   const [recentRequests, setRecentRequests] = useState([]);
   const [recentTokens, setRecentTokens] = useState([]);
@@ -174,6 +176,29 @@ const Level3Dashboard = () => {
             previousMonthTokens: previousMonth
           }));
         });
+
+        // Obtener balance real de tokens del usuario (user_blank_tokens)
+        const userTokensRef = ref(database, `user_blank_tokens/${currentUser.uid}/balance`);
+        onValue(userTokensRef, (snapshot) => {
+          let balance = snapshot.exists() ? snapshot.val() : 0;
+          
+          // Si no hay balance, inicializar con 20 tokens de prueba
+          if (!snapshot.exists() || balance === 0) {
+            console.log('Inicializando tokens de prueba...');
+            const tokenRef = ref(database, `user_blank_tokens/${currentUser.uid}`);
+            set(tokenRef, {
+              balance: 20,
+              lastUpdated: Date.now()
+            });
+            balance = 20;
+          }
+          
+          console.log('Balance de tokens cargado:', balance);
+          setStats(prevStats => ({
+            ...prevStats,
+            userTokenBalance: balance
+          }));
+        });
         
         setLoading(false);
       } catch (error) {
@@ -200,7 +225,14 @@ const Level3Dashboard = () => {
     localStorage.setItem('jobby_welcome_seen', 'true');
   };
 
-  const totalAvailableTokens = stats.currentMonthTokens + stats.previousMonthTokens;
+  // Asegurar que siempre muestre un número válido
+  const totalAvailableTokens = typeof stats.userTokenBalance === 'number' && stats.userTokenBalance >= 0 
+    ? stats.userTokenBalance 
+    : 25; // Valor por defecto
+  
+  console.log('Dashboard stats:', stats);
+  console.log('totalAvailableTokens:', totalAvailableTokens);
+  console.log('userTokenBalance direct:', stats.userTokenBalance);
 
   if (loading) {
     return (
@@ -239,15 +271,11 @@ const Level3Dashboard = () => {
           </div>
           
           <div className="tokens-summary">
-            <div className="token-card">
-              <div className="token-amount">
-                <span className="token-number">{totalAvailableTokens}</span>
-                <span className="token-label">Disponibles</span>
-              </div>
-              <div className="token-breakdown">
-                <span className="token-detail">
-                  Este mes: {stats.currentMonthTokens} • Anterior: {stats.previousMonthTokens}
-                </span>
+            <div className="new-token-widget">
+              <div className="token-icon">💰</div>
+              <div className="token-info">
+                <div className="token-value">{totalAvailableTokens}</div>
+                <div className="token-text">Tokens Disponibles</div>
               </div>
             </div>
             

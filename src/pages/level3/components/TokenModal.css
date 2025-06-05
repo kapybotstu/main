@@ -1,0 +1,378 @@
+/* Modal de Token - Estilos completamente independientes */
+
+/* Overlay del modal */
+.token-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: tokenModalFadeIn 0.3s ease-out;
+}
+
+@keyframes tokenModalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Contenedor principal del modal */
+.token-modal {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: tokenModalSlideIn 0.3s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes tokenModalSlideIn {
+  from {
+    transform: translateY(-50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Header del modal */
+.token-modal .modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  border-radius: 20px 20px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  border: none;
+}
+
+.token-modal .modal-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.token-modal .close-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.token-modal .close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Contenido del modal */
+.token-modal .modal-content {
+  padding: 2rem;
+  margin: 0;
+  border: none;
+}
+
+/* Display del token */
+.token-modal .token-display {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.token-modal .token-code {
+  font-family: 'Courier New', monospace;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 4px;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.token-modal .token-expiry {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Información del beneficio */
+.token-modal .benefit-info {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #667eea;
+}
+
+.token-modal .benefit-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.token-modal .paid-with-tokens-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff3cd;
+  color: #856404;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.token-modal .token-icon {
+  font-size: 1rem;
+}
+
+/* Instrucciones del administrador */
+.token-modal .admin-instructions {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.token-modal .admin-instructions-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.token-modal .admin-icon {
+  font-size: 1.3rem;
+}
+
+.token-modal .admin-instructions-content {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 1rem;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-left: 4px solid rgba(255, 255, 255, 0.3);
+  margin: 0;
+}
+
+/* Sección de instrucciones */
+.token-modal .token-instructions {
+  color: #4a5568;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.token-modal .token-instructions h4 {
+  margin: 0 0 1rem 0;
+  color: #2d3748;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Lista de instrucciones */
+.token-modal .instructions-list {
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.token-modal .instruction-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  background: #f7fafc;
+  border-radius: 10px;
+  border-left: 3px solid #667eea;
+}
+
+.token-modal .step-number {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.token-modal .step-text {
+  margin: 0;
+  color: #4a5568;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* Nota importante */
+.token-modal .important-note {
+  background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
+  border: 1px solid #f6cc8f;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  color: #744210;
+}
+
+.token-modal .note-icon {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.token-modal .important-note strong {
+  color: #744210;
+}
+
+.token-modal .important-note p {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+}
+
+/* Acciones del modal */
+.token-modal .modal-actions {
+  background: #f8fafc;
+  padding: 1.5rem 2rem;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0;
+  border: none;
+}
+
+.token-modal .close-modal-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  min-width: 120px;
+}
+
+.token-modal .close-modal-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.token-modal .close-modal-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .token-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .token-modal .modal-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .token-modal .modal-content {
+    padding: 1.5rem;
+  }
+  
+  .token-modal .token-code {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+  
+  .token-modal .modal-actions {
+    padding: 1rem 1.5rem;
+  }
+  
+  .token-modal .instruction-step {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .token-modal .step-number {
+    align-self: flex-start;
+  }
+}
+
+/* Animaciones adicionales */
+.token-modal .token-code {
+  animation: tokenPulse 2s infinite;
+}
+
+@keyframes tokenPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+}
+
+/* Scrollbar personalizado para el modal */
+.token-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.token-modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.token-modal::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.token-modal::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

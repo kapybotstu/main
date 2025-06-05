@@ -16,7 +16,7 @@ const BenefitCard = ({ benefit, onSelect, isCompact = false }) => {
         <div className="benefit-card-icon">
           {benefit.icon || '🎁'}
         </div>
-        <h3 className="card-title">{benefit.name}</h3>
+        <h3 className="card-title">{benefit.name || benefit.title || 'Beneficio sin nombre'}</h3>
         <p className="card-subtitle">{benefit.category}</p>
         {!isCompact && (
           <>

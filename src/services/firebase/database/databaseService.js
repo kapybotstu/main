@@ -157,19 +157,16 @@ export const getCompanyBenefits = async (companyId) => {
 
 // ===== SERVICIOS PARA TOKENS/SOLICITUDES =====
 
-// Solicitar beneficio (nivel 3)
-// Canjear experiencia por tokens
-export const redeemExperience = async (userId, benefitId, isBenefitJobby, companyId, tokenCost, additionalData = {}) => {
+// Solicitar beneficio con pago de tokens (nivel 3)
+export const requestBenefitWithTokens = async (userId, benefitId, isBenefitJobby, companyId, tokenCost, additionalData = {}) => {
   try {
     // 1. Verificar tokens disponibles del usuario
-    const userTokensRef = ref(database, `user_tokens/${userId}`);
+    const userTokensRef = ref(database, `user_blank_tokens/${userId}/balance`);
     const tokensSnapshot = await get(userTokensRef);
     
     let availableTokens = 0;
     if (tokensSnapshot.exists()) {
-      const userTokens = tokensSnapshot.val();
-      // Sumar tokens del mes actual y anterior disponibles
-      availableTokens = (userTokens.currentMonthTokens || 0) + (userTokens.previousMonthTokens || 0);
+      availableTokens = tokensSnapshot.val();
     }
     
     // 2. Verificar si tiene suficientes tokens
@@ -177,13 +174,203 @@ export const redeemExperience = async (userId, benefitId, isBenefitJobby, compan
       throw new Error(`No tienes suficientes tokens. Necesitas ${tokenCost} tokens, pero solo tienes ${availableTokens}.`);
     }
     
-    // 3. Crear el registro de canje
+    // 3. Obtener información del beneficio y su tipo
+    let benefitName = 'Beneficio';
+    let benefitType = 'automatic'; // Por defecto
+    let benefitData = {};
+    
+    if (isBenefitJobby) {
+      const benefitRef = ref(database, `jobby_benefits/${benefitId}`);
+      const benefitSnapshot = await get(benefitRef);
+      if (benefitSnapshot.exists()) {
+        benefitData = benefitSnapshot.val();
+        benefitName = benefitData.title || benefitData.name || 'Beneficio Jobby';
+        benefitType = benefitData.type || 'automatic';
+      }
+    } else {
+      const benefitRef = ref(database, `company_benefits/${companyId}/${benefitId}`);
+      const benefitSnapshot = await get(benefitRef);
+      if (benefitSnapshot.exists()) {
+        benefitData = benefitSnapshot.val();
+        benefitName = benefitData.title || benefitData.name || 'Beneficio Empresa';
+        benefitType = benefitData.type || 'automatic';
+      }
+    }
+    
+    // 4. Determinar el estado según el tipo de beneficio
+    let requestStatus = 'pending';
+    let processedDate = null;
+    let adminId = null;
+    
+    if (benefitType === 'automatic') {
+      // Beneficios automáticos se aprueban instantáneamente
+      requestStatus = 'approved';
+      processedDate = new Date().toISOString();
+      adminId = 'system';
+    } else if (benefitType === 'managed') {
+      // Beneficios gestionados requieren aprobación manual del proveedor
+      requestStatus = 'pending_provider_approval';
+    } else if (benefitType === 'third_party') {
+      // Beneficios de terceros van al nivel 1 para gestión
+      requestStatus = 'pending_admin_approval';
+    }
+    
+    // 5. Crear la solicitud con el estado apropiado
+    const requestRef = push(ref(database, 'benefit_requests'));
+    const requestId = requestRef.key;
+    const currentTime = new Date().toISOString();
+    
+    const requestData = {
+      userId,
+      benefitId,
+      benefitName,
+      benefitType,
+      isBenefitJobby,
+      status: requestStatus,
+      requestDate: currentTime,
+      processedDate,
+      adminId,
+      paidWithTokens: true,
+      tokenCost,
+      ...additionalData
+    };
+    
+    if (!isBenefitJobby && companyId) {
+      requestData.companyId = companyId;
+    }
+    
+    await set(requestRef, requestData);
+    
+    let tokenId = null;
+    let tokenCode = null;
+    
+    // 6. Solo crear token automáticamente para beneficios automáticos
+    if (benefitType === 'automatic' && requestStatus === 'approved') {
+      const tokenRef = push(ref(database, 'benefit_tokens'));
+      tokenId = tokenRef.key;
+      tokenCode = generateRandomToken();
+      
+      await set(tokenRef, {
+        requestId,
+        tokenCode,
+        status: 'active',
+        createdAt: currentTime,
+        expiresAt: calculateExpiryDate(30),
+        createdBy: 'system',
+        benefitId,
+        userId,
+        benefitName
+      });
+      
+      // Actualizar la solicitud con el ID del token
+      await update(requestRef, { tokenId });
+    }
+    
+    // 7. Descontar tokens del usuario y registrar en historial
+    const currentTimeMs = Date.now();
+    const newBalance = availableTokens - tokenCost;
+    
+    // Actualizar balance
+    await update(ref(database, `user_blank_tokens/${userId}`), {
+      balance: newBalance,
+      lastUpdated: currentTimeMs
+    });
+    
+    // 8. Registrar en historial de tokens
+    const historyRef = ref(database, `user_blank_tokens/${userId}/history`);
+    await push(historyRef, {
+      type: 'used',
+      amount: tokenCost,
+      reason: `Canjeado por: ${benefitName}`,
+      requestId: requestId,
+      tokenId: tokenId,
+      benefitId: benefitId,
+      createdAt: currentTimeMs,
+      balanceBefore: availableTokens,
+      balanceAfter: newBalance
+    });
+    
+    return { 
+      requestId,
+      tokenId,
+      tokenCode,
+      remainingTokens: newBalance 
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Solicitar beneficio sin tokens (mantener flujo tradicional)
+export const requestBenefitTraditional = async (userId, benefitId, isBenefitJobby, companyId, additionalData = {}) => {
+  try {
+    const newRequestRef = push(ref(database, 'benefit_requests'));
+    const requestId = newRequestRef.key;
+    
+    const requestData = {
+      userId,
+      benefitId,
+      isBenefitJobby,
+      status: 'pending', // Requiere aprobación manual
+      requestDate: new Date().toISOString(),
+      paidWithTokens: false,
+      ...additionalData
+    };
+    
+    if (!isBenefitJobby) {
+      requestData.companyId = companyId;
+    }
+    
+    await set(newRequestRef, requestData);
+    
+    return { requestId };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Solicitar beneficio (nivel 3) - DEPRECATED
+// Canjear experiencia por tokens
+export const redeemExperience = async (userId, benefitId, isBenefitJobby, companyId, tokenCost, additionalData = {}) => {
+  try {
+    // 1. Verificar tokens disponibles del usuario (usar user_blank_tokens)
+    const userTokensRef = ref(database, `user_blank_tokens/${userId}/balance`);
+    const tokensSnapshot = await get(userTokensRef);
+    
+    let availableTokens = 0;
+    if (tokensSnapshot.exists()) {
+      availableTokens = tokensSnapshot.val();
+    }
+    
+    // 2. Verificar si tiene suficientes tokens
+    if (availableTokens < tokenCost) {
+      throw new Error(`No tienes suficientes tokens. Necesitas ${tokenCost} tokens, pero solo tienes ${availableTokens}.`);
+    }
+    
+    // 3. Obtener información del beneficio
+    let benefitName = 'Beneficio';
+    if (isBenefitJobby) {
+      const benefitRef = ref(database, `jobby_benefits/${benefitId}`);
+      const benefitSnapshot = await get(benefitRef);
+      if (benefitSnapshot.exists()) {
+        benefitName = benefitSnapshot.val().title || benefitSnapshot.val().name || 'Beneficio Jobby';
+      }
+    } else {
+      const benefitRef = ref(database, `company_benefits/${companyId}/${benefitId}`);
+      const benefitSnapshot = await get(benefitRef);
+      if (benefitSnapshot.exists()) {
+        benefitName = benefitSnapshot.val().title || benefitSnapshot.val().name || 'Beneficio Empresa';
+      }
+    }
+    
+    // 4. Crear el registro de canje
     const newRedemptionRef = push(ref(database, 'experience_redemptions'));
     const redemptionId = newRedemptionRef.key;
     
     const redemptionData = {
       userId,
       benefitId,
+      benefitName,
       isBenefitJobby,
       tokenCost,
       status: 'redeemed',
@@ -196,38 +383,36 @@ export const redeemExperience = async (userId, benefitId, isBenefitJobby, compan
       redemptionData.companyId = companyId;
     }
     
-    // 4. Guardar el canje
+    // 5. Guardar el canje
     await set(newRedemptionRef, redemptionData);
     
-    // 5. Descontar tokens del usuario (priorizar mes anterior primero)
-    let remainingCost = tokenCost;
-    const updates = {};
+    // 6. Descontar tokens del usuario y registrar en historial
+    const currentTime = Date.now();
+    const newBalance = availableTokens - tokenCost;
     
-    if (tokensSnapshot.exists()) {
-      const userTokens = tokensSnapshot.val();
-      let previousMonthTokens = userTokens.previousMonthTokens || 0;
-      let currentMonthTokens = userTokens.currentMonthTokens || 0;
-      
-      // Descontar primero del mes anterior
-      if (remainingCost > 0 && previousMonthTokens > 0) {
-        const deductFromPrevious = Math.min(remainingCost, previousMonthTokens);
-        updates[`user_tokens/${userId}/previousMonthTokens`] = previousMonthTokens - deductFromPrevious;
-        remainingCost -= deductFromPrevious;
-      }
-      
-      // Luego descontar del mes actual si es necesario
-      if (remainingCost > 0 && currentMonthTokens > 0) {
-        const deductFromCurrent = Math.min(remainingCost, currentMonthTokens);
-        updates[`user_tokens/${userId}/currentMonthTokens`] = currentMonthTokens - deductFromCurrent;
-      }
-      
-      await update(ref(database), updates);
-    }
+    // Actualizar balance
+    await update(ref(database, `user_blank_tokens/${userId}`), {
+      balance: newBalance,
+      lastUpdated: currentTime
+    });
+    
+    // 7. Registrar en historial de tokens
+    const historyRef = ref(database, `user_blank_tokens/${userId}/history`);
+    await push(historyRef, {
+      type: 'used',
+      amount: tokenCost,
+      reason: `Canjeado por: ${benefitName}`,
+      redemptionId: redemptionId,
+      benefitId: benefitId,
+      createdAt: currentTime,
+      balanceBefore: availableTokens,
+      balanceAfter: newBalance
+    });
     
     return { 
       redemptionId, 
       redemptionCode: redemptionData.redemptionCode,
-      remainingTokens: availableTokens - tokenCost 
+      remainingTokens: newBalance 
     };
   } catch (error) {
     throw error;
@@ -251,7 +436,68 @@ export const requestBenefit = async (userId, benefitId, isBenefitJobby, companyI
   return redeemExperience(userId, benefitId, isBenefitJobby, companyId, 1, additionalData);
 };
 
-// Aprobar/Rechazar solicitud (nivel 1 o 2 dependiendo del beneficio)
+// Aprobar/Rechazar solicitud pagada con tokens que requiere gestión manual (nivel 1)
+export const processTokenPaidRequest = async (requestId, status, adminId, instructions = '') => {
+  try {
+    const requestRef = ref(database, `benefit_requests/${requestId}`);
+    const requestSnapshot = await get(requestRef);
+    
+    if (!requestSnapshot.exists()) {
+      throw new Error('Solicitud no encontrada');
+    }
+    
+    const requestData = requestSnapshot.val();
+    const currentTime = new Date().toISOString();
+    
+    // Actualizar el estado de la solicitud
+    await update(requestRef, {
+      status, // approved, rejected
+      adminId,
+      processedDate: currentTime,
+      adminInstructions: instructions || ''
+    });
+    
+    if (status === 'approved') {
+      // Generar token para beneficio aprobado
+      const tokenRef = push(ref(database, 'benefit_tokens'));
+      const tokenId = tokenRef.key;
+      const tokenCode = generateRandomToken();
+      
+      await set(tokenRef, {
+        requestId,
+        tokenCode,
+        status: 'active',
+        createdAt: currentTime,
+        expiresAt: calculateExpiryDate(30),
+        createdBy: adminId,
+        benefitId: requestData.benefitId,
+        userId: requestData.userId,
+        benefitName: requestData.benefitName,
+        benefitType: requestData.benefitType,
+        adminInstructions: instructions || ''
+      });
+      
+      // Actualizar solicitud con el ID del token
+      await update(requestRef, { tokenId });
+      
+      return { 
+        success: true, 
+        tokenId, 
+        tokenCode,
+        message: 'Solicitud aprobada y token generado correctamente'
+      };
+    }
+    
+    return { 
+      success: true,
+      message: `Solicitud ${status === 'rejected' ? 'rechazada' : 'procesada'} correctamente`
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Aprobar/Rechazar solicitud tradicional (nivel 1 o 2 dependiendo del beneficio)
 export const updateBenefitRequest = async (requestId, status, adminId) => {
   try {
     const requestRef = ref(database, `benefit_requests/${requestId}`);

@@ -966,3 +966,43 @@
   color: white;
   border-color: #667eea;
 }
+
+/* NUEVO COMPONENTE DE TOKENS - Siguiendo diseño CompanyBenefits */
+.new-token-widget {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  margin: 0;
+}
+
+.new-token-widget .token-icon {
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+  display: block;
+  opacity: 0.9;
+}
+
+.new-token-widget .token-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new-token-widget .token-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  line-height: 1;
+}
+
+.new-token-widget .token-text {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}

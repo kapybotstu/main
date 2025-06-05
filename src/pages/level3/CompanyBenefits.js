@@ -11,7 +11,7 @@ const CompanyBenefits = () => {
   const [filteredBenefits, setFilteredBenefits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userTokens, setUserTokens] = useState({ currentMonthTokens: 0, previousMonthTokens: 0 });
+  const [userTokenBalance, setUserTokenBalance] = useState(0);
   const [userRedemptions, setUserRedemptions] = useState([]);
   const [redeemingExperience, setRedeemingExperience] = useState(false);
   const [redemptionSuccess, setRedemptionSuccess] = useState(null);
@@ -30,14 +30,12 @@ const CompanyBenefits = () => {
       }
       
       try {
-        // Obtener tokens del usuario
-        const userTokensRef = ref(database, `user_tokens/${currentUser.uid}`);
+        // Obtener balance real de tokens del usuario
+        const userTokensRef = ref(database, `user_blank_tokens/${currentUser.uid}/balance`);
         onValue(userTokensRef, (snapshot) => {
-          if (snapshot.exists()) {
-            setUserTokens(snapshot.val());
-          } else {
-            setUserTokens({ currentMonthTokens: 0, previousMonthTokens: 0 });
-          }
+          const balance = snapshot.exists() ? snapshot.val() : 0;
+          console.log('CompanyBenefits - Balance de tokens cargado:', balance);
+          setUserTokenBalance(balance);
         });
 
         // Obtener canjes del usuario
@@ -161,24 +159,7 @@ const CompanyBenefits = () => {
         remainingTokens: result.remainingTokens
       });
       
-      setUserTokens(prev => {
-        const totalTokens = prev.currentMonthTokens + prev.previousMonthTokens;
-        const remaining = totalTokens - selectedExperience.tokenCost;
-        
-        if (remaining <= prev.previousMonthTokens) {
-          return {
-            ...prev,
-            previousMonthTokens: remaining,
-            currentMonthTokens: 0
-          };
-        } else {
-          return {
-            ...prev,
-            previousMonthTokens: 0,
-            currentMonthTokens: remaining - prev.previousMonthTokens
-          };
-        }
-      });
+      // El balance se actualizará automáticamente por Firebase
       
       setShowRedemptionModal(false);
     } catch (err) {
@@ -195,7 +176,9 @@ const CompanyBenefits = () => {
   };
   
   const getAvailableTokens = () => {
-    return userTokens.currentMonthTokens + userTokens.previousMonthTokens;
+    return typeof userTokenBalance === 'number' && userTokenBalance >= 0 
+      ? userTokenBalance 
+      : 25; // Mismo valor por defecto que Dashboard
   };
 
   const canAffordExperience = (tokenCost) => {
@@ -258,9 +241,12 @@ const CompanyBenefits = () => {
         <p>Beneficios exclusivos proporcionados por tu empresa</p>
         
         <div className="tokens-summary">
-          <div className="token-card">
-            <span className="token-number">{getAvailableTokens()}</span>
-            <span className="token-label">Tokens Disponibles</span>
+          <div className="new-token-widget">
+            <div className="token-icon">🏢</div>
+            <div className="token-info">
+              <div className="token-value">{userTokenBalance}</div>
+              <div className="token-text">Tokens Empresa</div>
+            </div>
           </div>
         </div>
       </div>

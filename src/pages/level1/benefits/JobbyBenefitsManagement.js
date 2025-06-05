@@ -19,7 +19,8 @@ const JobbyBenefitsManagement = () => {
     category: '',
     image: '',
     isHighlighted: false,
-    availableTokens: 100
+    availableTokens: 100,
+    tokenCost: 1 // Costo en tokens para canjear
   });
   
   // Estado para modo edición
@@ -112,7 +113,8 @@ const JobbyBenefitsManagement = () => {
         category: '',
         image: '',
         isHighlighted: false,
-        availableTokens: 100
+        availableTokens: 100,
+        tokenCost: 1
       });
       
       setShowModal(false);
@@ -132,7 +134,8 @@ const JobbyBenefitsManagement = () => {
       category: benefit.category || '',
       image: benefit.image || '',
       isHighlighted: benefit.isHighlighted || false,
-      availableTokens: benefit.availableTokens || 100
+      availableTokens: benefit.availableTokens || 100,
+      tokenCost: benefit.tokenCost || 1
     });
     
     setEditMode(true);
@@ -236,7 +239,8 @@ const JobbyBenefitsManagement = () => {
               category: '',
               image: '',
               isHighlighted: false,
-              availableTokens: 100
+              availableTokens: 100,
+              tokenCost: 1
             });
             setShowModal(true);
           }}
@@ -266,7 +270,8 @@ const JobbyBenefitsManagement = () => {
                   <th>Categoría</th>
                   <th>Valor</th>
                   <th>Proveedor</th>
-                  <th>Tokens</th>
+                  <th>Costo</th>
+                  <th>Stock</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
@@ -286,6 +291,7 @@ const JobbyBenefitsManagement = () => {
                     <td>{benefit.category || '-'}</td>
                     <td>{benefit.value || '-'}</td>
                     <td>{benefit.provider || '-'}</td>
+                    <td>{benefit.tokenCost || 1} 🎟️</td>
                     <td>{benefit.availableTokens || 0}</td>
                     <td>
                       <span className={`jobby-benefits-badge jobby-benefits-badge-${benefit.status === 'active' ? 'success' : 'danger'}`}>
@@ -422,7 +428,21 @@ const JobbyBenefitsManagement = () => {
               </div>
               
               <div className="jobby-benefits-form-group">
-                <label htmlFor="availableTokens">Tokens Disponibles</label>
+                <label htmlFor="tokenCost">Costo en Tokens *</label>
+                <input
+                  id="tokenCost"
+                  name="tokenCost"
+                  type="number"
+                  min="1"
+                  value={newBenefit.tokenCost}
+                  onChange={handleChange}
+                  required
+                />
+                <small>Cantidad de tokens necesarios para canjear este beneficio</small>
+              </div>
+              
+              <div className="jobby-benefits-form-group">
+                <label htmlFor="availableTokens">Stock Disponible</label>
                 <input
                   id="availableTokens"
                   name="availableTokens"
@@ -431,6 +451,7 @@ const JobbyBenefitsManagement = () => {
                   value={newBenefit.availableTokens}
                   onChange={handleChange}
                 />
+                <small>Cantidad de beneficios disponibles (0 = ilimitado)</small>
               </div>
               
               <div className="jobby-benefits-form-group jobby-benefits-checkbox-group">

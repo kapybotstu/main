@@ -8,7 +8,9 @@ import '../styles/header.css';
 
 // Import Level 3 styles when needed
 const loadLevel3Styles = () => {
-  import('../pages/level3/styles/index.css');
+  if (window.location.pathname.includes('/level3')) {
+    import('../pages/level3/styles/index.css');
+  }
 };
 
 const MainLayout = () => {
@@ -25,8 +27,8 @@ const MainLayout = () => {
     console.log("Current location:", location.pathname);
     console.log("User level:", userLevel);
     
-    // Load Level 3 styles when needed
-    if (userLevel === 3) {
+    // Load Level 3 styles only when in level 3 routes
+    if (userLevel === 3 && location.pathname.includes('/level3')) {
       loadLevel3Styles();
     }
   }, [location, userLevel]);
@@ -266,9 +268,6 @@ const MainLayout = () => {
                 </li>
                 <li>
                   <Link to="/level3/requests">Mis Solicitudes</Link>
-                </li>
-                <li>
-                  <Link to="/level3/tokens">Desafíos y Logros</Link>
                 </li>
               </ul>
             </>

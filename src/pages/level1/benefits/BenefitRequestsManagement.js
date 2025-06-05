@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ref, onValue, get } from 'firebase/database';
 import { database } from '../../../services/firebase/config';
 import { useAuth } from '../../../context/AuthContext';
-import { updateBenefitRequest } from '../../../services/firebase/database/databaseService';
+import { updateBenefitRequest, processTokenPaidRequest } from '../../../services/firebase/database/databaseService';
 import './BenefitRequestsManagement.css';
 
 const BenefitRequestsManagement = () => {
@@ -17,6 +17,7 @@ const BenefitRequestsManagement = () => {
   const [modalAction, setModalAction] = useState('view'); // view, approve, reject
   const [processingRequest, setProcessingRequest] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
+  const [adminInstructions, setAdminInstructions] = useState('');
 
   // Obtener las solicitudes de la base de datos
   useEffect(() => {
@@ -41,14 +42,16 @@ const BenefitRequestsManagement = () => {
             const requestId = childSnapshot.key;
             const requestData = childSnapshot.val();
             
-            // Solo incluir solicitudes de beneficios Jobby para el nivel 1
-            if (requestData.isBenefitJobby) {
+            // Incluir solicitudes de beneficios Jobby y solicitudes que requieren aprobación admin
+            if (requestData.isBenefitJobby || requestData.status === 'pending_admin_approval') {
               requestsPromises.push(
                 Promise.all([
                   // Obtener datos del usuario que solicita
                   get(ref(database, `users/${requestData.userId}`)),
-                  // Obtener datos del beneficio
-                  get(ref(database, `jobby_benefits/${requestData.benefitId}`))
+                  // Obtener datos del beneficio (Jobby o empresa)
+                  requestData.isBenefitJobby 
+                    ? get(ref(database, `jobby_benefits/${requestData.benefitId}`))
+                    : get(ref(database, `company_benefits/${requestData.companyId}/${requestData.benefitId}`))
                 ]).then(([userSnapshot, benefitSnapshot]) => {
                   const userData = userSnapshot.exists() ? userSnapshot.val() : {};
                   const benefitData = benefitSnapshot.exists() ? benefitSnapshot.val() : {};
@@ -63,7 +66,8 @@ const BenefitRequestsManagement = () => {
                     benefitName: benefitData.name || benefitData.title || 'Beneficio sin nombre',
                     benefitDescription: benefitData.description || 'Sin descripción',
                     benefitCategory: benefitData.category || 'Sin categoría',
-                    benefitValue: benefitData.value || ''
+                    benefitValue: benefitData.value || '',
+                    benefitType: benefitData.type || 'automatic'
                   };
                 })
               );
@@ -156,13 +160,33 @@ const BenefitRequestsManagement = () => {
       setMessage({ type: '', content: '' });
       
       const status = action === 'approve' ? 'approved' : 'rejected';
-      await updateBenefitRequest(selectedRequest.id, status, currentUser.uid);
+      
+      // Determinar si es una solicitud pagada con tokens que requiere gestión
+      const isTokenPaidRequest = selectedRequest.paidWithTokens && 
+                                 selectedRequest.status === 'pending_admin_approval';
+      
+      let result;
+      if (isTokenPaidRequest) {
+        // Usar la nueva función para solicitudes pagadas con tokens
+        result = await processTokenPaidRequest(
+          selectedRequest.id, 
+          status, 
+          currentUser.uid,
+          action === 'approve' ? adminInstructions : ''
+        );
+      } else {
+        // Usar la función tradicional
+        result = await updateBenefitRequest(selectedRequest.id, status, currentUser.uid);
+      }
       
       setProcessingRequest(false);
       setMessage({
         type: 'success',
-        content: `La solicitud ha sido ${status === 'approved' ? 'aprobada' : 'rechazada'} correctamente.`
+        content: result.message || `La solicitud ha sido ${status === 'approved' ? 'aprobada' : 'rechazada'} correctamente.`
       });
+      
+      // Limpiar instrucciones
+      setAdminInstructions('');
       
       // Cerrar el modal después de un breve retraso
       setTimeout(() => {
@@ -223,6 +247,12 @@ const BenefitRequestsManagement = () => {
             Pendientes
           </button>
           <button 
+            className={`filter-tab ${filter === 'pending_admin_approval' ? 'active' : ''}`}
+            onClick={() => handleFilterChange('pending_admin_approval')}
+          >
+            Requieren Gestión
+          </button>
+          <button 
             className={`filter-tab ${filter === 'approved' ? 'active' : ''}`}
             onClick={() => handleFilterChange('approved')}
           >
@@ -261,6 +291,7 @@ const BenefitRequestsManagement = () => {
                 <th>Solicitante</th>
                 <th>Beneficio</th>
                 <th>Fecha de Solicitud</th>
+                <th>Pago</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
@@ -271,6 +302,15 @@ const BenefitRequestsManagement = () => {
                   <td>{request.userName}</td>
                   <td>{request.benefitName}</td>
                   <td>{formatDate(request.requestDate)}</td>
+                  <td>
+                    {request.paidWithTokens ? (
+                      <span className="badge badge-tokens">
+                        🎟️ {request.tokenCost} tokens
+                      </span>
+                    ) : (
+                      <span className="badge badge-traditional">Tradicional</span>
+                    )}
+                  </td>
                   <td>
                     <span className={`badge badge-${
                       request.status === 'approved' 
@@ -283,7 +323,9 @@ const BenefitRequestsManagement = () => {
                         ? 'Aprobada' 
                         : request.status === 'rejected'
                           ? 'Rechazada'
-                          : 'Pendiente'
+                          : request.status === 'pending_admin_approval'
+                            ? 'Requiere Gestión'
+                            : 'Pendiente'
                       }
                     </span>
                   </td>
@@ -296,7 +338,7 @@ const BenefitRequestsManagement = () => {
                         Ver
                       </button>
                       
-                      {request.status === 'pending' && (
+                      {(request.status === 'pending' || request.status === 'pending_admin_approval') && (
                         <>
                           <button 
                             className="btn-action btn-approve"
@@ -383,11 +425,32 @@ const BenefitRequestsManagement = () => {
                         ? 'Aprobada' 
                         : selectedRequest.status === 'rejected'
                           ? 'Rechazada'
-                          : 'Pendiente'
+                          : selectedRequest.status === 'pending_admin_approval'
+                            ? 'Requiere Gestión'
+                            : 'Pendiente'
                       }
                     </span>
                   </div>
                 </div>
+                {selectedRequest.paidWithTokens && (
+                  <>
+                    <div className="detail-group">
+                      <div className="detail-label">Pago:</div>
+                      <div className="detail-value">
+                        <span className="badge badge-tokens">
+                          🎟️ Pagado con {selectedRequest.tokenCost} tokens
+                        </span>
+                      </div>
+                    </div>
+                    <div className="detail-group">
+                      <div className="detail-label">Tipo de Beneficio:</div>
+                      <div className="detail-value">
+                        {selectedRequest.benefitType === 'third_party' ? 'Terceros (Requiere gestión manual)' : 
+                         selectedRequest.benefitType === 'managed' ? 'Gestionado' : 'Automático'}
+                      </div>
+                    </div>
+                  </>
+                )}
                 {selectedRequest.processedDate && (
                   <div className="detail-group">
                     <div className="detail-label">Fecha de Procesamiento:</div>
@@ -399,6 +462,30 @@ const BenefitRequestsManagement = () => {
                   <div className="detail-value">{selectedRequest.benefitDescription}</div>
                 </div>
               </div>
+              
+              {/* Campo de instrucciones para solicitudes que requieren gestión */}
+              {modalAction === 'approve' && 
+               selectedRequest?.paidWithTokens && 
+               selectedRequest?.status === 'pending_admin_approval' && (
+                <div className="instructions-section">
+                  <h3>Instrucciones para el Usuario</h3>
+                  <p className="instructions-help">
+                    Como este es un beneficio de terceros, proporciona instrucciones específicas 
+                    sobre cómo el usuario debe canjear o usar este beneficio:
+                  </p>
+                  <textarea
+                    className="instructions-textarea"
+                    placeholder="Ej: Para canjear tu GamePass, presenta este código en el siguiente enlace: [URL]. El código es válido por 30 días..."
+                    value={adminInstructions}
+                    onChange={(e) => setAdminInstructions(e.target.value)}
+                    rows={4}
+                    required
+                  />
+                  <div className="instructions-note">
+                    <strong>Nota:</strong> Estas instrucciones aparecerán junto con el código del token cuando el usuario vea sus solicitudes aprobadas.
+                  </div>
+                </div>
+              )}
             </div>
             
             <div className="modal-actions">

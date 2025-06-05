@@ -4,6 +4,7 @@ import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import './styles/pages/MyRequests.css';
+import './components/TokenModal.css'; // CSS independiente para el modal de token
 import RequestCard from './components/RequestCard';
 
 const MyRequests = () => {
@@ -18,6 +19,12 @@ const MyRequests = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [expandedRows, setExpandedRows] = useState({});
+  
+  // Estados para gestión de tokens
+  const [tokenBalance, setTokenBalance] = useState(0);
+  const [tokenHistory, setTokenHistory] = useState([]);
+  const [showTokenHistory, setShowTokenHistory] = useState(false);
+  const [historyFilter, setHistoryFilter] = useState('all');
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -27,6 +34,33 @@ const MyRequests = () => {
       }
       
       try {
+        // Obtener balance de tokens del usuario
+        const balanceRef = ref(database, `user_blank_tokens/${currentUser.uid}/balance`);
+        onValue(balanceRef, (snapshot) => {
+          setTokenBalance(snapshot.exists() ? snapshot.val() : 0);
+        });
+        
+        // Obtener historial de tokens
+        const historyRef = ref(database, `user_blank_tokens/${currentUser.uid}/history`);
+        onValue(historyRef, (snapshot) => {
+          const historyList = [];
+          
+          if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+              historyList.push({
+                id: childSnapshot.key,
+                ...childSnapshot.val(),
+                createdAt: new Date(childSnapshot.val().createdAt)
+              });
+            });
+            
+            // Ordenar por fecha (más recientes primero)
+            historyList.sort((a, b) => b.createdAt - a.createdAt);
+          }
+          
+          setTokenHistory(historyList);
+        });
+        
         // Obtener todas las solicitudes del usuario
         const requestsRef = ref(database, 'benefit_requests');
         onValue(requestsRef, (snapshot) => {
@@ -132,7 +166,10 @@ const MyRequests = () => {
             ...tokenData,
             id: requestData.tokenId,
             benefitName,
-            expiresAt: new Date(tokenData.expiresAt)
+            expiresAt: new Date(tokenData.expiresAt),
+            paidWithTokens: requestData.paidWithTokens,
+            tokenCost: requestData.tokenCost,
+            adminInstructions: tokenData.adminInstructions || ''
           });
           setShowTokenModal(true);
         } else {
@@ -162,7 +199,43 @@ const MyRequests = () => {
       return requests;
     }
     
+    if (activeTab === 'pending') {
+      // Incluir todos los tipos de pendientes
+      return requests.filter(request => 
+        request.status === 'pending' || 
+        request.status === 'pending_provider_approval' || 
+        request.status === 'pending_admin_approval'
+      );
+    }
+    
     return requests.filter(request => request.status === activeTab);
+  };
+  
+  // Funciones para historial de tokens
+  const filteredTokenHistory = () => {
+    if (historyFilter === 'all') {
+      return tokenHistory;
+    }
+    
+    return tokenHistory.filter(item => item.type === historyFilter);
+  };
+  
+  const getTypeText = (type) => {
+    switch (type) {
+      case 'add': return 'Añadido';
+      case 'remove': return 'Quitado';
+      case 'used': return 'Canjeado';
+      default: return type;
+    }
+  };
+  
+  const getTypeClass = (type) => {
+    switch (type) {
+      case 'add': return 'type-add';
+      case 'remove': return 'type-remove';
+      case 'used': return 'type-used';
+      default: return '';
+    }
   };
   
   const formatDate = (date) => {
@@ -178,7 +251,10 @@ const MyRequests = () => {
     switch (status) {
       case 'approved': return '✅';
       case 'rejected': return '❌';
-      case 'pending': return '⏳';
+      case 'pending':
+      case 'pending_provider_approval':
+      case 'pending_admin_approval':
+        return '⏳';
       default: return '📋';
     }
   };
@@ -187,10 +263,14 @@ const MyRequests = () => {
     switch (status) {
       case 'approved': return 'Aprobada';
       case 'rejected': return 'Rechazada';
-      case 'pending': return 'Pendiente';
+      case 'pending':
+      case 'pending_provider_approval':
+      case 'pending_admin_approval':
+        return 'Pendiente';
       default: return 'Desconocido';
     }
   };
+  
   
   if (loading) {
     return (
@@ -231,10 +311,23 @@ const MyRequests = () => {
             <h1>📋 Mis Solicitudes</h1>
             <p>Gestiona y revisa el estado de tus solicitudes de beneficios</p>
           </div>
-          <Link to="/level3/benefits" className="new-request-button">
-            <span className="button-icon">✨</span>
-            Nueva Solicitud
-          </Link>
+          <div className="header-actions">
+            <div className="token-balance-display">
+              <span className="balance-label">Balance:</span>
+              <span className="balance-amount">🎟️ {tokenBalance}</span>
+              <button 
+                className="history-toggle-btn"
+                onClick={() => setShowTokenHistory(!showTokenHistory)}
+                title="Ver historial de tokens"
+              >
+                📊
+              </button>
+            </div>
+            <Link to="/level3/benefits" className="new-request-button">
+              <span className="button-icon">✨</span>
+              Nueva Solicitud
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -252,6 +345,76 @@ const MyRequests = () => {
           <span className="error-icon">⚠️</span>
           <p>{errorMessage}</p>
           <button onClick={() => setErrorMessage('')}>×</button>
+        </div>
+      )}
+
+      {/* Historial de tokens (mostrar/ocultar) */}
+      {showTokenHistory && (
+        <div className="token-history-section">
+          <div className="history-header">
+            <h2>📊 Historial de Tokens</h2>
+            <button 
+              className="close-history-btn"
+              onClick={() => setShowTokenHistory(false)}
+            >
+              ×
+            </button>
+          </div>
+          
+          {/* Filtros del historial */}
+          <div className="history-filter-tabs">
+            <button
+              className={`filter-tab ${historyFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setHistoryFilter('all')}
+            >
+              Todas
+            </button>
+            <button
+              className={`filter-tab ${historyFilter === 'add' ? 'active' : ''}`}
+              onClick={() => setHistoryFilter('add')}
+            >
+              Recibidos
+            </button>
+            <button
+              className={`filter-tab ${historyFilter === 'used' ? 'active' : ''}`}
+              onClick={() => setHistoryFilter('used')}
+            >
+              Canjeados
+            </button>
+          </div>
+          
+          {/* Lista del historial */}
+          <div className="history-list">
+            {filteredTokenHistory().length === 0 ? (
+              <div className="empty-history">
+                <p>No hay transacciones para mostrar</p>
+              </div>
+            ) : (
+              filteredTokenHistory().map((item) => (
+                <div key={item.id} className={`history-item ${getTypeClass(item.type)}`}>
+                  <div className="history-item-content">
+                    <div className="history-main">
+                      <span className={`transaction-type ${getTypeClass(item.type)}`}>
+                        {getTypeText(item.type)}
+                      </span>
+                      <span className="transaction-amount">
+                        {item.type === 'add' ? '+' : '-'}{item.amount} tokens
+                      </span>
+                    </div>
+                    <div className="history-details">
+                      <p className="reason">{item.reason}</p>
+                      <p className="date">{formatDate(item.createdAt)}</p>
+                    </div>
+                    <div className="history-balance">
+                      <span className="balance-before">Antes: {item.balanceBefore}</span>
+                      <span className="balance-arrow">→</span>
+                      <span className="balance-after">Después: {item.balanceAfter}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       )}
 
@@ -274,7 +437,13 @@ const MyRequests = () => {
               <span className="tab-count">
                 {tab.key === 'all' 
                   ? requests.length 
-                  : requests.filter(r => r.status === tab.key).length
+                  : tab.key === 'pending'
+                    ? requests.filter(r => 
+                        r.status === 'pending' || 
+                        r.status === 'pending_provider_approval' || 
+                        r.status === 'pending_admin_approval'
+                      ).length
+                    : requests.filter(r => r.status === tab.key).length
                 }
               </span>
             </button>
@@ -316,9 +485,16 @@ const MyRequests = () => {
                 <div className="card-content">
                   <div className="card-header">
                     <h3>{request.benefitName}</h3>
-                    <span className={`benefit-type ${request.isBenefitJobby ? 'jobby' : 'company'}`}>
-                      {request.isBenefitJobby ? 'Jobby' : 'Empresa'}
-                    </span>
+                    <div className="card-badges">
+                      <span className={`benefit-type ${request.isBenefitJobby ? 'jobby' : 'company'}`}>
+                        {request.isBenefitJobby ? 'Jobby' : 'Empresa'}
+                      </span>
+                      {request.paidWithTokens && (
+                        <span className="token-paid-badge" title="Pagado con tokens">
+                          🎟️ {request.tokenCost}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="card-description">
@@ -344,6 +520,12 @@ const MyRequests = () => {
                       <div className="metadata-item">
                         <span className="metadata-label">💰 Valor:</span>
                         <span className="metadata-value">{request.benefitValue}</span>
+                      </div>
+                    )}
+                    {request.paidWithTokens && (
+                      <div className="metadata-item tokens-paid">
+                        <span className="metadata-label">🎟️ Pagado con tokens:</span>
+                        <span className="metadata-value">{request.tokenCost} tokens</span>
                       </div>
                     )}
                   </div>
@@ -373,10 +555,10 @@ const MyRequests = () => {
                         <span className="button-icon">🎫</span>
                         {request.token ? 'Ver Token' : 'Generar Token'}
                       </button>
-                    ) : request.status === 'pending' ? (
+                    ) : (request.status === 'pending' || request.status === 'pending_provider_approval' || request.status === 'pending_admin_approval') ? (
                       <div className="pending-message">
                         <span className="pending-icon">⏳</span>
-                        En revisión por RRHH
+                        En proceso
                       </div>
                     ) : request.status === 'rejected' ? (
                       <div className="rejected-message">
@@ -411,14 +593,39 @@ const MyRequests = () => {
 
               <div className="benefit-info">
                 <h3>{selectedToken.benefitName}</h3>
+                {selectedToken.paidWithTokens && (
+                  <div className="paid-with-tokens-notice">
+                    <span className="token-icon">🎟️</span>
+                    <span>Pagado con {selectedToken.tokenCost} tokens</span>
+                  </div>
+                )}
               </div>
               
               <div className="token-instructions">
                 <h4>📋 Instrucciones de uso:</h4>
+                
+                {/* Mostrar instrucciones específicas del admin para beneficios de terceros */}
+                {selectedToken.adminInstructions && (
+                  <div className="admin-instructions">
+                    <div className="admin-instructions-header">
+                      <span className="admin-icon">👨‍💼</span>
+                      <strong>Instrucciones especiales del administrador:</strong>
+                    </div>
+                    <div className="admin-instructions-content">
+                      {selectedToken.adminInstructions}
+                    </div>
+                  </div>
+                )}
+                
                 <div className="instructions-list">
                   <div className="instruction-step">
                     <span className="step-number">1</span>
-                    <span className="step-text">Presenta este código al proveedor del beneficio</span>
+                    <span className="step-text">
+                      {selectedToken.adminInstructions 
+                        ? "Sigue las instrucciones específicas del administrador arriba"
+                        : "Presenta este código al proveedor del beneficio"
+                      }
+                    </span>
                   </div>
                   <div className="instruction-step">
                     <span className="step-number">2</span>
@@ -433,6 +640,9 @@ const MyRequests = () => {
                 <div className="important-note">
                   <span className="note-icon">⚠️</span>
                   <strong>Importante:</strong> Este token es de un solo uso y expirará automáticamente en la fecha indicada.
+                  {selectedToken.paidWithTokens && (
+                    <p><strong>✅ Beneficio pagado con tokens:</strong> Tu solicitud fue procesada automáticamente.</p>
+                  )}
                 </div>
               </div>
             </div>

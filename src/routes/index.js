@@ -29,8 +29,8 @@ import Level3Dashboard from '../pages/level3/Level3Dashboard';
 import AvailableBenefits from '../pages/level3/AvailableBenefits';
 import CompanyBenefits from '../pages/level3/CompanyBenefits';
 import MyRequests from '../pages/level3/MyRequests';
-import MyTokens from '../pages/level3/MyTokens';
 import ProfileSurvey from '../pages/level3/ProfileSurvey';
+import DiagnosticPage from '../pages/level3/DiagnosticPage';
 
 // Nivel 4: Proveedores
 import Level4Dashboard from '../pages/level4/Level4Dashboard';
@@ -92,7 +92,7 @@ const AppRoutes = () => {
           <Route path="benefits" element={<AvailableBenefits />} />
           <Route path="company-benefits" element={<CompanyBenefits />} />
           <Route path="requests" element={<MyRequests />} />
-          <Route path="tokens" element={<MyTokens />} />
+          <Route path="diagnostic" element={<DiagnosticPage />} />
           <Route path="" element={<Navigate to="/level3/dashboard" replace />} />
         </Route>
       </Route>

@@ -294,6 +294,27 @@
   /* Remove fixed height to adjust to content */
 }
 
+/* Asegurar que los títulos del carrusel sean visibles */
+.benefit-card-immersive .card-header h3 {
+  color: #2d3748 !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+
+/* Asegurar que toda la descripción sea visible */
+.benefit-card-immersive .card-description p {
+  color: #4a5568 !important;
+}
+
+/* Asegurar que los metadatos sean visibles */
+.benefit-card-immersive .card-metadata .category {
+  color: #667eea !important;
+}
+
+.benefit-card-immersive .token-cost {
+  color: #2d3748 !important;
+}
+
 .benefit-card-immersive.active {
   z-index: 10;
   cursor: default;
@@ -380,7 +401,7 @@
 .card-header h3 {
   margin: 0;
   font-size: 1.05rem;
-  color: #2d3748;
+  color: #2d3748 !important;
   font-weight: 700;
   flex: 1;
   line-height: 1.2;
@@ -736,6 +757,11 @@
   padding: var(--spacing-md) var(--spacing-xl);
   display: inline-block;
   border: 1px solid var(--border-light);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.current-benefit-info {
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 .benefit-counter {

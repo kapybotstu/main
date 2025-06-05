@@ -735,3 +735,44 @@
   border-color: rgba(156, 163, 175, 0.2);
   border-top-color: #667eea;
 }
+
+/* NUEVO COMPONENTE DE TOKENS - Siguiendo el diseño existente */
+.new-token-widget {
+  background: var(--primary-gradient);
+  color: white;
+  padding: 1.5rem 2rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 200px;
+}
+
+.new-token-widget .token-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+  opacity: 0.9;
+}
+
+.new-token-widget .token-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new-token-widget .token-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  display: block;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.new-token-widget .token-text {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  font-weight: 500;
+}

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../../services/firebase/config';
 import { useAuth } from '../../context/AuthContext';
-import { redeemExperience } from '../../services/firebase/database/databaseService';
+import { requestBenefitWithTokens } from '../../services/firebase/database/databaseService';
+import './styles/index.css'; // Import Level 3 styles
 import './styles/pages/AvailableBenefits.css';
 import BenefitCard from './components/BenefitCard';
 
@@ -12,7 +13,7 @@ const AvailableBenefits = () => {
   const [filteredBenefits, setFilteredBenefits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userTokens, setUserTokens] = useState({ currentMonthTokens: 0, previousMonthTokens: 0 });
+  const [userTokenBalance, setUserTokenBalance] = useState(0);
   const [userRedemptions, setUserRedemptions] = useState([]);
   const [redeemingExperience, setRedeemingExperience] = useState(false);
   const [redemptionSuccess, setRedemptionSuccess] = useState(null);
@@ -30,10 +31,20 @@ const AvailableBenefits = () => {
   const [dragStart, setDragStart] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [separation, setSeparation] = useState(120);
+  const [showInfoContent, setShowInfoContent] = useState(true);
   
   const carouselRef = useRef(null);
   const touchStartRef = useRef(0);
 
+
+  // Función para mostrar temporalmente el info-content
+  const showInfoTemporarily = useCallback(() => {
+    setShowInfoContent(true);
+    // Ocultar después de 2 segundos
+    setTimeout(() => {
+      setShowInfoContent(false);
+    }, 2000);
+  }, []);
 
   // Función para abrir modal de canje (definida PRIMERO)
   const openRedemptionModal = useCallback((experience) => {
@@ -63,6 +74,15 @@ const AvailableBenefits = () => {
     return () => window.removeEventListener('resize', updateSeparation);
   }, []);
 
+  // Ocultar info-content automáticamente después de 4 segundos
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowInfoContent(false);
+    }, 4000); // 4 segundos
+
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const fetchBenefits = async () => {
       if (!currentUser?.uid) {
@@ -71,13 +91,13 @@ const AvailableBenefits = () => {
       }
       
       try {
-        // Obtener tokens del usuario
-        const userTokensRef = ref(database, `user_tokens/${currentUser.uid}`);
+        // Obtener balance de tokens del usuario (user_blank_tokens)
+        const userTokensRef = ref(database, `user_blank_tokens/${currentUser.uid}/balance`);
         onValue(userTokensRef, (snapshot) => {
           if (snapshot.exists()) {
-            setUserTokens(snapshot.val());
+            setUserTokenBalance(snapshot.val());
           } else {
-            setUserTokens({ currentMonthTokens: 0, previousMonthTokens: 0 });
+            setUserTokenBalance(0);
           }
         });
 
@@ -108,11 +128,15 @@ const AvailableBenefits = () => {
               const benefit = childSnapshot.val();
               
               if (benefit.status === 'active') {
+                const benefitName = benefit.name || benefit.title || 'Beneficio sin nombre';
+                console.log('Benefit data:', { id: childSnapshot.key, originalName: benefit.name, originalTitle: benefit.title, finalName: benefitName });
+                
                 benefits.push({
                   id: childSnapshot.key,
                   ...benefit,
+                  name: benefitName, // Normalizar nombre
                   isJobbyBenefit: true,
-                  image: benefit.image || generatePlaceholder(benefit.name, '#667eea'),
+                  image: benefit.image || generatePlaceholder(benefitName, '#667eea'),
                   gradient: getRandomGradient(),
                   tokenCost: benefit.tokenCost || 1 // Costo por defecto: 1 token
                 });
@@ -183,12 +207,14 @@ const AvailableBenefits = () => {
           setCurrentBenefitIndex(prevIndex => 
             prevIndex === 0 ? filteredBenefits.length - 1 : prevIndex - 1
           );
+          showInfoTemporarily();
           break;
         case 'ArrowRight':
           event.preventDefault();
           setCurrentBenefitIndex(prevIndex => 
             (prevIndex + 1) % filteredBenefits.length
           );
+          showInfoTemporarily();
           break;
         case 'Enter':
         case ' ':
@@ -210,7 +236,7 @@ const AvailableBenefits = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [filteredBenefits.length, showRedemptionModal, showGridView, currentBenefitIndex, openRedemptionModal]);
+  }, [filteredBenefits.length, showRedemptionModal, showGridView, currentBenefitIndex, openRedemptionModal, showInfoTemporarily]);
 
   // Auto-avance del carrusel cada 5 segundos
   useEffect(() => {
@@ -306,8 +332,8 @@ const AvailableBenefits = () => {
         additionalData.comments = redemptionFormData.comments;
       }
       
-      // Canjear experiencia por tokens
-      const result = await redeemExperience(
+      // Solicitar beneficio pagando con tokens
+      const result = await requestBenefitWithTokens(
         currentUser.uid, 
         selectedExperience.id, 
         selectedExperience.isJobbyBenefit, 
@@ -317,33 +343,15 @@ const AvailableBenefits = () => {
       );
       
       setRedemptionSuccess({
-        message: `¡Experiencia canjeada exitosamente!`,
+        message: `¡Beneficio solicitado exitosamente!`,
         experienceName: selectedExperience.name,
         tokenCost: selectedExperience.tokenCost,
-        redemptionCode: result.redemptionCode,
+        redemptionCode: result.tokenCode,
         remainingTokens: result.remainingTokens
       });
       
-      // Actualizar tokens localmente
-      setUserTokens(prev => {
-        const totalTokens = prev.currentMonthTokens + prev.previousMonthTokens;
-        const remaining = totalTokens - selectedExperience.tokenCost;
-        
-        // Redistribuir tokens restantes (priorizar mes anterior)
-        if (remaining <= prev.previousMonthTokens) {
-          return {
-            ...prev,
-            previousMonthTokens: remaining,
-            currentMonthTokens: 0
-          };
-        } else {
-          return {
-            ...prev,
-            previousMonthTokens: 0,
-            currentMonthTokens: remaining - prev.previousMonthTokens
-          };
-        }
-      });
+      // Actualizar balance localmente
+      setUserTokenBalance(prev => prev - selectedExperience.tokenCost);
       
       // Cerrar modal
       setShowRedemptionModal(false);
@@ -361,11 +369,13 @@ const AvailableBenefits = () => {
   };
   
   const getAvailableTokens = () => {
-    return userTokens.currentMonthTokens + userTokens.previousMonthTokens;
+    return typeof userTokenBalance === 'number' && userTokenBalance >= 0 
+      ? userTokenBalance 
+      : 25; // Mismo valor por defecto que otros componentes
   };
 
   const canAffordExperience = (tokenCost) => {
-    return getAvailableTokens() >= tokenCost;
+    return userTokenBalance >= tokenCost;
   };
   
   if (loading) {
@@ -542,6 +552,8 @@ const AvailableBenefits = () => {
               translateZ = -absPosition * 50; // Profundidad
             }
 
+            console.log('Rendering benefit:', benefit.name, benefit.title, benefit);
+            
             return (
               <div
                 key={benefit.id}
@@ -574,7 +586,7 @@ const AvailableBenefits = () => {
                 <div className="card-content">
                   <div className="card-top">
                     <div className="card-header">
-                      <h3>{benefit.name}</h3>
+                      <h3>{benefit.name || benefit.title || 'Sin nombre'}</h3>
                       <span className={`benefit-type ${benefit.isJobbyBenefit ? 'jobby' : 'company'}`}>
                         {benefit.isJobbyBenefit ? 'Jobby' : 'Empresa'}
                       </span>
@@ -639,16 +651,18 @@ const AvailableBenefits = () => {
         </div>
 
         {/* Información del beneficio actual */}
-        <div className="current-benefit-info">
-          <div className="info-content">
-            <span className="benefit-counter">
-              {currentBenefitIndex + 1} de {filteredBenefits.length}
-            </span>
-            <p className="navigation-hint">
-              Usa las flechas del teclado para navegar • Presiona Enter para canjear • G para vista de cuadrícula
-            </p>
+        {showInfoContent && (
+          <div className="current-benefit-info">
+            <div className="info-content">
+              <span className="benefit-counter">
+                {currentBenefitIndex + 1} de {filteredBenefits.length}
+              </span>
+              <p className="navigation-hint">
+                Usa las flechas del teclado para navegar • Presiona Enter para canjear • G para vista de cuadrícula
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Vista Grid Alternativa con modal overlay */}

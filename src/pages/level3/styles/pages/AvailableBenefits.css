@@ -170,6 +170,9 @@
   right: var(--spacing-xl);
   z-index: 10;
   animation: fadeInScale 0.8s ease-out 0.6s both;
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
 }
 
 .benefits-carousel .view-toggle {
@@ -192,6 +195,12 @@
   background: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
 }
+
+/* Map menu container */
+.map-menu-container {
+  position: relative;
+}
+
 
 /* Search container */
 .search-container {
@@ -1155,6 +1164,7 @@
 [data-theme="dark"] .card-actions button:hover {
   background: #5a67d8;
 }
+
 
 /* SOLUCIÓN DEFINITIVA para benefit-type en carrusel */
 html[data-theme="dark"] .benefit-card-immersive .benefit-type.jobby,

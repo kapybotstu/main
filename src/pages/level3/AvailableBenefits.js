@@ -6,6 +6,9 @@ import { requestBenefitWithTokens, getJobbyTokenBalance } from '../../services/f
 import './styles/index.css'; // Import Level 3 styles
 import './styles/pages/AvailableBenefits.css';
 import BenefitCard from './components/BenefitCard';
+import { MapView } from './map';
+import MapViewTest from './components/MapViewTest';
+import SimpleGoogleMap from './components/SimpleGoogleMap';
 
 const AvailableBenefits = () => {
   const { currentUser, companyId } = useAuth();
@@ -32,9 +35,11 @@ const AvailableBenefits = () => {
   const [dragOffset, setDragOffset] = useState(0);
   const [separation, setSeparation] = useState(120);
   const [showInfoContent, setShowInfoContent] = useState(true);
+  const [showMapMenu, setShowMapMenu] = useState(false);
   
   const carouselRef = useRef(null);
   const touchStartRef = useRef(0);
+  const mapMenuRef = useRef(null);
 
 
   // Función para mostrar temporalmente el info-content
@@ -288,6 +293,21 @@ const AvailableBenefits = () => {
     setDragOffset(0);
   }, [isDragging, dragOffset, filteredBenefits.length]);
 
+  // DESHABILITADO: Cerrar menú de mapa al hacer clic fuera
+  // Este useEffect estaba causando que el mapa se cerrara con cualquier clic
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (mapMenuRef.current && !mapMenuRef.current.contains(event.target)) {
+  //       setShowMapMenu(false);
+  //     }
+  //   };
+
+  //   if (showMapMenu) {
+  //     document.addEventListener('mousedown', handleClickOutside);
+  //     return () => document.removeEventListener('mousedown', handleClickOutside);
+  //   }
+  // }, [showMapMenu]);
+
   // Touch gestures optimizados
   const handleTouchStart = useCallback((e) => {
     touchStartRef.current = e.touches[0].clientX;
@@ -457,7 +477,7 @@ const AvailableBenefits = () => {
           )}
         </div>
 
-        {/* Vista de cuadrícula toggle */}
+        {/* Vista de cuadrícula toggle y mapa */}
         <div className="view-controls-simple">
           <button 
             className="view-toggle"
@@ -466,6 +486,17 @@ const AvailableBenefits = () => {
           >
             {showGridView ? '🎡' : '⊞'}
           </button>
+          
+          <div className="map-menu-container" ref={mapMenuRef}>
+            <button 
+              className="view-toggle map-toggle"
+              onClick={() => setShowMapMenu(!showMapMenu)}
+              title="Ver mapa"
+            >
+              📍
+            </button>
+            
+          </div>
         </div>
 
         {/* Navegación del carrusel */}
@@ -834,6 +865,12 @@ const AvailableBenefits = () => {
           </div>
         </div>
       )}
+      
+      {/* Vista de Mapa en Pantalla Completa */}
+      <SimpleGoogleMap 
+        isOpen={showMapMenu} 
+        onClose={() => setShowMapMenu(false)} 
+      />
     </div>
   );
 };

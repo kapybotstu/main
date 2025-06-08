@@ -17,6 +17,7 @@ import TokenManagement from '../pages/level1/tokens/TokenManagement';
 import ObtenerUsers from '../pages/level1/users/ObtenerUsers';
 import AsignarNiveles from '../pages/level1/users/AsignarNiveles';
 import AchievementsManagement from '../pages/level1/achievements/AchievementsManagement';
+import BotManagement from '../pages/level1/bot/BotManagement';
 
 // Nivel 2: Recursos Humanos de empresa
 import Level2Dashboard from '../pages/level2/Level2Dashboard';
@@ -24,6 +25,7 @@ import CompanyBenefitsManagement from '../pages/level2/CompanyBenefitsManagement
 import CompanyTokensManagement from '../pages/level2/CompanyTokensManagement';
 import CompanyUsersManagement from '../pages/level2/CompanyUsersManagement';
 import CompanyRequestsManagement from '../pages/level2/CompanyRequestsManagement';
+import BotMessaging from '../pages/level2/BotMessaging';
 
 // Nivel 3: Usuario final de empresa
 import Level3Dashboard from '../pages/level3/Level3Dashboard';
@@ -32,6 +34,7 @@ import CompanyBenefits from '../pages/level3/CompanyBenefits';
 import MyRequests from '../pages/level3/MyRequests';
 import ProfileSurvey from '../pages/level3/ProfileSurvey';
 import DiagnosticPage from '../pages/level3/DiagnosticPage';
+import Bot from '../pages/level3/Bot';
 
 // Nivel 4: Proveedores
 import Level4Dashboard from '../pages/level4/Level4Dashboard';
@@ -71,6 +74,7 @@ const AppRoutes = () => {
           <Route path="providers" element={<ProviderManagement />} />
           <Route path="tokens" element={<TokenManagement />} />
           <Route path="achievements" element={<AchievementsManagement />} />
+          <Route path="bot-management" element={<BotManagement />} />
           <Route path="" element={<Navigate to="/level1/dashboard" replace />} />
         </Route>
       </Route>
@@ -83,6 +87,7 @@ const AppRoutes = () => {
           <Route path="tokens" element={<CompanyTokensManagement />} />
           <Route path="users" element={<CompanyUsersManagement />} />
           <Route path="requests" element={<CompanyRequestsManagement />} />
+          <Route path="bot-messaging" element={<BotMessaging />} />
           <Route path="" element={<Navigate to="/level2/dashboard" replace />} />
         </Route>
       </Route>
@@ -94,6 +99,7 @@ const AppRoutes = () => {
           <Route path="benefits" element={<AvailableBenefits />} />
           <Route path="company-benefits" element={<CompanyBenefits />} />
           <Route path="requests" element={<MyRequests />} />
+          <Route path="bot" element={<Bot />} />
           <Route path="diagnostic" element={<DiagnosticPage />} />
           <Route path="" element={<Navigate to="/level3/dashboard" replace />} />
         </Route>

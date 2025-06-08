@@ -3,6 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { logoutUser } from '../services/firebase/auth/authService';
 import { getUserThemePreference, saveUserThemePreference } from '../services/firebase/database/databaseService';
+import { getDatabase, ref, get } from 'firebase/database';
 import '../styles/level3-layout.css';
 import '../styles/header.css';
 
@@ -21,6 +22,11 @@ const MainLayout = () => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [notificationCount, setNotificationCount] = useState(3); // Example count
   const [themeLoading, setThemeLoading] = useState(true);
+  const [tokenData, setTokenData] = useState({
+    jobbyTokenBalance: 0,
+    companyTokenBalance: 0,
+    activeTokens: 0
+  });
   
   useEffect(() => {
     console.log("MainLayout rendered");
@@ -86,6 +92,32 @@ const MainLayout = () => {
     return 'U';
   };
 
+  // Fetch token data for level 3 users
+  const fetchTokenData = async () => {
+    if (userLevel === 3 && currentUser?.uid) {
+      try {
+        const database = getDatabase();
+        const userRef = ref(database, `users/${currentUser.uid}`);
+        const snapshot = await get(userRef);
+        
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          setTokenData({
+            jobbyTokenBalance: userData.jobbyTokenBalance || 0,
+            companyTokenBalance: userData.companyTokenBalance || 0,
+            activeTokens: userData.activeTokens || 0
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching token data:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchTokenData();
+  }, [currentUser, userLevel]);
+
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -122,9 +154,43 @@ const MainLayout = () => {
   return (
     <div className="app-container" data-level={userLevel} data-theme={theme}>
       <header className="header">
-        <div className="logo">
-          <h1>Jobby</h1>
+        <div className="header-left">
+          <div className="logo">
+            <h1>Jobby</h1>
+          </div>
+          
+          {/* Token display for level 3 */}
+          {userLevel === 3 && (
+            <div className="header-tokens">
+              <div className="token-card jobby-tokens">
+                <div className="token-logo">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+                    <path d="M20.5 7.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"/>
+                  </svg>
+                </div>
+                <div className="token-info">
+                  <div className="token-count">{tokenData.jobbyTokenBalance}</div>
+                  <div className="token-label">Flexibles</div>
+                </div>
+              </div>
+              
+              <div className="token-card company-tokens">
+                <div className="token-logo">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M3 21h18M4 21V7l8-4v18M20 21V11l-8-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/>
+                  </svg>
+                </div>
+                <div className="token-info">
+                  <div className="token-count">{tokenData.companyTokenBalance}</div>
+                  <div className="token-label">Empresa</div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
+        
         <div className="user-info">
           {currentUser && (
             <div className="header-actions">
@@ -150,6 +216,7 @@ const MainLayout = () => {
                   </svg>
                 )}
               </button>
+
 
               {/* User dropdown */}
               <div className={`user-dropdown ${showUserDropdown ? 'active' : ''}`}>
@@ -226,6 +293,9 @@ const MainLayout = () => {
                 <li>
                   <Link to="/level1/achievements">Sistema de Logros</Link>
                 </li>
+                <li>
+                  <Link to="/level1/bot-management">Gestión de Bot</Link>
+                </li>
               </ul>
             </>
           )}
@@ -249,6 +319,9 @@ const MainLayout = () => {
                 <li>
                   <Link to="/level2/requests">Solicitudes</Link>
                 </li>
+                <li>
+                  <Link to="/level2/bot-messaging">Mensajería Bot</Link>
+                </li>
               </ul>
             </>
           )}
@@ -258,16 +331,52 @@ const MainLayout = () => {
             <>
               <ul>
                 <li>
-                  <Link to="/level3/dashboard">Dashboard</Link>
+                  <Link to="/level3/dashboard" className={location.pathname === '/level3/dashboard' ? 'active' : ''}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="3" width="7" height="7" rx="1"/>
+                      <rect x="14" y="3" width="7" height="7" rx="1"/>
+                      <rect x="3" y="14" width="7" height="7" rx="1"/>
+                      <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    Dashboard
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/level3/benefits">Beneficios Flexibles Jobby</Link>
+                  <Link to="/level3/benefits" className={location.pathname === '/level3/benefits' ? 'active' : ''}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+                      <path d="M20.5 7.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"/>
+                    </svg>
+                    Beneficios Flexibles Jobby
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/level3/company-benefits">Beneficios Internos</Link>
+                  <Link to="/level3/company-benefits" className={location.pathname === '/level3/company-benefits' ? 'active' : ''}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 21h18M4 21V7l8-4v18M20 21V11l-8-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/>
+                    </svg>
+                    Beneficios Internos
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/level3/requests">Mis Solicitudes</Link>
+                  <Link to="/level3/requests" className={location.pathname === '/level3/requests' ? 'active' : ''}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+                    </svg>
+                    Mis Solicitudes
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/level3/bot" className={location.pathname === '/level3/bot' ? 'active' : ''}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 8V4l8 8-8 8v-4a8 8 0 01-8-8 8 8 0 018-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M5 12a7 7 0 017-7M19 12a7 7 0 01-7 7"/>
+                    </svg>
+                    Asistente Bot
+                  </Link>
                 </li>
               </ul>
             </>

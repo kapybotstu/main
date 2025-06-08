@@ -270,30 +270,6 @@ const Level3Dashboard = () => {
             </p>
           </div>
           
-          <div className="tokens-summary">
-            <div className="new-token-widget jobby-tokens">
-              <div className="token-icon">💰</div>
-              <div className="token-info">
-                <div className="token-value">{stats.jobbyTokenBalance}</div>
-                <div className="token-text">Tokens Flexibles</div>
-              </div>
-            </div>
-            
-            <div className="new-token-widget company-tokens">
-              <div className="token-icon">🏢</div>
-              <div className="token-info">
-                <div className="token-value">{stats.companyTokenBalance}</div>
-                <div className="token-text">Tokens Empresa</div>
-              </div>
-            </div>
-            
-            <div className="active-token-card">
-              <div className="active-amount">
-                <span className="active-number">{stats.activeTokens}</span>
-                <span className="active-label">Activos</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

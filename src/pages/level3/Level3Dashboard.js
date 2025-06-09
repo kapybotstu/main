@@ -7,6 +7,7 @@ import { getJobbyTokenBalance, getCompanyTokenBalance } from '../../services/fir
 import './styles/index.css'; // Import Level 3 styles
 import './styles/pages/Dashboard.css';
 import TokenBalance from './components/TokenBalance';
+import RecommendedBenefits from './components/RecommendedBenefits';
 
 const Level3Dashboard = () => {
   const { currentUser, companyId } = useAuth();
@@ -24,7 +25,6 @@ const Level3Dashboard = () => {
   const [recentTokens, setRecentTokens] = useState([]);
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -216,18 +216,6 @@ const Level3Dashboard = () => {
     }
   }, [currentUser, companyId]);
 
-  // Mostrar modal de bienvenida para nuevos usuarios
-  useEffect(() => {
-    const hasSeenWelcome = localStorage.getItem('jobby_welcome_seen');
-    if (!hasSeenWelcome) {
-      setShowWelcomeModal(true);
-    }
-  }, []);
-
-  const handleWelcomeClose = () => {
-    setShowWelcomeModal(false);
-    localStorage.setItem('jobby_welcome_seen', 'true');
-  };
 
 
   console.log('Dashboard stats:', stats);
@@ -271,6 +259,9 @@ const Level3Dashboard = () => {
           </div>
           
         </div>
+        
+        {/* Componente de beneficios recomendados */}
+        <RecommendedBenefits />
       </div>
 
       {/* Welcome Board - Pantalla principal */}
@@ -325,7 +316,7 @@ const Level3Dashboard = () => {
         {/* Logros recientes (izquierda) */}
         <div className="achievements-section">
           <div className="section-header">
-            <h3>🏆 Mis Logros Recientes</h3>
+            <h3>🏆 Mi Historial Reciente</h3>
             <Link to="/level3/requests" className="see-all-link">Ver todos</Link>
           </div>
           
@@ -395,48 +386,6 @@ const Level3Dashboard = () => {
       </div>
 
 
-      {/* Modal de bienvenida */}
-      {showWelcomeModal && (
-        <div className="welcome-modal-overlay">
-          <div className="welcome-modal">
-            <div className="welcome-header">
-              <h2>¡Bienvenido a Jobby! 🎉</h2>
-              <button className="close-modal" onClick={handleWelcomeClose}>×</button>
-            </div>
-            <div className="welcome-content">
-              <p>Estamos emocionados de tenerte aquí. Con Jobby puedes acceder a beneficios exclusivos usando tu sistema de tokens.</p>
-              
-              <div className="welcome-steps">
-                <div className="step">
-                  <span className="step-number">1</span>
-                  <div>
-                    <h4>Explora Beneficios</h4>
-                    <p>Descubre todos los beneficios disponibles</p>
-                  </div>
-                </div>
-                <div className="step">
-                  <span className="step-number">2</span>
-                  <div>
-                    <h4>Solicita con Tokens</h4>
-                    <p>Usa tus tokens para solicitar beneficios</p>
-                  </div>
-                </div>
-                <div className="step">
-                  <span className="step-number">3</span>
-                  <div>
-                    <h4>Disfruta</h4>
-                    <p>Recibe tu código y disfruta del beneficio</p>
-                  </div>
-                </div>
-              </div>
-              
-              <button onClick={handleWelcomeClose} className="welcome-cta">
-                ¡Comenzar ahora!
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

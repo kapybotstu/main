@@ -1500,3 +1500,38 @@ export const createCompanyBenefitToken = async (requestId, companyId, adminId) =
     throw error;
   }
 };
+
+// ===== USER SURVEY PREFERENCES =====
+
+// Get user survey preferences for recommendations
+export const getUserSurveyPreferences = async (userId) => {
+  try {
+    const userRef = ref(database, `users/${userId}`);
+    const snapshot = await get(userRef);
+    
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      return {
+        benefitPreferences: userData.benefitPreferences ? userData.benefitPreferences.split(',') : [],
+        generationalMemory: userData.generationalMemory || null,
+        satisfactionLevel: userData.satisfactionLevel || null,
+        surveyCompleted: userData.surveyCompleted || false
+      };
+    }
+    
+    return {
+      benefitPreferences: [],
+      generationalMemory: null,
+      satisfactionLevel: null,
+      surveyCompleted: false
+    };
+  } catch (error) {
+    console.error('Error getting user survey preferences:', error);
+    return {
+      benefitPreferences: [],
+      generationalMemory: null,
+      satisfactionLevel: null,
+      surveyCompleted: false
+    };
+  }
+};

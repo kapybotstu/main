@@ -5,7 +5,9 @@
   max-width: 1000px;
   margin: 0 auto;
   background: white;
-  min-height: 100vh;
+  min-height: calc(100vh - 65px); /* Ajustar para el header */
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .diagnostic-container h1 {

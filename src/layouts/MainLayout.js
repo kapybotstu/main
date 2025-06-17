@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { logoutUser } from '../services/firebase/auth/authService';
-import { getUserThemePreference, saveUserThemePreference } from '../services/firebase/database/databaseService';
-import { getDatabase, ref, get } from 'firebase/database';
+import { getUserThemePreference, saveUserThemePreference, getJobbyTokenBalance, getCompanyTokenBalance } from '../services/firebase/database/databaseService';
 import '../styles/level3-layout.css';
 import '../styles/header.css';
 
@@ -22,6 +21,7 @@ const MainLayout = () => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [notificationCount, setNotificationCount] = useState(3); // Example count
   const [themeLoading, setThemeLoading] = useState(true);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [tokenData, setTokenData] = useState({
     jobbyTokenBalance: 0,
     companyTokenBalance: 0,
@@ -96,20 +96,25 @@ const MainLayout = () => {
   const fetchTokenData = async () => {
     if (userLevel === 3 && currentUser?.uid) {
       try {
-        const database = getDatabase();
-        const userRef = ref(database, `users/${currentUser.uid}`);
-        const snapshot = await get(userRef);
+        // Usar los mismos servicios que el dashboard para obtener tokens reales
+        const jobbyBalance = await getJobbyTokenBalance(currentUser.uid);
+        const companyBalance = await getCompanyTokenBalance(currentUser.uid);
         
-        if (snapshot.exists()) {
-          const userData = snapshot.val();
-          setTokenData({
-            jobbyTokenBalance: userData.jobbyTokenBalance || 0,
-            companyTokenBalance: userData.companyTokenBalance || 0,
-            activeTokens: userData.activeTokens || 0
-          });
-        }
+        console.log('Header - Balances cargados:', { jobbyBalance, companyBalance });
+        
+        setTokenData({
+          jobbyTokenBalance: jobbyBalance,
+          companyTokenBalance: companyBalance,
+          activeTokens: 0 // Por ahora mantenemos en 0, se puede agregar lógica después
+        });
       } catch (error) {
         console.error('Error fetching token data:', error);
+        // En caso de error, mostrar 0
+        setTokenData({
+          jobbyTokenBalance: 0,
+          companyTokenBalance: 0,
+          activeTokens: 0
+        });
       }
     }
   };
@@ -117,6 +122,7 @@ const MainLayout = () => {
   useEffect(() => {
     fetchTokenData();
   }, [currentUser, userLevel]);
+
 
   const handleLogout = async () => {
     try {
@@ -154,111 +160,178 @@ const MainLayout = () => {
   return (
     <div className="app-container" data-level={userLevel} data-theme={theme}>
       <header className="header">
-        <div className="header-left">
-          <div className="logo">
-            <h1>Jobby</h1>
-          </div>
-          
-          {/* Token display for level 3 */}
-          {userLevel === 3 && (
-            <div className="header-tokens">
-              <div className="token-card jobby-tokens">
-                <div className="token-logo">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
-                    <path d="M20.5 7.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"/>
-                  </svg>
-                </div>
-                <div className="token-info">
-                  <div className="token-count">{tokenData.jobbyTokenBalance}</div>
-                  <div className="token-label">Flexibles</div>
-                </div>
-              </div>
-              
-              <div className="token-card company-tokens">
-                <div className="token-logo">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 21h18M4 21V7l8-4v18M20 21V11l-8-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/>
-                  </svg>
-                </div>
-                <div className="token-info">
-                  <div className="token-count">{tokenData.companyTokenBalance}</div>
-                  <div className="token-label">Empresa</div>
-                </div>
-              </div>
+        {/* Header structure for mobile/desktop */}
+        <div className={userLevel === 3 ? "header-top-row" : "header-left"}>
+          <div className="header-left">
+            {/* Mobile menu button for level 3 */}
+            {userLevel === 3 && (
+              <button 
+                className="mobile-menu-btn"
+                onClick={() => {
+                  setShowMobileMenu(!showMobileMenu);
+                }}
+                title="Menú"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            )}
+            
+            <div className="logo">
+              <h1>Jobby</h1>
             </div>
-          )}
+            
+            {/* Token display for level 3 - desktop only */}
+            {userLevel === 3 && (
+              <div className="header-tokens">
+                <div className="token-card jobby-tokens">
+                  <div className="token-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+                      <path d="M20.5 7.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"/>
+                    </svg>
+                  </div>
+                  <div className="token-info">
+                    <div className="token-count">{tokenData.jobbyTokenBalance}</div>
+                    <div className="token-label">Flexibles</div>
+                  </div>
+                </div>
+                
+                <div className="token-card company-tokens">
+                  <div className="token-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 21h18M4 21V7l8-4v18M20 21V11l-8-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/>
+                    </svg>
+                  </div>
+                  <div className="token-info">
+                    <div className="token-count">{tokenData.companyTokenBalance}</div>
+                    <div className="token-label">Empresa</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        
+          <div className="user-info">
+            {currentUser && (
+              <div className="header-actions">
+                {/* Notifications button */}
+                <button className="header-btn" title="Notificaciones">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  {notificationCount > 0 && (
+                    <span className="notification-badge">{notificationCount}</span>
+                  )}
+                </button>
+
+                {/* Theme toggle */}
+                <button className="header-btn" onClick={toggleTheme} title="Cambiar tema">
+                  {theme === 'light' ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  )}
+                </button>
+
+                {/* User dropdown */}
+                <div className={`user-dropdown ${showUserDropdown ? 'active' : ''}`}>
+                  <div 
+                    className="user-avatar"
+                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  >
+                    {getUserInitials()}
+                  </div>
+                  <div className="user-dropdown-menu">
+                    <div className="user-dropdown-header">
+                      <span className="user-name">{currentUser.displayName || 'Usuario'}</span>
+                      <span className="user-email">{currentUser.email}</span>
+                    </div>
+                    <Link to="/profile">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Mi Perfil
+                    </Link>
+                    <Link to="/settings">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      Configuración
+                    </Link>
+                    <button onClick={handleLogout}>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      Cerrar Sesión
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         
-        <div className="user-info">
-          {currentUser && (
-            <div className="header-actions">
-              {/* Notifications button */}
-              <button className="header-btn" title="Notificaciones">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        {/* Mobile tokens row for level 3 */}
+        {userLevel === 3 && (
+          <div className="header-tokens mobile-tokens-row">
+            <div className="token-card jobby-tokens">
+              <div className="token-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+                  <path d="M20.5 7.5L16 12l4.5 4.5M3.5 7.5L8 12l-4.5 4.5"/>
                 </svg>
-                {notificationCount > 0 && (
-                  <span className="notification-badge">{notificationCount}</span>
-                )}
-              </button>
-
-              {/* Theme toggle */}
-              <button className="header-btn" onClick={toggleTheme} title="Cambiar tema">
-                {theme === 'light' ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                )}
-              </button>
-
-
-              {/* User dropdown */}
-              <div className={`user-dropdown ${showUserDropdown ? 'active' : ''}`}>
-                <div 
-                  className="user-avatar"
-                  onClick={() => setShowUserDropdown(!showUserDropdown)}
-                >
-                  {getUserInitials()}
-                </div>
-                <div className="user-dropdown-menu">
-                  <div className="user-dropdown-header">
-                    <span className="user-name">{currentUser.displayName || 'Usuario'}</span>
-                    <span className="user-email">{currentUser.email}</span>
-                  </div>
-                  <Link to="/profile">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Mi Perfil
-                  </Link>
-                  <Link to="/settings">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Configuración
-                  </Link>
-                  <button onClick={handleLogout}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
-                    Cerrar Sesión
-                  </button>
-                </div>
+              </div>
+              <div className="token-info">
+                <div className="token-count">{tokenData.jobbyTokenBalance}</div>
+                <div className="token-label">Flexibles</div>
               </div>
             </div>
-          )}
-        </div>
+            
+            <div className="token-card company-tokens">
+              <div className="token-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M3 21h18M4 21V7l8-4v18M20 21V11l-8-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/>
+                </svg>
+              </div>
+              <div className="token-info">
+                <div className="token-count">{tokenData.companyTokenBalance}</div>
+                <div className="token-label">Empresa</div>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       <div className="main-content">
-        <nav className="sidebar">
+        <nav className={`sidebar ${userLevel === 3 && showMobileMenu ? 'mobile-menu-open' : ''}`}>
+          {/* Mobile menu overlay for level 3 */}
+          {userLevel === 3 && showMobileMenu && (
+            <div 
+              className="mobile-menu-overlay"
+              onClick={() => setShowMobileMenu(false)}
+            />
+          )}
+          
+          {/* Mobile menu close button for level 3 */}
+          {userLevel === 3 && showMobileMenu && (
+            <button 
+              className="mobile-menu-close"
+              onClick={() => setShowMobileMenu(false)}
+              title="Cerrar menú"
+            >
+              ×
+            </button>
+          )}
+          
           {/* Menú para Nivel 1: Administración Jobby */}
           {userLevel === 1 && (
             <>
@@ -331,7 +404,11 @@ const MainLayout = () => {
             <>
               <ul>
                 <li>
-                  <Link to="/level3/dashboard" className={location.pathname === '/level3/dashboard' ? 'active' : ''}>
+                  <Link 
+                    to="/level3/dashboard" 
+                    className={location.pathname === '/level3/dashboard' ? 'active' : ''}
+                    onClick={() => setShowMobileMenu(false)}
+                  >
                     <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <rect x="3" y="3" width="7" height="7" rx="1"/>
                       <rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -342,7 +419,11 @@ const MainLayout = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/level3/benefits" className={location.pathname === '/level3/benefits' ? 'active' : ''}>
+                  <Link 
+                    to="/level3/benefits" 
+                    className={location.pathname === '/level3/benefits' ? 'active' : ''}
+                    onClick={() => setShowMobileMenu(false)}
+                  >
                     <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="3"/>
                       <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
@@ -352,7 +433,11 @@ const MainLayout = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/level3/company-benefits" className={location.pathname === '/level3/company-benefits' ? 'active' : ''}>
+                  <Link 
+                    to="/level3/company-benefits" 
+                    className={location.pathname === '/level3/company-benefits' ? 'active' : ''}
+                    onClick={() => setShowMobileMenu(false)}
+                  >
                     <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M3 21h18M4 21V7l8-4v18M20 21V11l-8-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/>
                     </svg>
@@ -360,16 +445,24 @@ const MainLayout = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/level3/requests" className={location.pathname === '/level3/requests' ? 'active' : ''}>
+                  <Link 
+                    to="/level3/requests" 
+                    className={location.pathname === '/level3/requests' ? 'active' : ''}
+                    onClick={() => setShowMobileMenu(false)}
+                  >
                     <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                       <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
                     </svg>
-                    Mis Solicitudes
+                    Historial
                   </Link>
                 </li>
                 <li>
-                  <Link to="/level3/bot" className={location.pathname === '/level3/bot' ? 'active' : ''}>
+                  <Link 
+                    to="/level3/bot" 
+                    className={location.pathname === '/level3/bot' ? 'active' : ''}
+                    onClick={() => setShowMobileMenu(false)}
+                  >
                     <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M12 8V4l8 8-8 8v-4a8 8 0 01-8-8 8 8 0 018-8z"/>
                       <circle cx="12" cy="12" r="3"/>

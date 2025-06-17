@@ -11,8 +11,15 @@ const SimpleGoogleMap = ({ isOpen, onClose }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen && mapRef.current) {
-      loadGoogleMapsAndInitialize();
+    if (isOpen) {
+      // Agregar un pequeño delay para asegurar que el DOM esté listo
+      const timeoutId = setTimeout(() => {
+        if (mapRef.current) {
+          loadGoogleMapsAndInitialize();
+        }
+      }, 100);
+      
+      return () => clearTimeout(timeoutId);
     }
   }, [isOpen]);
 
@@ -98,43 +105,59 @@ const SimpleGoogleMap = ({ isOpen, onClose }) => {
   };
 
   const initializeMap = () => {
-    if (!mapRef.current || !window.google || !window.google.maps) {
-      console.error('Map container or Google Maps not available');
+    // Verificaciones más robustas
+    if (!mapRef.current) {
+      console.error('Map container ref is null');
+      return;
+    }
+    
+    if (!window.google || !window.google.maps) {
+      console.error('Google Maps API not loaded');
+      return;
+    }
+
+    // Verificar que el elemento DOM existe y está en el DOM
+    if (!document.contains(mapRef.current)) {
+      console.error('Map container element is not in the DOM');
       return;
     }
 
     console.log('Google Maps loaded, initializing map...');
     
-    const map = new window.google.maps.Map(mapRef.current, {
-      center: { lat: -33.4373, lng: -70.6506 }, // Monjitas 565, Santiago
-      zoom: 15,
-      mapTypeId: 'roadmap'
-    });
+    try {
+      const map = new window.google.maps.Map(mapRef.current, {
+        center: { lat: -33.4373, lng: -70.6506 }, // Monjitas 565, Santiago
+        zoom: 15,
+        mapTypeId: 'roadmap'
+      });
 
-    // Agregar marcador
-    const marker = new window.google.maps.Marker({
-      position: { lat: -33.4373, lng: -70.6506 },
-      map: map,
-      title: 'Monjitas 565, Santiago, Chile',
-      animation: window.google.maps.Animation.DROP
-    });
+      // Agregar marcador
+      const marker = new window.google.maps.Marker({
+        position: { lat: -33.4373, lng: -70.6506 },
+        map: map,
+        title: 'Monjitas 565, Santiago, Chile',
+        animation: window.google.maps.Animation.DROP
+      });
 
-    // Info window
-    const infoWindow = new window.google.maps.InfoWindow({
-      content: `
-        <div style="padding: 10px;">
-          <h3 style="margin: 0 0 5px 0; color: #2d3748;">Monjitas 565</h3>
-          <p style="margin: 0; color: #4a5568;">Santiago, Chile</p>
-          <small style="color: #718096;">📌 -33.4373, -70.6506</small>
-        </div>
-      `
-    });
+      // Info window
+      const infoWindow = new window.google.maps.InfoWindow({
+        content: `
+          <div style="padding: 10px;">
+            <h3 style="margin: 0 0 5px 0; color: #2d3748;">Monjitas 565</h3>
+            <p style="margin: 0; color: #4a5568;">Santiago, Chile</p>
+            <small style="color: #718096;">📌 -33.4373, -70.6506</small>
+          </div>
+        `
+      });
 
-    marker.addListener('click', () => {
-      infoWindow.open(map, marker);
-    });
+      marker.addListener('click', () => {
+        infoWindow.open(map, marker);
+      });
 
-    console.log('Google Maps initialized successfully');
+      console.log('Google Maps initialized successfully');
+    } catch (error) {
+      console.error('Error initializing Google Maps:', error);
+    }
   };
 
   if (!isOpen) return null;

@@ -20,6 +20,111 @@
   animation: immersiveEntrance 1.2s ease-out;
 }
 
+/* Mobile immersive mode - pantalla completa sin bordes */
+@media (max-width: 768px) {
+  .immersive-benefits {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    height: 100vh;
+    min-height: 100vh;
+  }
+  
+  /* Touch controls for mobile */
+  .benefits-carousel {
+    position: relative;
+    height: 100vh;
+    touch-action: pan-x;
+    user-select: none;
+  }
+  
+  /* Add touch feedback */
+  .benefit-card {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
+  
+  /* Mobile exit button */
+  .mobile-exit-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  .mobile-exit-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+  }
+  
+  /* Mobile navigation hints */
+  .mobile-nav-hints {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    font-size: 12px;
+    z-index: 1001;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    animation: fadeInDown 0.5s ease;
+  }
+  
+  .mobile-nav-hints.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}
+
 /* Animaciones inmersivas */
 @keyframes immersiveEntrance {
   from {
@@ -82,6 +187,12 @@
   border-radius: 3rem;
 }
 
+@media (max-width: 768px) {
+  .background-blur {
+    border-radius: 0;
+  }
+}
+
 /* Overlay gradient for better contrast */
 .background-blur::after {
   content: '';
@@ -93,6 +204,12 @@
   background: linear-gradient(to bottom, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0.6) 100%);
   pointer-events: none;
   border-radius: 3rem;
+}
+
+@media (max-width: 768px) {
+  .background-blur::after {
+    border-radius: 0;
+  }
 }
 
 .blur-background {

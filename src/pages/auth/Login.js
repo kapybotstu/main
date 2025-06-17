@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/firebase/auth/authService';
 import { getUserSurveyStatus } from '../../services/firebase/database/databaseService';
 import { useAuth } from '../../context/AuthContext';
-import './Login.css';
+import formStyles from './styles/LoginForm.module.css';
+import carouselStyles from './styles/BenefitsCarousel.module.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -88,7 +89,7 @@ const Login = () => {
         navigate('/level3/dashboard');
         break;
       case 4:
-        navigate('/level4/dashboard');
+        navigate('/level4');
         break;
       default:
         navigate('/login');
@@ -145,32 +146,32 @@ const Login = () => {
   };
   
   return (
-    <div className="login-layout">
+    <div className={formStyles.loginLayout}>
       {/* Sección del formulario de login */}
-      <div className="login-section">
-        <div className="login-container">
-          <div className="login-branding">
-            <div className="jobby-logo">
-              <div className="logo-gradient">Jobby</div>
-              <p className="logo-tagline">Tu plataforma de beneficios laborales</p>
+      <div className={formStyles.loginSection}>
+        <div className={formStyles.loginContainer}>
+          <div className={formStyles.loginBranding}>
+            <div className={formStyles.jobbyLogo}>
+              <div className={formStyles.logoGradient}>Jobby</div>
+              <p className={formStyles.logoTagline}>Tu plataforma de beneficios laborales</p>
             </div>
           </div>
           
-          <div className="login-form-container">
+          <div className={formStyles.loginFormContainer}>
             <h2>Iniciar Sesión</h2>
             
             {error && (
-              <div className="error-modal">
-                <div className="error-content">
-                  <span className="error-icon">⚠️</span>
+              <div className={formStyles.errorModal}>
+                <div className={formStyles.errorContent}>
+                  <span className={formStyles.errorIcon}>⚠️</span>
                   <p>{error}</p>
                 </div>
               </div>
             )}
             
-            <form onSubmit={handleSubmit} className="login-form">
-              <div className="form-group-with-icon">
-                <div className="input-icon">📧</div>
+            <form onSubmit={handleSubmit} className={formStyles.loginForm}>
+              <div className={formStyles.formGroupWithIcon}>
+                <div className={formStyles.inputIcon}>📧</div>
                 <input
                   id="email"
                   type="email"
@@ -181,8 +182,8 @@ const Login = () => {
                 />
               </div>
               
-              <div className="form-group-with-icon">
-                <div className="input-icon">🔒</div>
+              <div className={formStyles.formGroupWithIcon}>
+                <div className={formStyles.inputIcon}>🔒</div>
                 <input
                   id="password"
                   type="password"
@@ -195,12 +196,12 @@ const Login = () => {
               
               <button 
                 type="submit" 
-                className="login-button" 
+                className={formStyles.loginButton} 
                 disabled={loading}
               >
                 {loading ? (
-                  <span className="loading-spinner">
-                    <span className="spinner"></span>
+                  <span className={formStyles.loadingSpinner}>
+                    <span className={formStyles.spinner}></span>
                     Iniciando sesión...
                   </span>
                 ) : (
@@ -213,29 +214,29 @@ const Login = () => {
       </div>
       
       {/* Sección del carrusel de beneficios */}
-      <div className="benefits-showcase">
-        <div className="benefit-slide" 
+      <div className={carouselStyles.benefitsShowcase}>
+        <div className={carouselStyles.benefitSlide} 
              style={{background: benefitsShowcase[currentBenefitIndex].color}}>
-          <div className="benefit-image-container">
+          <div className={carouselStyles.benefitImageContainer}>
             <img 
               src={benefitsShowcase[currentBenefitIndex].image} 
               alt={benefitsShowcase[currentBenefitIndex].title}
-              className="benefit-image"
+              className={carouselStyles.benefitImage}
             />
           </div>
-          <div className="benefit-overlay">
-            <div className="benefit-promo-text">
+          <div className={carouselStyles.benefitOverlay}>
+            <div className={carouselStyles.benefitPromoText}>
               <h2>🎉 ¡Descubre Jobby Benefits!</h2>
               <p>Accede a miles de beneficios exclusivos para empleados</p>
-              <span className="benefit-category-badge">
+              <span className={carouselStyles.benefitCategoryBadge}>
                 {benefitsShowcase[currentBenefitIndex].category}
               </span>
             </div>
-            <div className="preview-dots">
+            <div className={carouselStyles.previewDots}>
               {benefitsShowcase.map((_, index) => (
                 <span 
                   key={index}
-                  className={`dot ${index === currentBenefitIndex ? 'active' : ''}`}
+                  className={`${carouselStyles.dot} ${index === currentBenefitIndex ? carouselStyles.active : ''}`}
                   onClick={() => setCurrentBenefitIndex(index)}
                 ></span>
               ))}

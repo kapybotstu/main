@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, database } from '../services/firebase/config';
-import { subscribeToAuthChanges } from '../services/firebase/auth/authService';
+import { subscribeToAuthChanges, logoutUser } from '../services/firebase/auth/authService';
 import { ref, get } from 'firebase/database';
 import { getUserSurveyStatus } from '../services/firebase/database/databaseService';
 
@@ -102,7 +102,8 @@ export const AuthProvider = ({ children }) => {
     loading,
     error,
     surveyCompleted,
-    updateSurveyStatus
+    updateSurveyStatus,
+    logout: logoutUser
   };
 
   return (

@@ -1,0 +1,157 @@
+/* Módulo CSS del Carrusel de Beneficios - Aislado del resto de componentes */
+
+.benefitsShowcase {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.benefitSlide {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.8s ease;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.benefitImageContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.benefitImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+}
+
+/* Overlay solo en la parte inferior */
+.benefitOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35%; /* Solo cubre el 35% inferior */
+  background: linear-gradient(to top, 
+    rgba(0, 0, 0, 0.95) 0%, 
+    rgba(0, 0, 0, 0.7) 50%, 
+    rgba(0, 0, 0, 0.3) 80%, 
+    transparent 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 2;
+}
+
+.benefitPromoText {
+  text-align: center;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.benefitPromoText h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+}
+
+.benefitPromoText p {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.95;
+  line-height: 1.4;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.benefitCategoryBadge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1.25rem;
+  border-radius: 25px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Dots de navegación */
+.previewDots {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.dot.active {
+  background: white;
+  transform: scale(1.2);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.dot:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .benefitsShowcase {
+    min-height: 40vh;
+  }
+  
+  .benefitOverlay {
+    height: 45%; /* Más espacio en móvil */
+  }
+  
+  .benefitPromoText h2 {
+    font-size: 1.5rem;
+  }
+  
+  .benefitPromoText p {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .benefitOverlay {
+    height: 50%;
+    padding: 1.5rem;
+  }
+  
+  .benefitPromoText h2 {
+    font-size: 1.25rem;
+  }
+  
+  .benefitCategoryBadge {
+    font-size: 0.75rem;
+    padding: 0.4rem 1rem;
+  }
+}

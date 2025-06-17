@@ -36,10 +36,13 @@ const AvailableBenefits = () => {
   const [separation, setSeparation] = useState(120);
   const [showInfoContent, setShowInfoContent] = useState(true);
   const [showMapMenu, setShowMapMenu] = useState(false);
+  const [isImmersiveMode, setIsImmersiveMode] = useState(false);
   
   const carouselRef = useRef(null);
   const touchStartRef = useRef(0);
   const mapMenuRef = useRef(null);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchStartY, setTouchStartY] = useState(0);
 
 
   // Función para mostrar temporalmente el info-content
@@ -51,6 +54,42 @@ const AvailableBenefits = () => {
     }, 2000);
   }, []);
 
+  // Touch navigation handlers for mobile
+  const handleTouchStart = useCallback((e) => {
+    if (!isImmersiveMode) return;
+    
+    const touch = e.touches[0];
+    setTouchStartX(touch.clientX);
+    setTouchStartY(touch.clientY);
+  }, [isImmersiveMode]);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (!isImmersiveMode || !touchStartX) return;
+
+    const touch = e.changedTouches[0];
+    const touchEndX = touch.clientX;
+    const touchEndY = touch.clientY;
+    
+    const deltaX = touchStartX - touchEndX;
+    const deltaY = touchStartY - touchEndY;
+    
+    // Check if it's a horizontal swipe (not vertical scroll)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      if (deltaX > 0 && currentBenefitIndex < filteredBenefits.length - 1) {
+        // Swipe left - next benefit
+        setCurrentBenefitIndex(currentBenefitIndex + 1);
+        showInfoTemporarily();
+      } else if (deltaX < 0 && currentBenefitIndex > 0) {
+        // Swipe right - previous benefit
+        setCurrentBenefitIndex(currentBenefitIndex - 1);
+        showInfoTemporarily();
+      }
+    }
+    
+    setTouchStartX(0);
+    setTouchStartY(0);
+  }, [isImmersiveMode, touchStartX, touchStartY, currentBenefitIndex, filteredBenefits.length, showInfoTemporarily]);
+
   // Función para abrir modal de canje (definida PRIMERO)
   const openRedemptionModal = useCallback((experience) => {
     setSelectedExperience(experience);
@@ -60,10 +99,19 @@ const AvailableBenefits = () => {
     setShowRedemptionModal(true);
   }, []);
 
-  // Manejar separación responsive una sola vez
+  // Manejar separación responsive y modo inmersivo
   useEffect(() => {
     const updateSeparation = () => {
       const width = window.innerWidth;
+      const isMobile = width <= 768;
+      
+      // Activar modo inmersivo en móviles automáticamente
+      if (isMobile && !isImmersiveMode) {
+        setIsImmersiveMode(true);
+      } else if (!isMobile && isImmersiveMode) {
+        setIsImmersiveMode(false);
+      }
+      
       if (width <= 768) {
         setSeparation(80);
       } else if (width <= 1024) {
@@ -77,7 +125,7 @@ const AvailableBenefits = () => {
     window.addEventListener('resize', updateSeparation);
     
     return () => window.removeEventListener('resize', updateSeparation);
-  }, []);
+  }, [isImmersiveMode]);
 
   // Ocultar info-content automáticamente después de 4 segundos
   useEffect(() => {
@@ -86,6 +134,36 @@ const AvailableBenefits = () => {
     }, 4000); // 4 segundos
 
     return () => clearTimeout(timer);
+  }, []);
+
+  // Manejar clase CSS en el body para ocultar header en móviles
+  useEffect(() => {
+    if (isImmersiveMode && window.innerWidth <= 768) {
+      document.body.classList.add('immersive-carousel-active');
+      // Prevent scroll on body when in immersive mode
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.classList.remove('immersive-carousel-active');
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.classList.remove('immersive-carousel-active');
+      document.body.style.overflow = 'unset';
+    };
+  }, [isImmersiveMode]);
+
+  // Listen for exit immersive mode event from header
+  useEffect(() => {
+    const handleExitImmersiveMode = () => {
+      setIsImmersiveMode(false);
+    };
+
+    window.addEventListener('exitImmersiveMode', handleExitImmersiveMode);
+    
+    return () => {
+      window.removeEventListener('exitImmersiveMode', handleExitImmersiveMode);
+    };
   }, []);
 
   useEffect(() => {
@@ -308,12 +386,12 @@ const AvailableBenefits = () => {
   //   }
   // }, [showMapMenu]);
 
-  // Touch gestures optimizados
-  const handleTouchStart = useCallback((e) => {
+  // Touch gestures optimizados for carousel navigation
+  const handleCarouselTouchStart = useCallback((e) => {
     touchStartRef.current = e.touches[0].clientX;
   }, []);
 
-  const handleTouchEnd = useCallback((e) => {
+  const handleCarouselTouchEnd = useCallback((e) => {
     const touchEnd = e.changedTouches[0].clientX;
     const diff = touchStartRef.current - touchEnd;
     
@@ -454,9 +532,33 @@ const AvailableBenefits = () => {
 
   return (
     <div className="immersive-benefits">
+      {/* Mobile navigation hints */}
+      {isImmersiveMode && (
+        <div className={`mobile-nav-hints ${!showInfoContent ? 'hidden' : ''}`}>
+          Desliza para navegar • Toca para seleccionar
+        </div>
+      )}
+      
+      {/* Exit immersive mode button for mobile */}
+      {isImmersiveMode && window.innerWidth <= 768 && (
+        <button 
+          className="mobile-exit-btn"
+          onClick={() => {
+            setIsImmersiveMode(false);
+            document.body.classList.remove('immersive-carousel-active');
+            document.body.style.overflow = 'unset';
+          }}
+          title="Salir del carrusel"
+        >
+          ×
+        </button>
+      )}
+      
       {/* Vista inmersiva a pantalla completa */}
       <div 
         className="benefits-carousel"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         style={{
           background: 'transparent',
           filter: isDragging ? 'brightness(0.8)' : 'none'
@@ -530,8 +632,8 @@ const AvailableBenefits = () => {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onTouchStart={handleCarouselTouchStart}
+          onTouchEnd={handleCarouselTouchEnd}
           style={{
             transform: `translateX(${dragOffset}px)`,
             cursor: isDragging ? 'grabbing' : 'grab'

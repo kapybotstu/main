@@ -37,8 +37,7 @@ import DiagnosticPage from '../pages/level3/DiagnosticPage';
 import Bot from '../pages/level3/Bot';
 
 // Nivel 4: Proveedores
-import Level4Dashboard from '../pages/level4/Level4Dashboard';
-import TokenVerification from '../pages/level4/TokenVerification';
+import ProviderPortal from '../pages/level4/ProviderPortal';
 
 const AppRoutes = () => {
   console.log("AppRoutes component rendered");
@@ -110,13 +109,9 @@ const AppRoutes = () => {
         <Route path="/level3/survey" element={<ProfileSurvey />} />
       </Route>
       
-      {/* Nivel 4: Proveedores */}
+      {/* Nivel 4: Proveedores - Sin sidebar */}
       <Route element={<ProtectedRoute requiredLevel={4} />}>
-        <Route path="/level4" element={<MainLayout />}>
-          <Route path="dashboard" element={<Level4Dashboard />} />
-          <Route path="verify" element={<TokenVerification />} />
-          <Route path="" element={<Navigate to="/level4/dashboard" replace />} />
-        </Route>
+        <Route path="/level4" element={<ProviderPortal />} />
       </Route>
       
       {/* Ruta para cualquier otra URL no definida */}

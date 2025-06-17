@@ -328,12 +328,6 @@ const MyRequests = () => {
                       <span className="metadata-label">🏷️ Categoría:</span>
                       <span className="metadata-value">{request.benefitCategory}</span>
                     </div>
-                    {request.benefitValue && (
-                      <div className="metadata-item">
-                        <span className="metadata-label">💰 Valor:</span>
-                        <span className="metadata-value">{request.benefitValue}</span>
-                      </div>
-                    )}
                     {request.paidWithTokens && (
                       <div className="metadata-item tokens-paid">
                         <span className="metadata-label">🎟️ Pagado con tokens:</span>

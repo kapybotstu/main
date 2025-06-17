@@ -24,7 +24,7 @@
   color: white;
   padding: 2rem 0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 25px;
+  border-radius: 20px;
   margin: 1rem 2rem;
 }
 
@@ -57,7 +57,7 @@
   backdrop-filter: blur(10px);
   color: white;
   padding: 0.75rem 1.5rem;
-  border-radius: 25px;
+  border-radius: 20px;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -99,7 +99,7 @@
   right: 2rem;
   z-index: 1000;
   padding: 1rem 1.5rem;
-  border-radius: 15px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -150,8 +150,11 @@
 /* Filter tabs */
 .filter-tabs {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 2rem 0;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tabs-container {
@@ -173,7 +176,7 @@
   border: none;
   color: #4a5568;
   padding: 0.75rem 1rem;
-  border-radius: 15px;
+  border-radius: 16px;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -199,7 +202,7 @@
 .tab-count {
   background: rgba(255, 255, 255, 0.2);
   padding: 0.25rem 0.5rem;
-  border-radius: 10px;
+  border-radius: 16px;
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -211,8 +214,13 @@
 /* Content */
 .requests-content {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 2rem auto;
   padding: 2rem;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 /* Requests grid */
@@ -303,7 +311,7 @@
 
 .benefit-type {
   padding: 0.25rem 0.75rem;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -345,7 +353,7 @@
   gap: 0.4rem;
   padding: 0.75rem;
   background: rgba(226, 232, 240, 0.3);
-  border-radius: 12px;
+  border-radius: 16px;
   margin-bottom: 0.75rem;
 }
 
@@ -381,7 +389,7 @@
 /* Token info section */
 .token-info {
   background: rgba(102, 126, 234, 0.1);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 0.75rem;
   margin-bottom: 0.75rem;
   font-size: 0.875rem;
@@ -423,7 +431,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 0.875rem;
   font-weight: 500;
   width: 100%;
@@ -449,7 +457,7 @@
   flex: 1;
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -644,7 +652,7 @@
   padding: 4rem 2rem;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
-  border-radius: 25px;
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -679,7 +687,7 @@
   background: var(--primary-gradient);
   color: white;
   padding: 0.75rem 1.5rem;
-  border-radius: 25px;
+  border-radius: 20px;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -762,7 +770,7 @@
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -851,12 +859,14 @@
   }
   
   .filter-tabs {
-    padding: 1rem 1rem 0;
+    margin: 1rem auto;
+    padding: 0 1rem;
   }
   
   .tabs-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 20px;
   }
   
   .requests-grid {
@@ -894,7 +904,7 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   padding: 0.75rem 1rem;
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid rgba(102, 126, 234, 0.3);
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
 }
@@ -1071,8 +1081,7 @@
 
 /* Tabs de filtros en modo oscuro */
 [data-theme="dark"] .filter-tabs {
-  background: #1f2937;
-  border: 1px solid #374151;
+  background: transparent;
 }
 
 [data-theme="dark"] .tab-button {
@@ -1094,8 +1103,11 @@
 
 /* Contenido de solicitudes en modo oscuro */
 [data-theme="dark"] .requests-content {
-  background: #1f2937;
+  background: rgba(31, 41, 55, 0.8);
+  backdrop-filter: blur(10px);
   border: 1px solid #374151;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .requests-table {
@@ -1223,7 +1235,7 @@
 [data-theme="dark"] .tabs-container {
   background: #1f2937;
   border: 1px solid #374151;
-  border-radius: 12px;
+  border-radius: 20px;
   padding: 0.5rem;
 }
 
@@ -1232,7 +1244,7 @@
   background: #374151;
   color: #d1d5db;
   border: 1px solid #4b5563;
-  border-radius: 8px;
+  border-radius: 16px;
   transition: all 0.2s ease;
 }
 
@@ -1254,7 +1266,7 @@
 [data-theme="dark"] .tab-count {
   background: rgba(255, 255, 255, 0.2);
   color: inherit;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 0.2rem 0.5rem;
   font-size: 0.75rem;
   font-weight: 600;
@@ -1270,7 +1282,7 @@
 [data-theme="dark"] .request-card {
   background: #1f2937;
   border: 1px solid #374151;
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }

@@ -37,6 +37,7 @@ const AvailableBenefits = () => {
   const [showInfoContent, setShowInfoContent] = useState(true);
   const [showMapMenu, setShowMapMenu] = useState(false);
   const [isImmersiveMode, setIsImmersiveMode] = useState(false);
+  const [activeQuickFilter, setActiveQuickFilter] = useState('todos');
   
   const carouselRef = useRef(null);
   const touchStartRef = useRef(0);
@@ -44,6 +45,69 @@ const AvailableBenefits = () => {
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchStartY, setTouchStartY] = useState(0);
 
+  // Filtros rápidos disponibles
+  const quickFilters = [
+    { id: 'todos', label: 'Todos', icon: '🎁' },
+    { id: 'comida', label: 'Comida', icon: '🍽️' },
+    { id: 'entretenimiento', label: 'Diversión', icon: '🎮' },
+    { id: 'salud', label: 'Salud', icon: '🏥' },
+    { id: 'deporte', label: 'Deporte', icon: '⚽' },
+    { id: 'educacion', label: 'Educación', icon: '📚' },
+    { id: 'tecnologia', label: 'Tech', icon: '💻' },
+    { id: 'viajes', label: 'Viajes', icon: '✈️' }
+  ];
+
+
+  // Función para aplicar filtros rápidos
+  const applyQuickFilter = useCallback((filterId) => {
+    setActiveQuickFilter(filterId);
+    setCurrentBenefitIndex(0); // Resetear al primer beneficio
+    
+    let filtered = [...jobbyBenefits];
+    
+    if (filterId !== 'todos') {
+      filtered = jobbyBenefits.filter(benefit => {
+        const category = benefit.category?.toLowerCase() || '';
+        const name = benefit.name?.toLowerCase() || '';
+        const description = benefit.description?.toLowerCase() || '';
+        
+        switch (filterId) {
+          case 'comida':
+            return category.includes('comida') || category.includes('gastronomia') || 
+                   name.includes('restaurante') || name.includes('comida') || 
+                   description.includes('comida') || description.includes('restaurante');
+          case 'entretenimiento':
+            return category.includes('entretenimiento') || category.includes('diversión') ||
+                   name.includes('cine') || name.includes('teatro') || name.includes('concierto') ||
+                   description.includes('entretenimiento') || description.includes('diversión');
+          case 'salud':
+            return category.includes('salud') || category.includes('medicina') ||
+                   name.includes('medico') || name.includes('salud') || name.includes('clinica') ||
+                   description.includes('salud') || description.includes('medicina');
+          case 'deporte':
+            return category.includes('deporte') || category.includes('fitness') ||
+                   name.includes('gym') || name.includes('deporte') || name.includes('fitness') ||
+                   description.includes('deporte') || description.includes('ejercicio');
+          case 'educacion':
+            return category.includes('educacion') || category.includes('curso') ||
+                   name.includes('curso') || name.includes('educacion') || name.includes('aprendizaje') ||
+                   description.includes('educacion') || description.includes('curso');
+          case 'tecnologia':
+            return category.includes('tecnologia') || category.includes('tech') ||
+                   name.includes('tech') || name.includes('software') || name.includes('app') ||
+                   description.includes('tecnologia') || description.includes('digital');
+          case 'viajes':
+            return category.includes('viajes') || category.includes('turismo') ||
+                   name.includes('viaje') || name.includes('hotel') || name.includes('vuelo') ||
+                   description.includes('viaje') || description.includes('turismo');
+          default:
+            return true;
+        }
+      });
+    }
+    
+    setFilteredBenefits(filtered);
+  }, [jobbyBenefits]);
 
   // Función para mostrar temporalmente el info-content
   const showInfoTemporarily = useCallback(() => {
@@ -165,6 +229,13 @@ const AvailableBenefits = () => {
       window.removeEventListener('exitImmersiveMode', handleExitImmersiveMode);
     };
   }, []);
+
+  // Aplicar filtro inicial cuando se cargan los beneficios
+  useEffect(() => {
+    if (jobbyBenefits.length > 0) {
+      applyQuickFilter(activeQuickFilter);
+    }
+  }, [jobbyBenefits, applyQuickFilter, activeQuickFilter]);
 
   useEffect(() => {
     const fetchBenefits = async () => {
@@ -589,15 +660,33 @@ const AvailableBenefits = () => {
             {showGridView ? '🎡' : '⊞'}
           </button>
           
-          <div className="map-menu-container" ref={mapMenuRef}>
+          <div className="map-menu-container" ref={mapMenuRef} style={{ display: 'none' }}>
             <button 
               className="view-toggle map-toggle"
               onClick={() => setShowMapMenu(!showMapMenu)}
               title="Ver mapa"
+              disabled
             >
               📍
             </button>
             
+          </div>
+        </div>
+
+        {/* Filtros rápidos */}
+        <div className="quick-filters">
+          <div className="filters-container">
+            {quickFilters.map((filter) => (
+              <button
+                key={filter.id}
+                className={`quick-filter-btn ${activeQuickFilter === filter.id ? 'active' : ''}`}
+                onClick={() => applyQuickFilter(filter.id)}
+                title={filter.label}
+              >
+                <span className="filter-icon">{filter.icon}</span>
+                <span className="filter-label">{filter.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 

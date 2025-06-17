@@ -457,20 +457,6 @@ const MainLayout = () => {
                     Historial
                   </Link>
                 </li>
-                <li>
-                  <Link 
-                    to="/level3/bot" 
-                    className={location.pathname === '/level3/bot' ? 'active' : ''}
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 8V4l8 8-8 8v-4a8 8 0 01-8-8 8 8 0 018-8z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                      <path d="M5 12a7 7 0 017-7M19 12a7 7 0 01-7 7"/>
-                    </svg>
-                    Asistente Bot
-                  </Link>
-                </li>
               </ul>
             </>
           )}

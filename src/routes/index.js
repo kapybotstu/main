@@ -34,7 +34,6 @@ import CompanyBenefits from '../pages/level3/CompanyBenefits';
 import MyRequests from '../pages/level3/MyRequests';
 import ProfileSurvey from '../pages/level3/ProfileSurvey';
 import DiagnosticPage from '../pages/level3/DiagnosticPage';
-import Bot from '../pages/level3/Bot';
 
 // Nivel 4: Proveedores
 import ProviderPortal from '../pages/level4/ProviderPortal';
@@ -98,7 +97,6 @@ const AppRoutes = () => {
           <Route path="benefits" element={<AvailableBenefits />} />
           <Route path="company-benefits" element={<CompanyBenefits />} />
           <Route path="requests" element={<MyRequests />} />
-          <Route path="bot" element={<Bot />} />
           <Route path="diagnostic" element={<DiagnosticPage />} />
           <Route path="" element={<Navigate to="/level3/dashboard" replace />} />
         </Route>

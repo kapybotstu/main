@@ -584,7 +584,8 @@
   height: 40px;
   align-items: center;
   justify-content: center;
-  margin-right: 0.5rem;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
 }
 
 [data-level="3"] .mobile-menu-btn:hover {
@@ -657,6 +658,7 @@
     align-items: center;
     gap: 0.5rem;
     height: 100%;
+    flex-shrink: 0;
   }
   
   [data-level="3"] .header-actions {
@@ -664,6 +666,7 @@
     align-items: center;
     gap: 0.5rem;
     height: 100%;
+    flex-shrink: 0;
   }
 }
 
@@ -813,13 +816,14 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    gap: 1rem;
   }
   
   [data-level="3"] .header-left {
     gap: 0.75rem;
     flex-wrap: nowrap;
     align-items: center;
-    flex: 1;
+    flex: 0 0 auto;
     min-width: 0;
   }
   

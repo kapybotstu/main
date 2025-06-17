@@ -150,6 +150,17 @@
   }
 }
 
+@keyframes slideInFromTop {
+  from {
+    transform: translateX(-50%) translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
 @keyframes fadeInScale {
   from {
     opacity: 0;
@@ -404,10 +415,10 @@
 /* Benefit card immersive */
 .benefit-card-immersive {
   position: absolute;
-  width: 360px;
+  width: 300px;
   background: white;
   border-radius: 16px;
-  padding: 20px;
+  padding: 6px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   overflow: visible;
   cursor: pointer;
@@ -458,13 +469,13 @@
 
 .card-image {
   width: 100%;
-  height: 200px;
+  height: 65px;
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  margin-top: 40px; /* Controlled space after the button */
+  border-radius: 10px;
+  margin-bottom: 4px;
+  margin-top: 12px; /* Controlled space after the button */
 }
 
 .card-image img {
@@ -505,14 +516,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.05rem;
 }
 
 .card-bottom {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.15rem;
   margin-top: auto; /* Push to bottom */
 }
 
@@ -526,28 +537,28 @@
 
 .card-header h3 {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.8rem;
   color: #2d3748 !important;
   font-weight: 700;
   flex: 1;
-  line-height: 1.2;
+  line-height: 1.05;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 
 /* Jobby button positioned at top */
 .benefit-type {
   position: absolute;
-  top: -20px;
+  top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 0.2rem 0.6rem;
-  border-radius: 10px;
-  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.6rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -592,11 +603,11 @@
 .card-description p {
   margin: 0;
   color: #4a5568;
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  font-size: 0.65rem;
+  line-height: 1.2;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -607,9 +618,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.2rem;
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 0px;
 }
 
 .card-metadata .category {
@@ -824,14 +835,87 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+/* Quick Filters */
+.quick-filters {
+  position: absolute;
+  top: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-dropdown);
+  width: 90%;
+  max-width: 900px;
+  animation: slideInFromTop 0.8s ease-out 0.3s both;
+}
+
+.filters-container {
+  display: flex;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filters-container::-webkit-scrollbar {
+  display: none;
+}
+
+.quick-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.quick-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.quick-filter-btn.active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.filter-icon {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.filter-label {
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
 /* Progress indicators */
 .progress-indicators {
   position: absolute;
   bottom: 4rem;
-  left: 50%;
+  left: calc(50% - 5rem); /* Mover más a la izquierda */
   transform: translateX(-50%);
   z-index: var(--z-dropdown);
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: var(--spacing-sm);
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(15px);
@@ -1172,14 +1256,52 @@
   }
   
   .benefit-card-immersive {
-    width: 320px;
-    padding: 16px;
+    width: 280px;
+    padding: 0px;
     margin-bottom: 15px;
     /* Remove fixed height for mobile too */
   }
   
   .card-image {
-    height: 250px;
+    height: 20px;
+    margin-top: 2px;
+    margin-bottom: 0px;
+  }
+  
+  /* Mobile specific spacing reductions */
+  .card-top {
+    gap: 0rem;
+    padding: 1px;
+  }
+  
+  .card-bottom {
+    gap: 0rem;
+    padding: 1px;
+  }
+  
+  .card-metadata {
+    gap: 0.025rem;
+    margin-top: -4px;
+  }
+  
+  /* Mobile text adjustments for ultra-compact */
+  .card-header h3 {
+    font-size: 0.6rem;
+    line-height: 0.9;
+    margin: 0;
+  }
+  
+  .card-description p {
+    font-size: 0.5rem;
+    line-height: 1.0;
+    margin: 0;
+  }
+  
+  /* Mobile benefit type badge */
+  .benefit-type {
+    top: -6px;
+    padding: 0.04rem 0.25rem;
+    font-size: 0.45rem;
   }
   
   .benefits-grid {
@@ -1188,6 +1310,43 @@
   
   .carousel-navigation {
     display: none;
+  }
+  
+  /* Quick filters responsive */
+  .quick-filters {
+    top: 4rem;
+    width: 95%;
+    max-width: 100%;
+  }
+  
+  .filters-container {
+    padding: 0.375rem;
+    gap: 0.375rem;
+  }
+  
+  .quick-filter-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+  
+  .filter-label {
+    display: none; /* Solo mostrar iconos en móviles */
+  }
+  
+  .filter-icon {
+    font-size: 1.125rem;
+  }
+  
+  /* Progress indicators responsive */
+  .progress-indicators {
+    position: absolute;
+    bottom: 2rem;
+    left: calc(50% - 5rem); /* Mismo ajuste que en desktop */
+    transform: translateX(-50%);
+    width: auto;
+    max-width: calc(100vw - 2rem);
+    justify-content: center;
+    align-items: center;
   }
 }
 

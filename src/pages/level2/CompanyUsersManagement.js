@@ -145,11 +145,12 @@ const CompanyUsersManagement = () => {
         }
       }
       
-      // Crear usuario
+      // Crear usuario con tipo A por defecto
       await registerUser(
         userEmail,
         newUser.password,
-        newUser.displayName
+        newUser.displayName,
+        'A' // userType por defecto
       );
       
       setSuccess('Usuario creado correctamente');
@@ -188,6 +189,26 @@ const CompanyUsersManagement = () => {
       } catch (error) {
         setError(`Error al ${actionText} usuario: ${error.message}`);
       }
+    }
+  };
+  
+  // Cambiar tipo de usuario (A/B)
+  const handleToggleUserType = async (userId, currentType) => {
+    if (!companyId) return;
+    
+    const newType = currentType === 'A' ? 'B' : 'A';
+    
+    try {
+      const userRef = ref(database, `users/${userId}`);
+      await update(userRef, {
+        userType: newType,
+        updatedAt: new Date().toISOString(),
+        updatedBy: currentUser.uid
+      });
+      
+      setSuccess(`Usuario cambiado a tipo ${newType} correctamente`);
+    } catch (error) {
+      setError(`Error al cambiar tipo de usuario: ${error.message}`);
     }
   };
   
@@ -282,6 +303,7 @@ const CompanyUsersManagement = () => {
                   <th>Email</th>
                   <th>Fecha de Registro</th>
                   <th>Estado</th>
+                  <th>Tipo</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -297,12 +319,24 @@ const CompanyUsersManagement = () => {
                       </span>
                     </td>
                     <td>
+                      <span className={`badge badge-${user.userType === 'B' ? 'warning' : 'info'}`}>
+                        {user.userType || 'A'}
+                      </span>
+                    </td>
+                    <td>
                       <div className="action-buttons small">
                         <button 
                           className={`btn-action ${user.status === 'inactive' ? 'activate' : 'deactivate'}`}
                           onClick={() => handleToggleStatus(user.id, user.status || 'active')}
                         >
                           {user.status === 'inactive' ? 'Activar' : 'Desactivar'}
+                        </button>
+                        <button 
+                          className="btn-action type-toggle"
+                          onClick={() => handleToggleUserType(user.id, user.userType || 'A')}
+                          title="Cambiar tipo de usuario"
+                        >
+                          Tipo {user.userType === 'B' ? 'A' : 'B'}
                         </button>
                       </div>
                     </td>

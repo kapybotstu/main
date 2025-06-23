@@ -843,7 +843,7 @@ export const updateUserSurveyStatus = async (userId, completed = true) => {
   }
 };
 
-// Guardar preferencias de beneficios del usuario
+// Guardar preferencias de beneficios del usuario (Tipo A - Encuesta Original)
 export const saveSurveyPreferences = async (userId, preferences, generationalMemory = null) => {
   try {
     const userRef = ref(database, `users/${userId}`);
@@ -852,7 +852,8 @@ export const saveSurveyPreferences = async (userId, preferences, generationalMem
       benefitPreferences: preferences,
       surveyCompleted: true,
       surveyCompletedAt: new Date().toISOString(),
-      surveyUpdatedAt: new Date().toISOString()
+      surveyUpdatedAt: new Date().toISOString(),
+      surveyType: 'A' // Marcar como encuesta tipo A
     };
     
     // Agregar dato generacional si se proporciona
@@ -861,6 +862,35 @@ export const saveSurveyPreferences = async (userId, preferences, generationalMem
     }
     
     await update(userRef, surveyData);
+    
+    return { success: true };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Guardar preferencias de encuesta experimental para usuarios tipo B
+export const saveSurveyPreferencesB = async (userId, surveyData) => {
+  try {
+    const userRef = ref(database, `users/${userId}`);
+    const surveyBRef = ref(database, `survey_b_responses/${userId}`);
+    
+    // Actualizar estado del usuario
+    const userUpdates = {
+      surveyCompleted: true,
+      surveyCompletedAt: new Date().toISOString(),
+      surveyUpdatedAt: new Date().toISOString(),
+      surveyType: 'B' // Marcar como encuesta tipo B
+    };
+    
+    await update(userRef, userUpdates);
+    
+    // Guardar respuestas detalladas en colección separada
+    await set(surveyBRef, {
+      ...surveyData,
+      userId: userId,
+      submittedAt: new Date().toISOString()
+    });
     
     return { success: true };
   } catch (error) {

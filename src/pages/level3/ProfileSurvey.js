@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { saveSurveyPreferences } from '../../services/firebase/database/databaseService';
+import { ref, get } from 'firebase/database';
+import { database } from '../../services/firebase/config';
 import './ProfileSurvey.css';
 
 // Inicializar animación GSAP cuando el componente se monte
@@ -330,6 +332,8 @@ const ProfileSurvey = () => {
   const [showCelebration, setShowCelebration] = useState(false);
   const [showIntroAnimation, setShowIntroAnimation] = useState(true);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [userType, setUserType] = useState(null);
+  const [isCheckingUserType, setIsCheckingUserType] = useState(true);
 
   const introRef = useRef(null);
   const finalRef = useRef(null);
@@ -337,6 +341,43 @@ const ProfileSurvey = () => {
 
   // Hook para manejar las animaciones GSAP
   useGSAPEffect(animationBgRef);
+
+  // Verificar tipo de usuario al montar el componente
+  useEffect(() => {
+    const checkUserType = async () => {
+      if (!currentUser || !currentUser.uid) {
+        setIsCheckingUserType(false);
+        return;
+      }
+
+      try {
+        const userRef = ref(database, `users/${currentUser.uid}`);
+        const snapshot = await get(userRef);
+        
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          const userTypeFromDB = userData.userType || 'A'; // Default to A if not set
+          setUserType(userTypeFromDB);
+          
+          // Si es usuario tipo B, redirigir a encuesta experimental
+          if (userTypeFromDB === 'B') {
+            // Pequeño delay para la experiencia
+            setTimeout(() => {
+              navigate('/level3/survey-b');
+            }, 2000);
+            return;
+          }
+        }
+        
+        setIsCheckingUserType(false);
+      } catch (error) {
+        console.error('Error checking user type:', error);
+        setIsCheckingUserType(false);
+      }
+    };
+
+    checkUserType();
+  }, [currentUser]);
 
   // Bloquear scroll del body cuando este componente está montado
   useEffect(() => {
@@ -812,6 +853,37 @@ const ProfileSurvey = () => {
         return null;
     }
   };
+
+  // Mostrar pantalla de carga mientras verificamos el tipo de usuario
+  if (isCheckingUserType) {
+    return (
+      <div className="profile-survey">
+        <div className="user-type-checking">
+          <div className="checking-content">
+            <div className="loading-spinner"></div>
+            <h2>Verificando tu perfil...</h2>
+            <p>Preparando tu experiencia personalizada</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Pantalla especial para usuarios tipo B (antes del rickroll)
+  if (userType === 'B') {
+    return (
+      <div className="profile-survey">
+        <div className="type-b-special">
+          <div className="special-content">
+            <div className="special-animation">🎭</div>
+            <h2>¡Felicidades! Eres parte del grupo experimental</h2>
+            <p>Te llevamos a la encuesta avanzada con tecnología experimental...</p>
+            <div className="countdown-timer">Redirigiendo a la experiencia premium...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Componente de animación 3D intro - ESTILO SPOTIFY WRAPPED ORIGINAL
   if (showIntroAnimation) {

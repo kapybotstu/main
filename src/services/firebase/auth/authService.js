@@ -95,7 +95,7 @@ const resolveCompanyId = async (email) => {
 };
 
 // Crear nuevo usuario
-export const registerUser = async (email, password, displayName) => {
+export const registerUser = async (email, password, displayName, userType = 'A') => {
   try {
     console.log("Registrando usuario con email:", email);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -118,6 +118,7 @@ export const registerUser = async (email, password, displayName) => {
       displayName,
       level: userLevel,
       companyId,
+      userType, // Agregar tipo de usuario
       createdAt: new Date().toISOString()
     });
     

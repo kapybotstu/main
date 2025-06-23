@@ -1,4 +1,31 @@
 /* CSS específico del Level2Dashboard - LEVEL 2 UNIQUE STYLES */
+
+/* Botón de tipo de usuario */
+.btn-action.type-toggle {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-action.type-toggle:hover {
+  background-color: #5a6268;
+}
+
+/* Badges para tipos de usuario */
+.badge-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
 .level2-dashboard-container {
   padding: 2rem;
   max-width: 1200px;

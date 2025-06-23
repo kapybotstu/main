@@ -1,0 +1,412 @@
+.profile-survey-b {
+  height: 100vh;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.canvas-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.survey-b-container {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(1px);
+}
+
+/* Progress Bar Futurista */
+.progress-b {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.progress-glow {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(78, 205, 196, 0.3) 50%, 
+    rgba(255, 255, 255, 0.1) 100%);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill-b {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #FF6B9D 0%, 
+    #4ECDC4 30%, 
+    #FFE66D 60%, 
+    #A8E6CF 100%);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 3px;
+  box-shadow: 0 0 20px rgba(78, 205, 196, 0.6);
+  position: relative;
+}
+
+.progress-fill-b::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6));
+  animation: progress-shine 2s infinite;
+}
+
+.progress-text {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+@keyframes progress-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Contenido principal */
+.survey-b-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Intro */
+.survey-b-intro {
+  text-align: center;
+  max-width: 600px;
+}
+
+.intro-content {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glitch-text {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1rem;
+  position: relative;
+  animation: glitch 2s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  color: #FF6B9D;
+  animation: glitch-1 0.5s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch-text::after {
+  color: #4ECDC4;
+  animation: glitch-2 0.5s infinite;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+@keyframes glitch-1 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(2px, -2px); }
+}
+
+.subtitle-b {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+.instruction {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 2rem;
+}
+
+/* Botón Futurista */
+.btn-futuristic {
+  position: relative;
+  background: linear-gradient(45deg, #FF6B9D, #4ECDC4);
+  border: none;
+  border-radius: 50px;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-futuristic:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(78, 205, 196, 0.4);
+}
+
+.btn-futuristic:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-glow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: btn-shine 3s infinite;
+}
+
+@keyframes btn-shine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* Matriz de Personalidad */
+.survey-b-matrix {
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.survey-b-matrix h2 {
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.personality-matrix {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  margin: 2rem auto;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.matrix-option {
+  position: absolute;
+  width: 150px;
+  height: 120px;
+  border-radius: 15px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 2px solid transparent;
+  transform: translate(-50%, -50%);
+}
+
+.matrix-option:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.matrix-option.selected {
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.matrix-option h3 {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.matrix-option ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.matrix-option li {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+/* Resultados */
+.survey-b-results {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.results-content {
+  text-align: center;
+  z-index: 1;
+}
+
+.hologram-effect {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 3rem;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.hologram-effect h2 {
+  font-size: 2.5rem;
+  color: #4ECDC4;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+}
+
+.scanning-animation {
+  position: relative;
+  height: 100px;
+  margin: 2rem 0;
+  overflow: hidden;
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4ECDC4, transparent);
+  animation: scan 2s infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100px); }
+}
+
+.progress-ring {
+  width: 80px;
+  height: 80px;
+  border: 3px solid rgba(78, 205, 196, 0.3);
+  border-radius: 50%;
+  margin: 2rem auto;
+  position: relative;
+  animation: rotate 2s linear infinite;
+}
+
+.progress-fill {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 80px;
+  height: 80px;
+  border: 3px solid transparent;
+  border-top-color: #4ECDC4;
+  border-radius: 50%;
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes loading {
+  0% { transform: rotate(0deg); border-top-color: #4ECDC4; }
+  50% { transform: rotate(180deg); border-top-color: #FF6B9D; }
+  100% { transform: rotate(360deg); border-top-color: #4ECDC4; }
+}
+
+/* Default step */
+.survey-b-default {
+  text-align: center;
+  max-width: 600px;
+}
+
+.survey-b-default h2 {
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.survey-b-default p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .survey-b-content {
+    padding: 1rem;
+  }
+  
+  .glitch-text {
+    font-size: 2rem;
+  }
+  
+  .personality-matrix {
+    width: 90%;
+    max-width: 500px;
+    height: 300px;
+  }
+  
+  .matrix-option {
+    width: 120px;
+    height: 100px;
+    padding: 0.8rem;
+  }
+  
+  .intro-content {
+    padding: 2rem;
+  }
+}

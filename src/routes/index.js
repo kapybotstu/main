@@ -33,6 +33,7 @@ import AvailableBenefits from '../pages/level3/AvailableBenefits';
 import CompanyBenefits from '../pages/level3/CompanyBenefits';
 import MyRequests from '../pages/level3/MyRequests';
 import ProfileSurvey from '../pages/level3/ProfileSurvey';
+import ProfileSurveyB from '../pages/level3/ProfileSurveyB';
 import DiagnosticPage from '../pages/level3/DiagnosticPage';
 
 // Nivel 4: Proveedores
@@ -102,9 +103,10 @@ const AppRoutes = () => {
         </Route>
       </Route>
       
-      {/* Ruta especial para la encuesta de nivel 3 (sin MainLayout) */}
+      {/* Rutas especiales para encuestas de nivel 3 (sin MainLayout) */}
       <Route element={<ProtectedRoute requiredLevel={3} />}>
         <Route path="/level3/survey" element={<ProfileSurvey />} />
+        <Route path="/level3/survey-b" element={<ProfileSurveyB />} />
       </Route>
       
       {/* Nivel 4: Proveedores - Sin sidebar */}

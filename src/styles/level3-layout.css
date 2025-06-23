@@ -2,18 +2,18 @@
 
 /* Variables para Level 3 */
 :root {
-  --level3-primary: #667eea;
-  --level3-secondary: #764ba2;
-  --level3-accent: #f093fb;
-  --level3-success: #4facfe;
-  --level3-warning: #ffd89b;
-  --level3-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --level3-primary: #6B3AA0;
+  --level3-secondary: #8B5BA8;
+  --level3-accent: #FFC0CB;
+  --level3-success: #4169E1;
+  --level3-warning: #D4A645;
+  --level3-bg: linear-gradient(135deg, #F5E6D3 0%, #E6D5F5 100%);
   --level3-card-bg: rgba(255, 255, 255, 0.95);
   --level3-glass: rgba(255, 255, 255, 0.25);
   --level3-glass-border: rgba(255, 255, 255, 0.18);
   --level3-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  --level3-text: #2d3748;
-  --level3-text-light: #718096;
+  --level3-text: #333333;
+  --level3-text-light: #666666;
 }
 
 /* Aplicar solo a Level 3 */
@@ -31,11 +31,11 @@
 
 /* Header profesional para Level 3 */
 [data-level="3"] .header {
-  background: #ffffff;
+  background: #FFFFFF;
   padding: 1rem 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: none;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #F5F5F5;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -101,8 +101,8 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.8rem;
-  background: rgba(102, 126, 234, 0.05);
-  border: 1px solid rgba(102, 126, 234, 0.1);
+  background: rgba(107, 58, 160, 0.05);
+  border: 1px solid rgba(107, 58, 160, 0.1);
   border-radius: 6px;
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -114,7 +114,7 @@
 }
 
 [data-level="3"] .token-card:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(107, 58, 160, 0.1);
 }
 
 [data-level="3"] .token-logo {
@@ -133,12 +133,12 @@
 }
 
 [data-level="3"] .token-card.jobby-tokens .token-logo {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6B3AA0 0%, #8B5BA8 100%);
   color: white;
 }
 
 [data-level="3"] .token-card.company-tokens .token-logo {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  background: linear-gradient(135deg, #D4A645 0%, #C9A23E 100%);
   color: white;
 }
 
@@ -174,7 +174,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  color: #6b7280;
+  color: #666666;
   width: 32px;
   height: 32px;
   display: flex;
@@ -183,7 +183,7 @@
 }
 
 [data-level="3"] .header-btn:hover {
-  background: #f3f4f6;
+  background: #F5F5F5;
   color: var(--level3-primary);
 }
 
@@ -197,7 +197,7 @@
   position: absolute;
   top: 6px;
   right: 6px;
-  background: #ef4444;
+  background: #FF7F50;
   color: white;
   font-size: 10px;
   min-width: 16px;
@@ -219,7 +219,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--level3-primary);
+  background: #6B3AA0;
   color: white;
   display: flex;
   align-items: center;
@@ -232,7 +232,7 @@
 }
 
 [data-level="3"] .user-avatar:hover {
-  border-color: var(--level3-primary);
+  border-color: #6B3AA0;
   transform: scale(1.05);
 }
 
@@ -241,14 +241,14 @@
   top: 100%;
   right: 0;
   margin-top: 0.5rem;
-  background: white;
+  background: #FFFFFF;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   min-width: 200px;
   max-width: 220px;
   display: none;
   z-index: 1000;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #F5F5F5;
   overflow: hidden;
 }
 
@@ -258,12 +258,12 @@
 
 [data-level="3"] .user-dropdown-header {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #F5F5F5;
 }
 
 [data-level="3"] .user-dropdown-header .user-name {
   font-weight: 600;
-  color: #1f2937;
+  color: #333333;
   display: block;
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
@@ -271,7 +271,7 @@
 
 [data-level="3"] .user-dropdown-header .user-email {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #666666;
   display: block;
   word-break: break-all;
 }
@@ -282,7 +282,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1rem;
-  color: #4b5563;
+  color: #666666;
   text-decoration: none;
   transition: all 0.2s ease;
   border: none;
@@ -297,7 +297,7 @@
 
 [data-level="3"] .user-dropdown-menu a:hover,
 [data-level="3"] .user-dropdown-menu button:hover {
-  background: #f3f4f6;
+  background: #F5F5F5;
   color: var(--level3-primary);
 }
 
@@ -470,7 +470,7 @@
 
 [data-level="3"] .sidebar a:hover {
   color: var(--level3-primary);
-  background: rgba(102, 126, 234, 0.08);
+  background: rgba(107, 58, 160, 0.08);
   transform: translateX(4px);
   box-shadow: none;
 }
@@ -482,7 +482,7 @@
 /* Active state for current page */
 [data-level="3"] .sidebar a.active {
   color: var(--level3-primary);
-  background: rgba(102, 126, 234, 0.12);
+  background: rgba(107, 58, 160, 0.12);
   font-weight: 600;
   position: relative;
 }
@@ -496,14 +496,14 @@
   transform: translateY(-50%);
   width: 4px;
   height: 60%;
-  background: var(--level3-primary);
+  background: #6B3AA0;
   border-radius: 2px;
   animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-level="3"] .sidebar a.active .menu-icon {
   opacity: 1;
-  color: var(--level3-primary);
+  color: #6B3AA0;
 }
 
 @keyframes slideIn {
@@ -579,7 +579,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--level3-primary);
+  color: #6B3AA0;
   width: 40px;
   height: 40px;
   align-items: center;
@@ -589,7 +589,7 @@
 }
 
 [data-level="3"] .mobile-menu-btn:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(107, 58, 160, 0.1);
 }
 
 [data-level="3"] .mobile-menu-btn svg {
@@ -614,7 +614,7 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: var(--level3-primary);
+  background: #6B3AA0;
   color: white;
   border: none;
   width: 32px;
@@ -725,7 +725,7 @@
   body.immersive-carousel-active [data-level="3"] .user-avatar {
     width: 36px;
     height: 36px;
-    background: rgba(102, 126, 234, 0.8);
+    background: rgba(107, 58, 160, 0.8);
     border: 2px solid rgba(255, 255, 255, 0.2);
   }
   

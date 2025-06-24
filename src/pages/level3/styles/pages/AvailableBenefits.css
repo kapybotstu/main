@@ -858,6 +858,7 @@
   padding: var(--spacing-sm);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-light);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -875,29 +876,33 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 20px;
-  color: white;
+  color: #2d3748;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .quick-filter-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.85);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.9);
 }
 
 .quick-filter-btn.active {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: white;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
   transform: scale(1.05);
+  color: #1a202c;
 }
 
 .filter-icon {
@@ -914,8 +919,8 @@
 /* Progress indicators */
 .progress-indicators {
   position: absolute;
-  bottom: 4rem;
-  left: calc(50% - 5rem); /* Mover más a la izquierda */
+  bottom: 0.5rem;
+  left: 0%;
   transform: translateX(-50%);
   z-index: var(--z-dropdown);
   display: flex;
@@ -929,6 +934,34 @@
   border: 1px solid var(--border-light);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   animation: slideInFromBottom 0.8s ease-out 0.8s both;
+  overflow: hidden;
+  max-width: 300px;
+  position: relative;
+}
+
+/* Fade gradients for overflow indicators */
+.progress-indicators::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.progress-indicators::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .indicator {
@@ -938,7 +971,16 @@
   background: rgba(50, 50, 50, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
-  transition: var(--transition-fast);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  opacity: 0.4;
+  transform: scale(0.8);
+}
+
+/* Show only 3 indicators on each side of active */
+.indicator:nth-child(n+1):nth-child(-n+3) {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .indicator.active {
@@ -946,12 +988,27 @@
   transform: scale(1.3);
   box-shadow: 0 0 15px rgba(45, 55, 72, 0.6);
   border-color: #2d3748;
+  opacity: 1;
+  z-index: 3;
+}
+
+/* Dynamic visibility based on active position */
+.progress-indicators[data-active="0"] .indicator:nth-child(-n+7),
+.progress-indicators[data-active="1"] .indicator:nth-child(-n+8),
+.progress-indicators[data-active="2"] .indicator:nth-child(-n+9),
+.progress-indicators[data-active="3"] .indicator:nth-child(-n+10),
+.progress-indicators[data-active="4"] .indicator:nth-child(n+2):nth-child(-n+8),
+.progress-indicators[data-active="5"] .indicator:nth-child(n+3):nth-child(-n+9),
+.progress-indicators[data-active="6"] .indicator:nth-child(n+4):nth-child(-n+10) {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .indicator:hover {
   background: rgba(45, 55, 72, 0.7);
   transform: scale(1.15);
   border-color: rgba(45, 55, 72, 0.5);
+  opacity: 1;
 }
 
 /* Current benefit info */

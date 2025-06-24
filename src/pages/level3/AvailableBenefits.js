@@ -45,16 +45,22 @@ const AvailableBenefits = () => {
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchStartY, setTouchStartY] = useState(0);
 
-  // Filtros rápidos disponibles
+  // Filtros rápidos disponibles (categorías reales del sistema)
   const quickFilters = [
     { id: 'todos', label: 'Todos', icon: '🎁' },
-    { id: 'comida', label: 'Comida', icon: '🍽️' },
-    { id: 'entretenimiento', label: 'Diversión', icon: '🎮' },
-    { id: 'salud', label: 'Salud', icon: '🏥' },
-    { id: 'deporte', label: 'Deporte', icon: '⚽' },
-    { id: 'educacion', label: 'Educación', icon: '📚' },
-    { id: 'tecnologia', label: 'Tech', icon: '💻' },
-    { id: 'viajes', label: 'Viajes', icon: '✈️' }
+    { id: 'desarrollo-personal', label: 'Desarrollo Personal', icon: '🌱' },
+    { id: 'regalos', label: 'Regalos', icon: '🎁' },
+    { id: 'comidas-del-mundo', label: 'Comidas del mundo', icon: '🌍' },
+    { id: 'cuidado-personal', label: 'Cuidado personal', icon: '💆' },
+    { id: 'tuercas-y-autos', label: 'Tuercas y Autos', icon: '🚗' },
+    { id: 'mascotas', label: 'Mascotas', icon: '🐾' },
+    { id: 'salud-y-bienestar', label: 'Salud y Bienestar', icon: '🏥' },
+    { id: 'disfruta-en-familia', label: 'Disfruta en familia', icon: '👨‍👩‍👧‍👦' },
+    { id: 'deportes', label: 'Deportes', icon: '⚽' },
+    { id: 'cervezas-y-amigos', label: 'Cervezas y amigos', icon: '🍺' },
+    { id: 'teatro-y-cine', label: 'Teatro y Cine', icon: '🎭' },
+    { id: 'lectura', label: 'Lectura', icon: '📖' },
+    { id: 'eventos-del-mes', label: 'Eventos del mes', icon: '📅' }
   ];
 
 
@@ -67,39 +73,63 @@ const AvailableBenefits = () => {
     
     if (filterId !== 'todos') {
       filtered = jobbyBenefits.filter(benefit => {
-        const category = benefit.category?.toLowerCase() || '';
+        const category = benefit.category || '';
         const name = benefit.name?.toLowerCase() || '';
         const description = benefit.description?.toLowerCase() || '';
         
         switch (filterId) {
-          case 'comida':
-            return category.includes('comida') || category.includes('gastronomia') || 
-                   name.includes('restaurante') || name.includes('comida') || 
-                   description.includes('comida') || description.includes('restaurante');
-          case 'entretenimiento':
-            return category.includes('entretenimiento') || category.includes('diversión') ||
-                   name.includes('cine') || name.includes('teatro') || name.includes('concierto') ||
-                   description.includes('entretenimiento') || description.includes('diversión');
-          case 'salud':
-            return category.includes('salud') || category.includes('medicina') ||
-                   name.includes('medico') || name.includes('salud') || name.includes('clinica') ||
-                   description.includes('salud') || description.includes('medicina');
-          case 'deporte':
-            return category.includes('deporte') || category.includes('fitness') ||
-                   name.includes('gym') || name.includes('deporte') || name.includes('fitness') ||
-                   description.includes('deporte') || description.includes('ejercicio');
-          case 'educacion':
-            return category.includes('educacion') || category.includes('curso') ||
-                   name.includes('curso') || name.includes('educacion') || name.includes('aprendizaje') ||
-                   description.includes('educacion') || description.includes('curso');
-          case 'tecnologia':
-            return category.includes('tecnologia') || category.includes('tech') ||
-                   name.includes('tech') || name.includes('software') || name.includes('app') ||
-                   description.includes('tecnologia') || description.includes('digital');
-          case 'viajes':
-            return category.includes('viajes') || category.includes('turismo') ||
-                   name.includes('viaje') || name.includes('hotel') || name.includes('vuelo') ||
-                   description.includes('viaje') || description.includes('turismo');
+          case 'desarrollo-personal':
+            return category === 'Desarrollo Personal' ||
+                   name.includes('desarrollo') || name.includes('personal') || name.includes('crecimiento') ||
+                   description.includes('desarrollo') || description.includes('personal') || description.includes('aprendizaje');
+          case 'regalos':
+            return category === 'Regalos' ||
+                   name.includes('regalo') || name.includes('obsequio') || name.includes('sorpresa') ||
+                   description.includes('regalo') || description.includes('obsequio');
+          case 'comidas-del-mundo':
+            return category === 'Comidas del mundo' ||
+                   name.includes('comida') || name.includes('restaurante') || name.includes('gastronomia') ||
+                   description.includes('comida') || description.includes('gastronomia') || description.includes('restaurante');
+          case 'cuidado-personal':
+            return category === 'Cuidado personal' ||
+                   name.includes('cuidado') || name.includes('belleza') || name.includes('estetica') ||
+                   description.includes('cuidado') || description.includes('belleza') || description.includes('personal');
+          case 'tuercas-y-autos':
+            return category === 'Tuercas y Autos' ||
+                   name.includes('auto') || name.includes('vehiculo') || name.includes('mecanica') ||
+                   description.includes('auto') || description.includes('vehiculo') || description.includes('tuercas');
+          case 'mascotas':
+            return category === 'Mascotas' ||
+                   name.includes('mascota') || name.includes('perro') || name.includes('gato') ||
+                   description.includes('mascota') || description.includes('pet') || description.includes('animal');
+          case 'salud-y-bienestar':
+            return category === 'Salud y Bienestar' ||
+                   name.includes('salud') || name.includes('bienestar') || name.includes('medico') ||
+                   description.includes('salud') || description.includes('bienestar') || description.includes('medicina');
+          case 'disfruta-en-familia':
+            return category === 'Disfruta en familia' ||
+                   name.includes('familia') || name.includes('niños') || name.includes('familiar') ||
+                   description.includes('familia') || description.includes('familiar') || description.includes('niños');
+          case 'deportes':
+            return category === 'Deportes' ||
+                   name.includes('deporte') || name.includes('fitness') || name.includes('gym') ||
+                   description.includes('deporte') || description.includes('fitness') || description.includes('ejercicio');
+          case 'cervezas-y-amigos':
+            return category === 'Cervezas y amigos' ||
+                   name.includes('cerveza') || name.includes('bar') || name.includes('amigos') ||
+                   description.includes('cerveza') || description.includes('bar') || description.includes('social');
+          case 'teatro-y-cine':
+            return category === 'Teatro y Cine' ||
+                   name.includes('teatro') || name.includes('cine') || name.includes('pelicula') ||
+                   description.includes('teatro') || description.includes('cine') || description.includes('entretenimiento');
+          case 'lectura':
+            return category === 'Lectura' ||
+                   name.includes('libro') || name.includes('lectura') || name.includes('biblioteca') ||
+                   description.includes('libro') || description.includes('lectura') || description.includes('leer');
+          case 'eventos-del-mes':
+            return category === 'Eventos del mes' ||
+                   name.includes('evento') || name.includes('mes') || name.includes('especial') ||
+                   description.includes('evento') || description.includes('especial') || description.includes('mensual');
           default:
             return true;
         }

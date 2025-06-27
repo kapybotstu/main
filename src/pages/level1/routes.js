@@ -23,6 +23,9 @@ const AchievementsManagement = lazy(() => import('./achievements/AchievementsMan
 // Componentes de proveedores
 const ProviderManagement = lazy(() => import('./providers/ProviderManagement'));
 
+// Componentes de encuestas
+const SurveyManagement = lazy(() => import('./surveys/SurveyManagement'));
+
 export const level1Routes = [
   {
     path: '/level1',
@@ -75,6 +78,11 @@ export const level1Routes = [
       {
         path: 'providers',
         element: <ProviderManagement />
+      },
+      // Rutas de encuestas
+      {
+        path: 'surveys',
+        element: <SurveyManagement />
       }
     ]
   }
@@ -90,5 +98,6 @@ export {
   BenefitRequestsManagement,
   TokenManagement,
   AchievementsManagement,
-  ProviderManagement
+  ProviderManagement,
+  SurveyManagement
 };

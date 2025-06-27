@@ -17,6 +17,7 @@ import TokenManagement from '../pages/level1/tokens/TokenManagement';
 import ObtenerUsers from '../pages/level1/users/ObtenerUsers';
 import AsignarNiveles from '../pages/level1/users/AsignarNiveles';
 import AchievementsManagement from '../pages/level1/achievements/AchievementsManagement';
+import SurveyManagement from '../pages/level1/surveys/SurveyManagement';
 import BotManagement from '../pages/level1/bot/BotManagement';
 
 // Nivel 2: Recursos Humanos de empresa
@@ -73,6 +74,7 @@ const AppRoutes = () => {
           <Route path="providers" element={<ProviderManagement />} />
           <Route path="tokens" element={<TokenManagement />} />
           <Route path="achievements" element={<AchievementsManagement />} />
+          <Route path="surveys" element={<SurveyManagement />} />
           <Route path="bot-management" element={<BotManagement />} />
           <Route path="" element={<Navigate to="/level1/dashboard" replace />} />
         </Route>

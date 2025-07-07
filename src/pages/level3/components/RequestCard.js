@@ -27,10 +27,6 @@ const RequestCard = ({ request, onViewDetails, onCopyToken }) => {
       <td>{request.providerName}</td>
       <td>
         <span className={`status-badge ${getStatusClass(request.status)}`}>
-          {request.status === 'pendiente' && '⏳'}
-          {request.status === 'aprobado' && '✅'}
-          {request.status === 'rechazado' && '❌'}
-          {request.status === 'usado' && '✓'}
           {request.status}
         </span>
       </td>
@@ -43,7 +39,7 @@ const RequestCard = ({ request, onViewDetails, onCopyToken }) => {
             onClick={() => onViewDetails(request)}
             title="Ver detalles"
           >
-            👁️
+            Ver
           </button>
           {request.status === 'aprobado' && request.token && (
             <button 
@@ -51,7 +47,7 @@ const RequestCard = ({ request, onViewDetails, onCopyToken }) => {
               onClick={() => onCopyToken(request.token)}
               title="Copiar token"
             >
-              📋
+              Copiar
             </button>
           )}
         </div>

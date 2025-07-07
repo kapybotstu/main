@@ -154,13 +154,13 @@ const MyRequests = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'approved': return '✅';
-      case 'rejected': return '❌';
+      case 'approved': return '';
+      case 'rejected': return '';
       case 'pending':
       case 'pending_provider_approval':
       case 'pending_admin_approval':
-        return '⏳';
-      default: return '📋';
+        return '';
+      default: return '';
     }
   };
 
@@ -174,6 +174,11 @@ const MyRequests = () => {
         return 'Pendiente';
       default: return 'Desconocido';
     }
+  };
+
+  const onViewDetails = (request) => {
+    // Simple alert for now - could be enhanced with a proper modal
+    alert(`Detalles de la solicitud:\n\nBeneficio: ${request.benefitName}\nEstado: ${getStatusText(request.status)}\nFecha: ${formatDate(request.requestDate)}\nTokens: ${request.tokenCost || 1}`);
   };
   
   
@@ -196,7 +201,7 @@ const MyRequests = () => {
     return (
       <div className="modern-requests">
         <div className="error-state">
-          <div className="error-icon">⚠️</div>
+          <div className="error-icon">!</div>
           <h2>Error al cargar solicitudes</h2>
           <p>{error}</p>
           <button onClick={() => window.location.reload()} className="retry-button">
@@ -213,22 +218,21 @@ const MyRequests = () => {
       <div className="requests-header">
         <div className="header-content">
           <div className="header-info">
-            <h1>📋 Historial de Solicitudes</h1>
+            <h1>Historial de Solicitudes</h1>
             <p>Revisa el estado de todas tus solicitudes de beneficios</p>
           </div>
           <div className="header-actions">
             <div className="token-balances-display">
               <div className="token-balance-item">
                 <span className="balance-label">Flexibles:</span>
-                <span className="balance-amount">💰 {jobbyTokenBalance}</span>
+                <span className="balance-amount">{jobbyTokenBalance} Tokens</span>
               </div>
               <div className="token-balance-item">
                 <span className="balance-label">Empresa:</span>
-                <span className="balance-amount">🏢 {companyTokenBalance}</span>
+                <span className="balance-amount">{companyTokenBalance} Tokens</span>
               </div>
             </div>
             <Link to="/level3/benefits" className="new-request-button">
-              <span className="button-icon">✨</span>
               Nueva Solicitud
             </Link>
           </div>
@@ -241,8 +245,8 @@ const MyRequests = () => {
       <div className="filter-tabs">
         <div className="tabs-container">
           {[
-            { key: 'all', label: 'Todas', icon: '📋' },
-            { key: 'pending', label: 'Pendientes', icon: '⏳' }
+            { key: 'all', label: 'Todas', icon: '' },
+            { key: 'pending', label: 'Pendientes', icon: '' }
           ].map(tab => (
             <button
               key={tab.key}
@@ -270,7 +274,12 @@ const MyRequests = () => {
       <div className="requests-content">
         {filteredRequests().length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">📭</div>
+            <div className="empty-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+            </div>
             <h3>No hay solicitudes</h3>
             <p>
               {activeTab === 'all' 
@@ -279,95 +288,51 @@ const MyRequests = () => {
               }
             </p>
             <Link to="/level3/benefits" className="empty-action">
-              <span className="button-icon">🎁</span>
               Explorar Beneficios
             </Link>
           </div>
         ) : (
           <div className="requests-grid">
             {filteredRequests().map((request) => (
-              <div key={request.id} className="request-card">
-                <div className="card-image">
-                  <img src={request.benefitImage} alt={request.benefitName} />
-                  <div className="card-overlay">
-                    <span className={`status-badge status-${request.status}`}>
-                      <span className="status-icon">{getStatusIcon(request.status)}</span>
-                      {getStatusText(request.status)}
-                    </span>
-                  </div>
+              <div key={request.id} className="modern-request-card">
+                {/* Background Image with Overlay */}
+                <div className="card-background">
+                  <img 
+                    src={request.benefitImage || '/api/placeholder/400/300'} 
+                    alt={request.benefitName}
+                    className="card-image"
+                  />
+                  <div className="card-overlay"></div>
                 </div>
 
+                {/* Category Badge */}
+                <div className="category-badge">
+                  {request.benefitCategory || 'General'}
+                </div>
+
+                {/* Content */}
                 <div className="card-content">
-                  <div className="card-header">
-                    <h3>{request.benefitName}</h3>
-                    <div className="card-badges">
-                      {request.paidWithTokens && (
-                        <span className="token-paid-badge" title="Pagado con tokens">
-                          🎟️ {request.tokenCost}
-                        </span>
-                      )}
-                    </div>
+                  <h3 className="card-title">{request.benefitName}</h3>
+                  <p className="card-description">{request.benefitDescription}</p>
+                  
+                  {/* Status Indicator */}
+                  <div className={`status-indicator status-${request.status}`}>
+                    {getStatusText(request.status)}
                   </div>
-
-                  <div className="card-description">
-                    <p>{request.benefitDescription}</p>
-                  </div>
-
-                  <div className="card-metadata">
-                    <div className="metadata-item">
-                      <span className="metadata-label">📅 Solicitado:</span>
-                      <span className="metadata-value">{formatDate(request.requestDate)}</span>
+                  
+                  {/* Footer with tokens and actions */}
+                  <div className="card-footer">
+                    <div className="token-cost">
+                      <span className="token-amount">{request.tokenCost || 1}</span>
                     </div>
-                    {request.processedDate && (
-                      <div className="metadata-item">
-                        <span className="metadata-label">⚡ Procesado:</span>
-                        <span className="metadata-value">{formatDate(request.processedDate)}</span>
-                      </div>
-                    )}
-                    <div className="metadata-item">
-                      <span className="metadata-label">🏷️ Categoría:</span>
-                      <span className="metadata-value">{request.benefitCategory}</span>
-                    </div>
-                    {request.paidWithTokens && (
-                      <div className="metadata-item tokens-paid">
-                        <span className="metadata-label">🎟️ Pagado con tokens:</span>
-                        <span className="metadata-value">{request.tokenCost} tokens</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {request.token && (
-                    <div className="token-info">
-                      <div className="token-status">
-                        🎫 Token: <span className={`token-status-text token-${request.token.status}`}>
-                          {request.token.status === 'active' ? 'Activo' : 'Utilizado'}
-                        </span>
-                      </div>
-                      {request.token.expiresAt && (
-                        <div className="token-expiry">
-                          ⏰ Expira: {formatDate(request.token.expiresAt)}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="card-actions">
-                    {(request.status === 'pending' || request.status === 'pending_provider_approval' || request.status === 'pending_admin_approval') ? (
-                      <div className="pending-message">
-                        <span className="pending-icon">⏳</span>
-                        En proceso de revisión
-                      </div>
-                    ) : request.status === 'approved' ? (
-                      <div className="approved-message">
-                        <span className="approved-icon">✅</span>
-                        Solicitud aprobada
-                      </div>
-                    ) : request.status === 'rejected' ? (
-                      <div className="rejected-message">
-                        <span className="rejected-icon">❌</span>
-                        Solicitud rechazada
-                      </div>
-                    ) : null}
+                    
+                    <button 
+                      className="action-button"
+                      onClick={() => onViewDetails(request)}
+                    >
+                      Ver Detalles
+                      <span className="btn-arrow">></span>
+                    </button>
                   </div>
                 </div>
               </div>

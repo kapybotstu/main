@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { requestBenefitWithTokens, getJobbyTokenBalance } from '../../services/firebase/database/databaseService';
 import './styles/index.css'; // Import Level 3 styles
 import './styles/pages/AvailableBenefits.css';
+import './styles/components/BenefitsGrid.css';
 import BenefitCard from './components/BenefitCard';
 import { MapView } from './map';
 import MapViewTest from './components/MapViewTest';
@@ -382,6 +383,26 @@ const AvailableBenefits = () => {
     return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   };
 
+  // Función para obtener el color de la categoría
+  const getCategoryColor = (category) => {
+    const categoryColors = {
+      'Desarrollo Personal': 'rgba(34, 197, 94, 0.08)', // Verde suave
+      'Regalos': 'rgba(236, 72, 153, 0.08)', // Rosa suave
+      'Comidas del mundo': 'rgba(251, 146, 60, 0.08)', // Naranja suave
+      'Cuidado personal': 'rgba(168, 85, 247, 0.08)', // Púrpura suave
+      'Tuercas y Autos': 'rgba(71, 85, 105, 0.08)', // Gris azulado suave
+      'Mascotas': 'rgba(245, 158, 11, 0.08)', // Amarillo suave
+      'Salud y Bienestar': 'rgba(16, 185, 129, 0.08)', // Verde esmeralda suave
+      'Disfruta en familia': 'rgba(99, 102, 241, 0.08)', // Índigo suave
+      'Deportes': 'rgba(239, 68, 68, 0.08)', // Rojo suave
+      'Cervezas y amigos': 'rgba(217, 119, 6, 0.08)', // Ámbar suave
+      'Teatro y Cine': 'rgba(147, 51, 234, 0.08)', // Violeta suave
+      'Lectura': 'rgba(59, 130, 246, 0.08)', // Azul suave
+      'Eventos del mes': 'rgba(20, 184, 166, 0.08)' // Teal suave
+    };
+    
+    return categoryColors[category] || 'rgba(148, 163, 184, 0.08)'; // Gris suave por defecto
+  };
 
   // Navegación por teclado optimizada
   useEffect(() => {
@@ -920,31 +941,38 @@ const AvailableBenefits = () => {
         )}
       </div>
 
-      {/* Vista Grid Alternativa con modal overlay */}
+      {/* Vista Grid Reestructurada */}
       {showGridView && (
-        <div className="grid-modal-overlay">
-          <div className="grid-modal">
-            <div className="grid-header">
+        <div className="benefits-grid-modal-overlay">
+          <div className="benefits-grid-modal">
+            <div className="benefits-grid-header">
               <h2>Beneficios Flexibles Jobby</h2>
               <button 
-                className="close-grid"
+                className="benefits-grid-close"
                 onClick={() => setShowGridView(false)}
               >
                 ×
               </button>
             </div>
             
-            <div className="benefits-grid">
+            <div className="benefits-grid-container">
               {filteredBenefits.map((benefit, index) => (
                 <div
                   key={benefit.id}
-                  className="grid-benefit-card"
+                  className="benefit-grid-card"
+                  style={{
+                    backgroundColor: getCategoryColor(benefit.category)
+                  }}
                   onClick={() => {
                     setCurrentBenefitIndex(index);
                     setShowGridView(false);
                   }}
                 >
-                  <div className="grid-card-image">
+                  <div className="benefit-grid-title">
+                    <h3>{benefit.name}</h3>
+                  </div>
+                  
+                  <div className="benefit-grid-image">
                     <img 
                       src={benefit.image} 
                       alt={benefit.name}
@@ -953,14 +981,21 @@ const AvailableBenefits = () => {
                         e.target.src = generatePlaceholder(benefit.name, benefit.isJobbyBenefit ? '#667eea' : '#4facfe');
                       }}
                     />
-                    <div className="grid-overlay">
-                      <div className="overlay-content">
-                        <h4>{benefit.name}</h4>
-                        <p>{benefit.category}</p>
-                        <span className={`type-badge ${benefit.isJobbyBenefit ? 'jobby' : 'company'}`}>
-                          {benefit.isJobbyBenefit ? 'Jobby' : 'Empresa'}
-                        </span>
-                      </div>
+                  </div>
+                  
+                  <div className="benefit-grid-content">
+                    <p className="benefit-grid-description">
+                      {benefit.description}
+                    </p>
+                    
+                    <div className="benefit-grid-meta">
+                      <span className={`benefit-type-badge ${benefit.isJobbyBenefit ? 'jobby' : 'company'}`}>
+                        {benefit.isJobbyBenefit ? 'Jobby' : 'Empresa'}
+                      </span>
+                      <span className="benefit-token-cost">
+                        <span className="benefit-token-icon">🪙</span>
+                        {benefit.tokenCost}
+                      </span>
                     </div>
                   </div>
                 </div>

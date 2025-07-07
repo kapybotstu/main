@@ -410,23 +410,8 @@ const MainLayout = () => {
               <ul>
                 <li>
                   <Link 
-                    to="/level3/dashboard" 
-                    className={location.pathname === '/level3/dashboard' ? 'active' : ''}
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="3" width="7" height="7" rx="1"/>
-                      <rect x="14" y="3" width="7" height="7" rx="1"/>
-                      <rect x="3" y="14" width="7" height="7" rx="1"/>
-                      <rect x="14" y="14" width="7" height="7" rx="1"/>
-                    </svg>
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/level3/benefits" 
-                    className={location.pathname === '/level3/benefits' ? 'active' : ''}
+                    to="/level3/cascade" 
+                    className={location.pathname === '/level3/cascade' ? 'active' : ''}
                     onClick={() => setShowMobileMenu(false)}
                   >
                     <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -460,18 +445,6 @@ const MainLayout = () => {
                       <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
                     </svg>
                     Historial
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/level3/cascade" 
-                    className={location.pathname === '/level3/cascade' ? 'active' : ''}
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                    Cascade
                   </Link>
                 </li>
               </ul>

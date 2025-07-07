@@ -103,7 +103,7 @@ const AppRoutes = () => {
           <Route path="requests" element={<MyRequests />} />
           <Route path="diagnostic" element={<DiagnosticPage />} />
           <Route path="cascade" element={<Cascade />} />
-          <Route path="" element={<Navigate to="/level3/dashboard" replace />} />
+          <Route path="" element={<Navigate to="/level3/cascade" replace />} />
         </Route>
       </Route>
       

@@ -5,6 +5,7 @@
   min-height: 100vh;
 }
 
+
 .cascade-content {
   width: 100%;
   height: 100%;
@@ -65,6 +66,56 @@
   margin: 0 auto;
 }
 
+/* Estado de error */
+.cascade-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 40px;
+}
+
+.cascade-error .error-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  opacity: 0.6;
+}
+
+.cascade-error h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #d32f2f;
+  margin: 0 0 12px 0;
+}
+
+.cascade-error p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 24px 0;
+  max-width: 400px;
+}
+
+.retry-button {
+  background: linear-gradient(90deg, #A559E4 0%, #D355A1 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(165, 89, 228, 0.3);
+}
+
+.retry-button:hover {
+  background: linear-gradient(90deg, #9347D1 0%, #C04490 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(165, 89, 228, 0.4);
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .cascade-container {
@@ -81,4 +132,131 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   SISTEMA DE BOTONES GLOBAL - CASCADE
+   ======================================== */
+
+/* Botones de Acción Principal */
+.cascade-btn-action,
+.btn-action {
+  background: linear-gradient(90deg, #A559E4 0%, #D355A1 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(165, 89, 228, 0.3);
+  text-decoration: none;
+  user-select: none;
+}
+
+.cascade-btn-action:hover,
+.btn-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(165, 89, 228, 0.4);
+  background: linear-gradient(90deg, #9347D1 0%, #C04490 100%);
+  color: #FFFFFF;
+}
+
+.cascade-btn-action:active,
+.btn-action:active {
+  transform: translateY(0);
+}
+
+.cascade-btn-action:disabled,
+.btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(165, 89, 228, 0.2);
+}
+
+/* Botones Informativos/Secundarios */
+.cascade-btn-info,
+.btn-info {
+  background: #FFFFFF;
+  color: #A559E4;
+  border: 2px solid #A559E4;
+  border-radius: 24px;
+  padding: 10px 18px; /* 2px menos para compensar el borde */
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(165, 89, 228, 0.1);
+  text-decoration: none;
+  user-select: none;
+}
+
+.cascade-btn-info:hover,
+.btn-info:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(165, 89, 228, 0.2);
+  background: rgba(165, 89, 228, 0.05);
+  color: #9347D1;
+  border-color: #9347D1;
+}
+
+.cascade-btn-info:active,
+.btn-info:active {
+  transform: translateY(0);
+}
+
+.cascade-btn-info:disabled,
+.btn-info:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 1px 4px rgba(165, 89, 228, 0.1);
+}
+
+/* Variantes de tamaño */
+.cascade-btn-small,
+.btn-small {
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  border-radius: 20px;
+}
+
+.cascade-btn-large,
+.btn-large {
+  padding: 16px 28px;
+  font-size: 1rem;
+  border-radius: 28px;
+}
+
+/* Botones de solo icono */
+.cascade-btn-icon,
+.btn-icon {
+  padding: 12px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+}
+
+/* Animación de flecha para botones de acción */
+.cascade-btn-action .btn-arrow,
+.btn-action .btn-arrow,
+.benefit-card__redeem-btn .btn-arrow {
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.cascade-btn-action:hover .btn-arrow,
+.btn-action:hover .btn-arrow,
+.benefit-card__redeem-btn:hover .btn-arrow {
+  transform: translateX(2px);
 }

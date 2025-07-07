@@ -8,9 +8,9 @@
   cursor: pointer;
   margin-bottom: 0;
   break-inside: avoid;
-  min-height: 280px;
   display: flex;
   flex-direction: column;
+  /* Altura dinámica - removido min-height fijo */
 }
 
 .benefit-card:hover {
@@ -18,11 +18,26 @@
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.16);
 }
 
-/* Card que ocupa múltiples columnas */
+/* Card que ocupa múltiples espacios del grid */
 .benefit-card--spanned {
-  grid-column: span 2;
-  min-height: 320px;
+  /* Grid span se controla desde el contenedor padre */
 }
+
+.benefit-card--spanned .benefit-card__title {
+  font-size: 1.75rem; /* Título más grande para cards grandes */
+}
+
+.benefit-card--spanned .benefit-card__description {
+  font-size: 1rem; /* Descripción más grande */
+  max-height: none; /* Sin límite de altura en cards grandes */
+}
+
+.benefit-card--spanned .benefit-card__category {
+  padding: 8px 18px; /* Badge más grande */
+  font-size: 0.8rem;
+}
+
+/* Los botones mantienen el mismo tamaño independientemente del span */
 
 /* Imagen de fondo */
 .benefit-card__background {
@@ -60,11 +75,11 @@
 .benefit-card__content {
   position: relative;
   z-index: 2;
-  padding: 20px;
+  /* padding removido - ahora se controla dinámicamente */
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  min-height: 100%;
 }
 
 /* Badge de categoría */
@@ -80,12 +95,15 @@
   color: white;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: auto;
+  margin-bottom: 12px;
 }
 
 /* Información del beneficio */
 .benefit-card__info {
-  margin-top: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin-bottom: 16px;
 }
 
@@ -114,63 +132,81 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Footer con tokens y botón */
+/* Footer con tokens y botón - Layout horizontal centrado */
 .benefit-card__footer {
   display: flex;
+  gap: 12px;
+  margin-top: auto;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .benefit-card__tokens {
   display: flex;
   align-items: center;
+  flex: 1;
 }
 
 .token-counter {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #FFFFFF;
+  border: 2px solid #A559E4;
   border-radius: 16px;
-  padding: 8px 12px;
+  padding: 10px 16px;
+  min-width: 80px;
+  height: 36px;
+  font-size: 0.85rem;
+  color: #A559E4;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
+.token-counter:hover {
+  background: rgba(165, 89, 228, 0.1);
+  border-color: #9347D1;
+}
+
+
 .token-icon {
-  font-size: 1rem;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  font-size: 0.9rem;
+  color: #A559E4;
 }
 
 .token-count {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: #A559E4;
 }
 
 /* Botón de canjear */
 .benefit-card__redeem-btn {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-  color: white;
+  background: linear-gradient(90deg, #A559E4 0%, #D355A1 100%);
+  color: #FFFFFF;
   border: none;
-  border-radius: 24px;
-  padding: 12px 20px;
-  font-size: 0.9rem;
+  border-radius: 16px;
+  padding: 10px 20px;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 16px rgba(238, 90, 82, 0.3);
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 4px 16px rgba(165, 89, 228, 0.3);
+  min-width: 100px;
+  height: 36px;
 }
 
 .benefit-card__redeem-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(238, 90, 82, 0.4);
-  background: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
+  box-shadow: 0 6px 24px rgba(165, 89, 228, 0.4);
+  background: linear-gradient(90deg, #9347D1 0%, #C04490 100%);
 }
 
 .benefit-card__redeem-btn:active {
@@ -189,8 +225,8 @@
 /* Responsive */
 @media (max-width: 768px) {
   .benefit-card {
-    border-radius: 16px;
-    min-height: 240px;
+    /* border-radius dinámico se mantiene */
+    min-height: 260px !important; /* Altura mínima mayor para acomodar footer vertical */
   }
   
   .benefit-card--spanned {
@@ -198,7 +234,8 @@
   }
   
   .benefit-card__content {
-    padding: 16px;
+    /* padding dinámico se mantiene pero con mínimo */
+    padding: 16px !important;
   }
   
   .benefit-card__title {
@@ -207,5 +244,32 @@
   
   .benefit-card__description {
     font-size: 0.85rem;
+  }
+  
+  .benefit-card__footer {
+    gap: 8px;
+    flex-direction: column;
+  }
+  
+  .token-counter {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    min-width: 70px;
+    height: 32px;
+  }
+  
+  .benefit-card__redeem-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    min-width: 90px;
+    height: 32px;
+  }
+  
+  .token-icon {
+    font-size: 0.8rem;
+  }
+  
+  .token-count {
+    font-size: 0.8rem;
   }
 }

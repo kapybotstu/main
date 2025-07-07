@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import './BenefitCard.css';
 
 const BenefitCard = ({ 
   benefit, 
   onRedeem, 
-  isSpanned = false // Para cards que ocupan múltiples columnas
+  isSpanned = false, // Para cards que ocupan múltiples columnas
+  gridSize = { colSpan: 1, rowSpan: 1 } // Información del grid span
 }) => {
   const {
     id,
@@ -17,6 +18,20 @@ const BenefitCard = ({
     isJobbyBenefit = true
   } = benefit;
 
+  // Calcular estilos basados en el grid span
+  const cardStyles = useMemo(() => {
+    const { colSpan, rowSpan } = gridSize;
+    
+    // Para cards spanned, ajustar algunos valores
+    const borderRadius = colSpan > 1 || rowSpan > 1 ? 28 : 24;
+    const padding = colSpan > 1 || rowSpan > 1 ? 24 : 20;
+    
+    return {
+      borderRadius,
+      padding
+    };
+  }, [gridSize]);
+
   const handleRedeem = () => {
     if (onRedeem) {
       onRedeem(benefit);
@@ -24,7 +39,12 @@ const BenefitCard = ({
   };
 
   return (
-    <div className={`benefit-card ${isSpanned ? 'benefit-card--spanned' : ''}`}>
+    <div 
+      className={`benefit-card ${isSpanned ? 'benefit-card--spanned' : ''}`}
+      style={{ 
+        borderRadius: `${cardStyles.borderRadius}px`
+      }}
+    >
       {/* Imagen de fondo con overlay */}
       <div className="benefit-card__background">
         <img 
@@ -36,7 +56,10 @@ const BenefitCard = ({
       </div>
 
       {/* Contenido del card */}
-      <div className="benefit-card__content">
+      <div 
+        className="benefit-card__content"
+        style={{ padding: `${cardStyles.padding}px` }}
+      >
         {/* Badge de categoría */}
         <div className="benefit-card__category">
           {category || 'General'}

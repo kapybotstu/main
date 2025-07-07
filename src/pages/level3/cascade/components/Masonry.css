@@ -33,6 +33,26 @@
   will-change: transform, opacity, filter;
 }
 
+/* Items que ocupan múltiples espacios */
+.masonry-item--spanned {
+  position: relative;
+}
+
+.masonry-item--spanned .benefit-card {
+  height: 100%;
+  min-height: 100%;
+}
+
+/* Asegurar que todos los items se ajusten bien */
+.masonry-item {
+  display: block; /* Cambiar de flex a block para mejor control */
+}
+
+.masonry-item .benefit-card {
+  width: 100%;
+  min-height: 280px; /* Altura mínima para consistencia */
+}
+
 .masonry-item--animated {
   opacity: 1;
   transform: translateY(0) scale(1);
@@ -84,15 +104,15 @@
 .masonry-item--color-shift:hover .benefit-card__overlay {
   background: linear-gradient(
     180deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.3) 40%,
-    rgba(102, 126, 234, 0.7) 100%
+    rgba(165, 89, 228, 0.1) 0%,
+    rgba(211, 85, 161, 0.3) 40%,
+    rgba(165, 89, 228, 0.7) 100%
   );
 }
 
 .masonry-item--color-shift:hover .benefit-card__category {
-  background: rgba(102, 126, 234, 0.3);
-  border-color: rgba(102, 126, 234, 0.5);
+  background: rgba(165, 89, 228, 0.3);
+  border-color: rgba(165, 89, 228, 0.5);
 }
 
 /* Loading State */
@@ -114,8 +134,8 @@
 .masonry-loading .spinner-ring {
   width: 100%;
   height: 100%;
-  border: 4px solid rgba(255, 107, 107, 0.2);
-  border-top: 4px solid #ff6b6b;
+  border: 4px solid rgba(165, 89, 228, 0.2);
+  border-top: 4px solid #A559E4;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -162,10 +182,6 @@
   .masonry-grid-enhanced {
     gap: 14px;
   }
-  
-  .masonry-column-enhanced {
-    gap: 14px;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -174,10 +190,6 @@
   }
   
   .masonry-grid-enhanced {
-    gap: 12px;
-  }
-  
-  .masonry-column-enhanced {
     gap: 12px;
   }
   
@@ -192,6 +204,7 @@
   }
   
   .masonry-grid-enhanced {
+    flex-direction: column; /* Cambiar a columna única en móvil */
     gap: 10px;
   }
   
@@ -245,12 +258,12 @@
 }
 
 .masonry-enhanced::-webkit-scrollbar-thumb {
-  background: rgba(102, 126, 234, 0.3);
+  background: rgba(165, 89, 228, 0.3);
   border-radius: 3px;
 }
 
 .masonry-enhanced::-webkit-scrollbar-thumb:hover {
-  background: rgba(102, 126, 234, 0.5);
+  background: rgba(165, 89, 228, 0.5);
 }
 
 @keyframes spin {

@@ -4,7 +4,7 @@
 @import '../components/card.css';
 @import '../components/modal.css';
 @import './AvailableBenefits-form.css';
-@import './AvailableBenefits-grid.css';
+/* @import './AvailableBenefits-grid.css'; */ /* Comentado - usando nuevo BenefitsGrid.css */
 
 /* Main container */
 .immersive-benefits {
@@ -296,7 +296,7 @@
   position: absolute;
   top: var(--spacing-xl);
   right: var(--spacing-xl);
-  z-index: 10;
+  z-index: 1000;
   animation: fadeInScale 0.8s ease-out 0.6s both;
   display: flex;
   gap: var(--spacing-md);
@@ -1052,32 +1052,8 @@
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
-/* Grid view */
-.benefits-grid-container {
-  position: absolute;
-  bottom: var(--spacing-xl);
-  left: var(--spacing-xl);
-  right: var(--spacing-xl);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
-  max-height: 60vh;
-  overflow-y: auto;
-  transform: translateY(100%);
-  transition: var(--transition-slow);
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
-}
-
-.benefits-grid-container.active {
-  transform: translateY(0);
-}
-
-.benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--spacing-lg);
-}
+/* Grid view - REMOVIDO - usando BenefitsGrid.css */
+/* Estilos movidos a /components/BenefitsGrid.css para evitar conflictos */
 
 /* Loading state */
 .immersive-loading {
@@ -1319,63 +1295,87 @@
   
   .benefit-card-immersive {
     width: 280px;
-    padding: 0px;
-    margin-bottom: 15px;
-    /* Remove fixed height for mobile too */
+    padding: 5px;
+    margin-bottom: 12px;
+    height: auto;
+    max-height: 420px; /* 40% reduction from ~700px (20% more than 350px) */
   }
   
   .card-image {
-    height: 20px;
-    margin-top: 2px;
-    margin-bottom: 0px;
-    padding: 2px; /* Reduced padding for mobile */
+    height: 140px; /* Proportional increase from 120px */
+    margin-top: 10px;
+    margin-bottom: 8px;
+    padding: 5px;
   }
   
   .card-image img {
-    width: calc(100% - 4px);
-    height: calc(100% - 4px);
-    margin: 2px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    margin: 5px;
+    border-radius: 10px;
   }
   
-  /* Mobile specific spacing reductions */
+  /* Mobile specific spacing - proportional adjustments */
   .card-top {
-    gap: 0rem;
-    padding: 1px;
+    gap: 0.6rem;
+    padding: 10px 14px;
   }
   
   .card-bottom {
-    gap: 0rem;
-    padding: 1px;
+    gap: 0.6rem;
+    padding: 10px 14px;
   }
   
   .card-metadata {
-    gap: 0.025rem;
-    margin-top: -4px;
+    gap: 0.6rem;
+    margin-top: 6px;
   }
   
-  /* Mobile text adjustments for ultra-compact */
+  /* Mobile text adjustments - proportionally scaled */
   .card-header h3 {
-    font-size: 0.6rem;
-    line-height: 0.9;
+    font-size: 1rem;
+    line-height: 1.25;
     margin: 0;
+    font-weight: 700;
   }
   
   .card-description p {
-    font-size: 0.5rem;
-    line-height: 1.0;
+    font-size: 0.8125rem;
+    line-height: 1.35;
     margin: 0;
+    max-height: 3.6rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
   
-  /* Mobile benefit type badge */
+  /* Mobile benefit type badge - proportional */
   .benefit-type {
-    top: -6px;
-    padding: 0.04rem 0.25rem;
-    font-size: 0.45rem;
+    top: 5px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
   }
   
-  .benefits-grid {
-    grid-template-columns: 1fr;
+  /* Mobile token cost and badges - proportional */
+  .token-cost {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8125rem;
   }
+  
+  .popular-badge {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Adjust container for mobile */
+  .benefits-container {
+    height: 65vh; /* Slightly increased from 60vh */
+  }
+  
+  /* .benefits-grid removed - using BenefitsGrid.css */
   
   .carousel-navigation {
     display: none;
@@ -1416,6 +1416,56 @@
     max-width: calc(100vw - 2rem);
     justify-content: center;
     align-items: center;
+  }
+  
+  /* View controls mobile positioning */
+  .benefits-carousel .view-controls-simple {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .benefits-carousel .view-toggle {
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .benefits-carousel .view-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .benefits-carousel .view-controls-simple {
+    top: 15px;
+    right: 15px;
+    padding: 6px;
+  }
+  
+  .benefits-carousel .view-toggle {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Ensure button is always on top of everything */
+@media (max-width: 768px) {
+  .benefits-carousel .view-controls-simple {
+    z-index: 9999 !important;
   }
 }
 

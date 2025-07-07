@@ -1,0 +1,259 @@
+/* Enhanced Masonry with Animations */
+.masonry-enhanced {
+  width: 100%;
+  margin: 0;
+  padding: 0 8px;
+  position: relative;
+}
+
+.masonry-grid-enhanced {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  will-change: transform;
+}
+
+.masonry-column-enhanced {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Masonry Item Animations */
+.masonry-item {
+  opacity: 0;
+  transform: translateY(40px) scale(0.9);
+  transition: 
+    opacity var(--duration, 0.6s) var(--ease, cubic-bezier(0.23, 1, 0.32, 1)),
+    transform var(--duration, 0.6s) var(--ease, cubic-bezier(0.23, 1, 0.32, 1)),
+    filter 0.3s ease,
+    box-shadow 0.3s ease;
+  transition-delay: var(--animation-delay, 0s);
+  will-change: transform, opacity, filter;
+}
+
+.masonry-item--animated {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Animation from different directions */
+.masonry-item--from-bottom {
+  transform: translateY(60px) scale(0.8);
+}
+
+.masonry-item--from-bottom.masonry-item--animated {
+  transform: translateY(0) scale(1);
+}
+
+/* Hover Effects */
+.masonry-item--hoverable {
+  cursor: pointer;
+}
+
+.masonry-item--hoverable:hover {
+  transform: translateY(-8px) scale(var(--hover-scale, 0.95));
+  z-index: 10;
+  position: relative;
+}
+
+.masonry-item--hoverable:hover .benefit-card {
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Blur to Focus Effect */
+.masonry-item--blur-focus {
+  filter: blur(0px);
+  transition: filter 0.3s ease;
+}
+
+.masonry-enhanced:hover .masonry-item--blur-focus:not(:hover) {
+  filter: blur(1px);
+  opacity: 0.7;
+}
+
+.masonry-enhanced:hover .masonry-item--blur-focus:hover {
+  filter: blur(0px);
+  opacity: 1;
+}
+
+/* Color Shift on Hover */
+.masonry-item--color-shift:hover .benefit-card__overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(102, 126, 234, 0.1) 0%,
+    rgba(118, 75, 162, 0.3) 40%,
+    rgba(102, 126, 234, 0.7) 100%
+  );
+}
+
+.masonry-item--color-shift:hover .benefit-card__category {
+  background: rgba(102, 126, 234, 0.3);
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
+/* Loading State */
+.masonry-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 20px;
+}
+
+.masonry-loading .loading-spinner {
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+
+.masonry-loading .spinner-ring {
+  width: 100%;
+  height: 100%;
+  border: 4px solid rgba(255, 107, 107, 0.2);
+  border-top: 4px solid #ff6b6b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.masonry-loading p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Empty State */
+.masonry-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 40px;
+}
+
+.masonry-empty .empty-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  opacity: 0.6;
+}
+
+.masonry-empty h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.masonry-empty p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1440px) {
+  .masonry-grid-enhanced {
+    gap: 14px;
+  }
+  
+  .masonry-column-enhanced {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .masonry-enhanced {
+    padding: 0 6px;
+  }
+  
+  .masonry-grid-enhanced {
+    gap: 12px;
+  }
+  
+  .masonry-column-enhanced {
+    gap: 12px;
+  }
+  
+  .masonry-item--hoverable:hover {
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-enhanced {
+    padding: 0 4px;
+  }
+  
+  .masonry-grid-enhanced {
+    gap: 10px;
+  }
+  
+  .masonry-column-enhanced {
+    gap: 10px;
+  }
+  
+  .masonry-item {
+    transform: translateY(20px) scale(0.95);
+  }
+  
+  .masonry-item--from-bottom {
+    transform: translateY(30px) scale(0.9);
+  }
+  
+  /* Disable complex hover effects on mobile */
+  .masonry-enhanced:hover .masonry-item--blur-focus:not(:hover) {
+    filter: none;
+    opacity: 1;
+  }
+}
+
+/* Performance optimizations */
+.masonry-enhanced {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.masonry-item {
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
+/* Smooth transitions for dynamic content */
+.masonry-grid-enhanced {
+  transition: gap 0.3s ease;
+}
+
+.masonry-column-enhanced {
+  transition: gap 0.3s ease;
+}
+
+/* Custom scrollbar for overflow content */
+.masonry-enhanced::-webkit-scrollbar {
+  width: 6px;
+}
+
+.masonry-enhanced::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.masonry-enhanced::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 3px;
+}
+
+.masonry-enhanced::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.5);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,84 @@
+/* Cascade Page Styles */
+.cascade-container {
+  padding: 12px;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.cascade-content {
+  width: 100%;
+  height: 100%;
+}
+
+.cascade-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 20px;
+}
+
+.cascade-loading .loading-spinner {
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+
+.cascade-loading .spinner-ring {
+  width: 100%;
+  height: 100%;
+  border: 4px solid rgba(102, 126, 234, 0.2);
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.cascade-loading p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 32px;
+}
+
+.empty-state .empty-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  opacity: 0.6;
+}
+
+.empty-state h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .cascade-container {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cascade-container {
+    padding: 4px;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

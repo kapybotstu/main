@@ -1,0 +1,144 @@
+/* Masonry Grid Styles */
+.masonry-container {
+  width: 100%;
+  margin: 0;
+  padding: 0 8px;
+}
+
+.masonry-grid {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.masonry-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Loading State */
+.masonry-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 20px;
+}
+
+.masonry-loading .loading-spinner {
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+
+.masonry-loading .spinner-ring {
+  width: 100%;
+  height: 100%;
+  border: 4px solid rgba(255, 107, 107, 0.2);
+  border-top: 4px solid #ff6b6b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.masonry-loading p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Empty State */
+.masonry-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 40px;
+}
+
+.masonry-empty .empty-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  opacity: 0.6;
+}
+
+.masonry-empty h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.masonry-empty p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+}
+
+/* Responsive Design */
+@media (max-width: 1440px) {
+  .masonry-grid {
+    gap: 16px;
+  }
+  
+  .masonry-column {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .masonry-container {
+    padding: 0 16px;
+  }
+  
+  .masonry-grid {
+    gap: 16px;
+  }
+  
+  .masonry-column {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-container {
+    padding: 0 12px;
+  }
+  
+  .masonry-grid {
+    gap: 12px;
+  }
+  
+  .masonry-column {
+    gap: 12px;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Smooth transitions for column changes */
+.masonry-grid {
+  transition: gap 0.3s ease;
+}
+
+.masonry-column {
+  transition: gap 0.3s ease;
+}
+
+/* Performance optimizations */
+.masonry-container {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.masonry-grid {
+  transform: translateZ(0);
+}

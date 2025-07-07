@@ -36,6 +36,7 @@ import MyRequests from '../pages/level3/MyRequests';
 import ProfileSurvey from '../pages/level3/ProfileSurvey';
 import ProfileSurveyB from '../pages/level3/ProfileSurveyB';
 import DiagnosticPage from '../pages/level3/DiagnosticPage';
+import Cascade from '../pages/level3/cascade';
 
 // Nivel 4: Proveedores
 import ProviderPortal from '../pages/level4/ProviderPortal';
@@ -101,6 +102,7 @@ const AppRoutes = () => {
           <Route path="company-benefits" element={<CompanyBenefits />} />
           <Route path="requests" element={<MyRequests />} />
           <Route path="diagnostic" element={<DiagnosticPage />} />
+          <Route path="cascade" element={<Cascade />} />
           <Route path="" element={<Navigate to="/level3/dashboard" replace />} />
         </Route>
       </Route>

@@ -190,4 +190,13 @@ const BenefitModal = ({ benefit, isOpen, onClose, onConfirmRedeem, userTokenBala
   );
 };
 
-export default BenefitModal;
+export default React.memo(BenefitModal, (prevProps, nextProps) => {
+  // Comparación personalizada para evitar re-renders innecesarios
+  return (
+    prevProps.isOpen === nextProps.isOpen &&
+    prevProps.benefit?.id === nextProps.benefit?.id &&
+    prevProps.userTokenBalance === nextProps.userTokenBalance &&
+    prevProps.onClose === nextProps.onClose &&
+    prevProps.onConfirmRedeem === nextProps.onConfirmRedeem
+  );
+});

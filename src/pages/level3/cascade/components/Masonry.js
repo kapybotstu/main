@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import BenefitCard from './BenefitCard';
 import './Masonry.css';
 
@@ -40,25 +40,16 @@ const Masonry = ({
     return () => window.removeEventListener('resize', updateColumns);
   }, []);
 
-  // Stagger animation on mount
+  // Simplified: Show all items immediately without stagger animation
   useEffect(() => {
     if (items.length > 0 && !loading) {
-      const animateItems = () => {
-        items.forEach((item, index) => {
-          setTimeout(() => {
-            setAnimatedItems(prev => new Set(prev).add(item.id));
-          }, index * (stagger * 1000));
-        });
-      };
-
-      // Reset animations
-      setAnimatedItems(new Set());
-      animateItems();
+      // Show all items immediately for performance
+      setAnimatedItems(new Set(items.map(item => item.id)));
     }
-  }, [items, stagger, loading]);
+  }, [items, loading]);
 
-  // Generar variaciones de grid para cada item
-  const getItemGridSize = (item, index) => {
+  // Generar variaciones de grid para cada item - memoizado
+  const getItemGridSize = useCallback((item, index) => {
     const seed = parseInt(item.id) || Math.abs(item.name.split('').reduce((a, b) => a + b.charCodeAt(0), 0));
     const random = ((seed + index) * 9301 + 49297) % 233280;
     const normalized = random / 233280;
@@ -82,13 +73,14 @@ const Masonry = ({
       // 60% - Cards normales (1x1)
       return { colSpan: 1, rowSpan: 1 };
     }
-  };
+  }, [columns]);
 
-  // Simplificar: usar distribución por columnas como flexbox masonry
-  const distributeItems = (items) => {
+  // Simplificar: usar distribución por columnas como flexbox masonry - memoizado
+  const distributeItems = useCallback((items) => {
     const itemsWithSizes = items.map((item, index) => ({
       ...item,
-      gridSize: getItemGridSize(item, index)
+      gridSize: getItemGridSize(item, index),
+      originalIndex: index // Mantener índice original para el lazy loading
     }));
 
     // Crear columnas como arrays
@@ -117,13 +109,18 @@ const Masonry = ({
     });
 
     return columnArrays;
-  };
+  }, [columns, getItemGridSize]);
 
-  const handleItemRedeem = (item) => {
+  const handleItemRedeem = useCallback((item) => {
     if (onItemRedeem) {
       onItemRedeem(item);
     }
-  };
+  }, [onItemRedeem]);
+
+  // Memoizar la distribución de columnas
+  const columnArrays = useMemo(() => {
+    return distributeItems(items);
+  }, [items, distributeItems]);
 
   if (loading) {
     return (
@@ -151,8 +148,6 @@ const Masonry = ({
       </div>
     );
   }
-
-  const columnArrays = distributeItems(items);
 
   return (
     <div 
@@ -185,15 +180,13 @@ const Masonry = ({
                     ${colorShiftOnHover ? 'masonry-item--color-shift' : ''}
                     ${colSpan > 1 || rowSpan > 1 ? 'masonry-item--spanned' : ''}
                   `}
-                  style={{
-                    '--animation-delay': `${(columnIndex * columnItems.length + itemIndex) * stagger}s`,
-                  }}
                 >
                   <BenefitCard
                     benefit={item}
                     onRedeem={handleItemRedeem}
                     isSpanned={colSpan > 1 || rowSpan > 1}
                     gridSize={item.gridSize}
+                    cardIndex={item.originalIndex}
                   />
                 </div>
               );
@@ -205,4 +198,19 @@ const Masonry = ({
   );
 };
 
-export default Masonry;
+export default React.memo(Masonry, (prevProps, nextProps) => {
+  // Comparación personalizada para optimizar re-renders
+  return (
+    prevProps.items === nextProps.items &&
+    prevProps.onItemRedeem === nextProps.onItemRedeem &&
+    prevProps.ease === nextProps.ease &&
+    prevProps.duration === nextProps.duration &&
+    prevProps.stagger === nextProps.stagger &&
+    prevProps.animateFrom === nextProps.animateFrom &&
+    prevProps.scaleOnHover === nextProps.scaleOnHover &&
+    prevProps.hoverScale === nextProps.hoverScale &&
+    prevProps.blurToFocus === nextProps.blurToFocus &&
+    prevProps.colorShiftOnHover === nextProps.colorShiftOnHover &&
+    prevProps.loading === nextProps.loading
+  );
+});

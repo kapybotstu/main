@@ -6,53 +6,98 @@ import { database } from '../../../../services/firebase/config';
  */
 export class BenefitsService {
   /**
-   * Obtiene todos los beneficios Jobby activos
+   * Obtiene todos los beneficios Jobby activos (método one-time)
    * @returns {Promise} Promise que resuelve con array de beneficios
    */
   static async getJobbyBenefits() {
-    return new Promise((resolve, reject) => {
+    try {
       const benefitsRef = ref(database, 'jobby_benefits');
+      const snapshot = await get(benefitsRef);
       
-      onValue(benefitsRef, (snapshot) => {
-        try {
-          const data = snapshot.val();
-          if (data) {
-            const benefitsList = Object.entries(data)
-              .map(([id, benefit]) => ({
-                id,
-                ...benefit,
-                // Asegurar que tenemos los campos necesarios para el cascade
-                name: benefit.title || benefit.name || 'Beneficio sin nombre',
-                description: benefit.description || 'Sin descripción',
-                category: benefit.category || 'General',
-                tokensRequired: benefit.tokenCost || 1,
-                provider: benefit.provider || 'Jobby',
-                isJobbyBenefit: true,
-                image: benefit.image || '/api/placeholder/400/300'
-              }))
-              // Filtrar solo beneficios activos
-              .filter(benefit => benefit.status === 'active');
-            
-            // Ordenar por fecha de creación, más recientes primero
-            benefitsList.sort((a, b) => {
-              const dateA = new Date(a.createdAt || 0);
-              const dateB = new Date(b.createdAt || 0);
-              return dateB - dateA;
-            });
-            
-            resolve(benefitsList);
-          } else {
-            resolve([]);
-          }
-        } catch (error) {
-          console.error('Error procesando beneficios:', error);
-          reject(error);
+      const data = snapshot.val();
+      if (data) {
+        const benefitsList = Object.entries(data)
+          .map(([id, benefit]) => ({
+            id,
+            ...benefit,
+            // Asegurar que tenemos los campos necesarios para el cascade
+            name: benefit.title || benefit.name || 'Beneficio sin nombre',
+            description: benefit.description || 'Sin descripción',
+            category: benefit.category || 'General',
+            tokensRequired: benefit.tokenCost || 1,
+            provider: benefit.provider || 'Jobby',
+            isJobbyBenefit: true,
+            image: benefit.image || '/api/placeholder/400/300'
+          }))
+          // Filtrar solo beneficios activos
+          .filter(benefit => benefit.status === 'active');
+        
+        // Ordenar por fecha de creación, más recientes primero
+        benefitsList.sort((a, b) => {
+          const dateA = new Date(a.createdAt || 0);
+          const dateB = new Date(b.createdAt || 0);
+          return dateB - dateA;
+        });
+        
+        return benefitsList;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      console.error('Error obteniendo beneficios:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Suscribe a los cambios de beneficios Jobby en tiempo real
+   * @param {Function} callback - Función a llamar con los beneficios actualizados
+   * @returns {Function} Función para desuscribirse
+   */
+  static subscribeToJobbyBenefits(callback) {
+    const benefitsRef = ref(database, 'jobby_benefits');
+    
+    const unsubscribe = onValue(benefitsRef, (snapshot) => {
+      try {
+        const data = snapshot.val();
+        if (data) {
+          const benefitsList = Object.entries(data)
+            .map(([id, benefit]) => ({
+              id,
+              ...benefit,
+              // Asegurar que tenemos los campos necesarios para el cascade
+              name: benefit.title || benefit.name || 'Beneficio sin nombre',
+              description: benefit.description || 'Sin descripción',
+              category: benefit.category || 'General',
+              tokensRequired: benefit.tokenCost || 1,
+              provider: benefit.provider || 'Jobby',
+              isJobbyBenefit: true,
+              image: benefit.image || '/api/placeholder/400/300'
+            }))
+            // Filtrar solo beneficios activos
+            .filter(benefit => benefit.status === 'active');
+          
+          // Ordenar por fecha de creación, más recientes primero
+          benefitsList.sort((a, b) => {
+            const dateA = new Date(a.createdAt || 0);
+            const dateB = new Date(b.createdAt || 0);
+            return dateB - dateA;
+          });
+          
+          callback(benefitsList);
+        } else {
+          callback([]);
         }
-      }, (error) => {
-        console.error('Error obteniendo beneficios:', error);
-        reject(error);
-      });
+      } catch (error) {
+        console.error('Error procesando beneficios:', error);
+        callback([]);
+      }
+    }, (error) => {
+      console.error('Error obteniendo beneficios:', error);
+      callback([]);
     });
+
+    return unsubscribe;
   }
 
   /**
@@ -203,39 +248,70 @@ export class BenefitsService {
   }
 
   /**
-   * Obtiene las solicitudes de beneficios de un usuario
+   * Obtiene las solicitudes de beneficios de un usuario (método one-time)
    * @param {string} userId - ID del usuario
    * @returns {Promise} Promise que resuelve con array de solicitudes
    */
   static async getUserBenefitRequests(userId) {
-    return new Promise((resolve, reject) => {
+    try {
       const requestsRef = ref(database, 'benefit_requests');
+      const snapshot = await get(requestsRef);
       
-      onValue(requestsRef, (snapshot) => {
-        try {
-          const data = snapshot.val();
-          if (data) {
-            const userRequests = Object.entries(data)
-              .map(([id, request]) => ({
-                id,
-                ...request
-              }))
-              .filter(request => request.userId === userId)
-              .sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate));
-            
-            resolve(userRequests);
-          } else {
-            resolve([]);
-          }
-        } catch (error) {
-          console.error('Error procesando solicitudes:', error);
-          reject(error);
+      const data = snapshot.val();
+      if (data) {
+        const userRequests = Object.entries(data)
+          .map(([id, request]) => ({
+            id,
+            ...request
+          }))
+          .filter(request => request.userId === userId)
+          .sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate));
+        
+        return userRequests;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      console.error('Error obteniendo solicitudes:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Suscribe a los cambios de solicitudes de un usuario en tiempo real
+   * @param {string} userId - ID del usuario
+   * @param {Function} callback - Función a llamar con las solicitudes actualizadas
+   * @returns {Function} Función para desuscribirse
+   */
+  static subscribeToUserBenefitRequests(userId, callback) {
+    const requestsRef = ref(database, 'benefit_requests');
+    
+    const unsubscribe = onValue(requestsRef, (snapshot) => {
+      try {
+        const data = snapshot.val();
+        if (data) {
+          const userRequests = Object.entries(data)
+            .map(([id, request]) => ({
+              id,
+              ...request
+            }))
+            .filter(request => request.userId === userId)
+            .sort((a, b) => new Date(b.requestDate) - new Date(a.requestDate));
+          
+          callback(userRequests);
+        } else {
+          callback([]);
         }
-      }, (error) => {
-        console.error('Error obteniendo solicitudes:', error);
-        reject(error);
-      });
+      } catch (error) {
+        console.error('Error procesando solicitudes:', error);
+        callback([]);
+      }
+    }, (error) => {
+      console.error('Error obteniendo solicitudes:', error);
+      callback([]);
     });
+
+    return unsubscribe;
   }
 
   /**

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import Masonry from './components/Masonry';
 import BenefitModal from './components/BenefitModal';
+import { NotificationProvider, useNotification } from './components/NotificationSystem';
 import BenefitsService from './services/benefitsService';
 import '../styles/index.css';
 import './styles/index.css';
 
-const Cascade = () => {
+const CascadeContent = () => {
   const { currentUser, companyId } = useAuth();
+  const { showSuccess, showError, showWarning } = useNotification();
   const [loading, setLoading] = useState(true);
   const [benefits, setBenefits] = useState([]);
   const [benefitsLoading, setBenefitsLoading] = useState(true);
@@ -16,15 +18,42 @@ const Cascade = () => {
   const [error, setError] = useState(null);
   const [userTokenBalance, setUserTokenBalance] = useState(0);
 
+  const loadUserTokenBalance = useCallback(async () => {
+    try {
+      if (currentUser?.uid) {
+        const balance = await BenefitsService.getUserTokenBalance(currentUser.uid);
+        setUserTokenBalance(balance);
+      }
+    } catch (error) {
+      console.error('Error cargando balance de tokens:', error);
+    }
+  }, [currentUser?.uid]);
+
   useEffect(() => {
     if (currentUser?.uid) {
       setLoading(false);
-      loadBenefitsFromFirebase();
+      
+      // Suscribirse a cambios en beneficios con cleanup
+      setBenefitsLoading(true);
+      setError(null);
+      
+      const unsubscribe = BenefitsService.subscribeToJobbyBenefits((jobbyBenefits) => {
+        setBenefits(jobbyBenefits);
+        setBenefitsLoading(false);
+        console.log('Beneficios actualizados desde Firebase:', jobbyBenefits.length);
+      });
+      
+      // Cargar balance de tokens
       loadUserTokenBalance();
+      
+      // Cleanup function
+      return () => {
+        unsubscribe();
+      };
     }
-  }, [currentUser]);
+  }, [currentUser, loadUserTokenBalance]);
 
-  const loadBenefitsFromFirebase = async () => {
+  const loadBenefitsFromFirebase = useCallback(async () => {
     try {
       setBenefitsLoading(true);
       setError(null);
@@ -39,36 +68,28 @@ const Cascade = () => {
     } finally {
       setBenefitsLoading(false);
     }
-  };
+  }, []);
 
-  const loadUserTokenBalance = async () => {
-    try {
-      if (currentUser?.uid) {
-        const balance = await BenefitsService.getUserTokenBalance(currentUser.uid);
-        setUserTokenBalance(balance);
-      }
-    } catch (error) {
-      console.error('Error cargando balance de tokens:', error);
-    }
-  };
-
-  const handleBenefitRedeem = (benefit) => {
+  const handleBenefitRedeem = useMemo(() => (benefit) => {
     setSelectedBenefit(benefit);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useMemo(() => () => {
     setIsModalOpen(false);
     setSelectedBenefit(null);
-  };
+  }, []);
 
-  const handleConfirmRedeem = async (benefit) => {
+  const handleConfirmRedeem = useMemo(() => async (benefit) => {
     try {
       console.log('Iniciando canje de beneficio:', benefit);
       
       // Verificar que el usuario tenga tokens suficientes
       if (userTokenBalance < benefit.tokensRequired) {
-        alert(`No tienes suficientes tokens. Necesitas ${benefit.tokensRequired} tokens y tienes ${userTokenBalance}.`);
+        showWarning(
+          `Necesitas ${benefit.tokensRequired} tokens y tienes ${userTokenBalance}`,
+          'Tokens Insuficientes'
+        );
         return;
       }
 
@@ -85,14 +106,20 @@ const Cascade = () => {
       await loadUserTokenBalance();
       
       // Mostrar mensaje de éxito
-      alert(`¡Beneficio canjeado exitosamente: ${benefit.name}!\nID de solicitud: ${requestId}`);
+      showSuccess(
+        `¡${benefit.name} canjeado exitosamente! Tu solicitud ${requestId.slice(-8)} está siendo procesada.`,
+        'Canje Exitoso'
+      );
       
       handleCloseModal();
     } catch (error) {
       console.error('Error canjeando beneficio:', error);
-      alert('Error al canjear el beneficio. Por favor, intenta de nuevo.');
+      showError(
+        'Hubo un problema al procesar tu solicitud. Por favor, intenta de nuevo.',
+        'Error en el Canje'
+      );
     }
-  };
+  }, [userTokenBalance, currentUser?.uid, companyId, loadUserTokenBalance, handleCloseModal, showSuccess, showError, showWarning]);
 
   if (loading) {
     return (
@@ -152,6 +179,15 @@ const Cascade = () => {
         userTokenBalance={userTokenBalance}
       />
     </div>
+  );
+};
+
+// Componente principal con Provider de notificaciones
+const Cascade = () => {
+  return (
+    <NotificationProvider>
+      <CascadeContent />
+    </NotificationProvider>
   );
 };
 

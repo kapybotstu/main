@@ -43,7 +43,7 @@ const MyRequests = () => {
         
         // Obtener todas las solicitudes del usuario
         const requestsRef = ref(database, 'benefit_requests');
-        onValue(requestsRef, (snapshot) => {
+        const unsubscribe = onValue(requestsRef, (snapshot) => {
           const userRequests = [];
           
           if (snapshot.exists()) {
@@ -111,6 +111,11 @@ const MyRequests = () => {
             setLoading(false);
           });
         });
+        
+        // Return cleanup function
+        return () => {
+          unsubscribe();
+        };
       } catch (err) {
         setError('Error al cargar las solicitudes: ' + err.message);
         setLoading(false);

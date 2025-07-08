@@ -1,0 +1,188 @@
+/* Sistema de Notificaciones */
+.notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.notification {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border-left: 4px solid #e9ecef;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  min-width: 320px;
+  max-width: 400px;
+  pointer-events: auto;
+  animation: slideInRight 0.3s ease-out;
+  transition: all 0.3s ease;
+}
+
+.notification:hover {
+  transform: translateX(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Tipos de notificación */
+.notification--success {
+  border-left-color: #28a745;
+}
+
+.notification--error {
+  border-left-color: #dc3545;
+}
+
+.notification--warning {
+  border-left-color: #ffc107;
+}
+
+.notification--info {
+  border-left-color: #17a2b8;
+}
+
+.notification__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification__title {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.notification__message {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #5a6c7d;
+  word-wrap: break-word;
+}
+
+.notification__close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.notification__close:hover {
+  background: #f8f9fa;
+  color: #6c757d;
+}
+
+.notification__close:active {
+  transform: scale(0.95);
+}
+
+/* Animaciones */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .notification-container {
+    left: 16px;
+    right: 16px;
+    top: 16px;
+  }
+
+  .notification {
+    min-width: auto;
+    max-width: none;
+    margin: 0;
+  }
+}
+
+/* Indicadores visuales mejorados */
+.notification--success::before {
+  content: '✓';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #28a745;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.notification--error::before {
+  content: '!';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #dc3545;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.notification--warning::before {
+  content: '⚠';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #ffc107;
+  color: #212529;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.notification--info::before {
+  content: 'i';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #17a2b8;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
